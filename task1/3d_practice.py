@@ -3,18 +3,26 @@
 
 import sys
 
+import numpy as np
+
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
+from cg.shader import DiffuseShader
 from cg.utils import random_polygons
 
 
-points, polygons = random_polygons(3)
+polygons = random_polygons(3)
+# polygons = (
+#     # 時計周り
+#     np.array(([15, 1, 30], [-15, 1, 30], [1, 12, 25])),
+#     # 反時計回り
+#     np.array(([15, -1, 30], [-13, -1, 45], [-7, -20, 25])),
+# )
 
 # ポリゴンごとに3点の座標を出力する
 for polygon in polygons:
-    print(', '.join(map(lambda i: str(points[i]), polygon[:3])),
-          file=sys.stderr)
+    print(', '.join(map(str, polygon[:3])), file=sys.stderr)
 
 if __name__ == '__main__':
     width = height = 256
@@ -22,12 +30,13 @@ if __name__ == '__main__':
     camera = Camera(positon=(0.0, 0.0, 0.0),
                     angle=(0.0, 0.0, 1.0),
                     focus=256.0)
-    renderer = Renderer(camera=camera, depth=depth, width=width, height=height)
+    shader = DiffuseShader(direction=np.array((-1.0, -1.0, 2.0)),
+                           color=(1.0, 1.0, 1.0), depth=depth)
+    renderer = Renderer(camera=camera, shader=shader, depth=depth,
+                        width=width, height=height)
 
     for polygon in polygons:
-        renderer.draw_polygon((points[polygon[0]],
-                               points[polygon[1]],
-                               points[polygon[2]]))
+        renderer.draw_polygon(polygon)
 
     name = "3d.ppm"
     image = PpmImage(name, width, height, renderer.data, depth=depth)

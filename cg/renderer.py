@@ -7,11 +7,12 @@ from cg.utils import random_color
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, depth=8):
+    def __init__(self, camera, shader, width, height, depth=8):
         """
         :param cg.camera.Camera camera: カメラ
         """
         self.camera = camera
+        self.shader = shader
         self.depth = depth
         self.width = width
         self.height = height
@@ -54,6 +55,31 @@ class Renderer(object):
 
         # 3点を座標変換し, y でソート
         a, b, c = sorted(map(self.convert_point, points), key=lambda p: p[1])
+
+        # 3点の y 座標が同じであれば処理終了
+        if a[1] == b[1] == c[1]:
+            return
+
+        if a[1] == b[1]:
+            # c -> ab
+            for y in make_range_y(a[1], c[1]):
+                s = np.nan_to_num((y - c[1]) / (a[1] - c[1]))
+                p = ((1 - s) * c + s * a)
+                q = ((1 - s) * c + s * b)
+                for x in make_range_x(p[0], q[0]):
+                    yield (x, y)
+            return
+
+        if b[1] == c[1]:
+            # a -> bc
+            for y in make_range_y(a[1], c[1]):
+                s = np.nan_to_num((y - a[1]) / (b[1] - a[1]))
+                p = ((1 - s) * a + s * b)
+                q = ((1 - s) * a + s * c)
+                for x in make_range_x(p[0], q[0]):
+                    yield (x, y)
+            return
+
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
@@ -66,15 +92,17 @@ class Renderer(object):
                 q = ((1 - s) * a + s * b)
             else:
                 # 下 (bd -> c)
-                s = (y - c[1]) / (d[1] - c[1])
+                s = np.nan_to_num((y - c[1]) / (d[1] - c[1]))
                 p = ((1 - s) * c + s * d)
                 q = ((1 - s) * c + s * b)
+            p = np.nan_to_num(p)
+            q = np.nan_to_num(q)
             for x in make_range_x(p[0], q[0]):
                 yield (x, y)
 
     def draw_polygon(self, polygon):
-        color = random_color(self.depth)
-        for point in self.rasterize(polygon[:3]):
+        color = self.shader.calc(polygon)
+        for point in self.rasterize(polygon):
             # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
             # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
             data_x = 3 * (self.half_width + point[0])
