@@ -3,11 +3,10 @@
 
 import sys
 
-import numpy as np
-
 from cg.camera import Camera
 from cg.ppm import PpmImage
-from cg.utils import random_color, random_polygons
+from cg.renderer import Renderer
+from cg.utils import random_polygons
 
 
 points, polygons = random_polygons(3)
@@ -19,27 +18,19 @@ for polygon in polygons:
 
 if __name__ == '__main__':
     width = height = 256
+    depth = 8
     camera = Camera(positon=(0.0, 0.0, 0.0),
                     angle=(0.0, 0.0, 1.0),
-                    focus=256.0,
-                    width=width,
-                    height=height)
-    depth = 8
-    data = np.zeros((height, width * 3), dtype=np.int8)
+                    focus=256.0)
+    renderer = Renderer(camera=camera, depth=depth, width=width, height=height)
 
     for polygon in polygons:
-        color = random_color(depth)
-        for point in camera.rasterize([points[polygon[0]],
-                                       points[polygon[1]],
-                                       points[polygon[2]]]):
-            # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-            # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-            data_x = 3 * ((width // 2) + point[0])
-            data_y = (height // 2) - point[1]
-            data[data_y][data_x:data_x+3] = color
+        renderer.draw_polygon((points[polygon[0]],
+                               points[polygon[1]],
+                               points[polygon[2]]))
 
     name = "3d.ppm"
-    image = PpmImage(name, width, height, data, depth=depth)
+    image = PpmImage(name, width, height, renderer.data, depth=depth)
 
     # ファイルに保存
     with open(name, 'w') as f:
