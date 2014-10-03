@@ -13,7 +13,10 @@ class DiffuseShader(object):
 
     def calc(self, polygon):
         # 直交ベクトル
-        cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
+        # 反時計回りを表
+        cross = np.cross(polygon[0] - polygon[1], polygon[1] - polygon[2])
+        # 時計回りを表
+        # cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
         # 直交ベクトルがゼロベクトルであれば, 計算不能
         # Ex: 面積0のポリゴン
         if np.count_nonzero(cross) == 0:
