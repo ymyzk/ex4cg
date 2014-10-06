@@ -19,6 +19,8 @@ class Renderer(object):
 
         self.data = np.zeros((self.height, self.width * 3),
                              dtype=np.int8)
+        self.zbuffer = np.empty((self.height, self.width), dtype=np.float32)
+        self.zbuffer.fill(1000)
         self.half_width = self.width // 2
         self.half_height = self.height // 2
 
@@ -28,11 +30,11 @@ class Renderer(object):
         p = np.dot(self.camera.array, vertex)
         return np.nan_to_num((self.camera.focus / point[2]) * p)
 
-    def rasterize(self, points):
+    def rasterize(self, polygon):
         """ラスタライズ処理
 
         ポリゴンをラスタライズして, 点を順に返すイタレータ
-        :param points: ポリゴンの3点の座標のリスト
+        :param polygon: ポリゴン
         """
 
         def to_int(scalar):
@@ -54,7 +56,7 @@ class Renderer(object):
                          min(y2, self.half_height) + 1)
 
         # 3点を座標変換し, y でソート
-        a, b, c = sorted(map(self.convert_point, points), key=lambda p: p[1])
+        a, b, c = sorted(map(self.convert_point, polygon), key=lambda p: p[1])
 
         # 3点の y 座標が同じであれば処理終了
         if a[1] == b[1] == c[1]:

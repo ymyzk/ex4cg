@@ -49,7 +49,7 @@ class Vrml(object):
                 points.append(np.array(
                     tuple(map(lambda i: float(i.replace(',', '')), items))))
 
-            if (status is Status.index and len(items) == 4):
+            if status is Status.index and len(items) == 4:
                 indexes.append(
                     tuple(map(lambda i: int(i.replace(',', '')), items[:3])))
 
