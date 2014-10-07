@@ -35,7 +35,8 @@ class Vrml(object):
             if items[0] in ('diffuseColor', 'specularColor',
                             'ambientIntensity', 'shininess',):
                 if items[0] == 'diffuseColor':
-                    self.diffuse_color = np.array(items[1:4])
+                    self.diffuse_color = np.array(
+                        tuple(map(float, items[1:4])))
             elif items[0] == 'point':
                 status = Status.point
                 continue
@@ -57,7 +58,3 @@ class Vrml(object):
             self.polygons.append(
                 tuple((map(lambda i: points[i], index)))
             )
-
-        # print(points)
-        # print(indexes)
-        # print(self.polygons)

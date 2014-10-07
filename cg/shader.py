@@ -14,9 +14,9 @@ class DiffuseShader(object):
     def calc(self, polygon):
         # 直交ベクトル
         # 反時計回りを表
-        cross = np.cross(polygon[0] - polygon[1], polygon[1] - polygon[2])
+        # cross = np.cross(polygon[0] - polygon[1], polygon[1] - polygon[2])
         # 時計回りを表
-        # cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
+        cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
         # 直交ベクトルがゼロベクトルであれば, 計算不能
         # Ex: 面積0のポリゴン
         if np.count_nonzero(cross) == 0:
@@ -26,7 +26,8 @@ class DiffuseShader(object):
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
-        if cos < 0: return np.zeros(3)
+        if cos < 0:
+            return np.zeros(3)
         # 反射光を返す
         diffuse = np.dot(cos, self.color)
         return (2 ** self.depth - 1) * diffuse
