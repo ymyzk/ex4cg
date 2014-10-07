@@ -28,7 +28,7 @@ class Vrml(object):
             l = l.strip()
             if l.startswith('#'):
                 continue
-            items = l.split(' ')
+            items = tuple(filter(lambda i: i != '', l.split(' ')))
             if len(items) == 0:
                 continue
 

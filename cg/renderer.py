@@ -42,21 +42,23 @@ class Renderer(object):
         :param polygon: ポリゴン
         """
 
+        def calc_z(z1, z2, r):
+            return 1 / (r / z1 + (1 - r) / z2)
+
         def make_range(r1, r2):
             if r2 < r1:
                 r1, r2 = r2, r1
             return math.ceil(np.asscalar(r1)), math.floor(np.asscalar(r2))
 
-        def make_range_xz(p1, p2):
+        def make_range_xz(p1, p2, pz1, pz2):
             if p2[0] < p1[0]:
                 p1, p2 = p2, p1
             x1, x2 = make_range(p1[0], p2[0])
-            z1, z2 = p1[3], p2[3]
             if x1 == x2:
-                return x1, z1
+                return x1, pz1
             for x in range(max(x1, -self.half_width),
                            min(x2, self.half_width - 1) + 1):
-                yield x, z1 + (x - p1[0]) / (x2 - p1[0]) * (z2 - z1)
+                yield x, calc_z(pz1, pz2, (x - p1[0]) / (x2 - p1[0]))
 
         def make_range_y(p1, p2):
             y1, y2 = make_range(p1[1], p2[1])
@@ -83,6 +85,8 @@ class Renderer(object):
                 s = (y - a[1]) / (b[1] - a[1])
                 p = (1 - s) * a + s * b
                 q = (1 - s) * a + s * d
+                pz = calc_z(a[3], b[3], 1 - s)
+                qz = calc_z(a[3], d[3], 1 - s)
             else:
                 # 下 bd -> c
                 if b[1] == c[1]:
@@ -90,8 +94,10 @@ class Renderer(object):
                 s = (y - c[1]) / (b[1] - c[1])
                 p = (1 - s) * c + s * b
                 q = (1 - s) * c + s * d
+                pz = calc_z(c[3], b[3], 1 - s)
+                qz = calc_z(c[3], d[3], 1 - s)
             # x についてループ
-            for x, z in make_range_xz(p, q):
+            for x, z in make_range_xz(p, q, pz, qz):
                 yield x, y, z
 
     def rasterize_b(self, polygon):
