@@ -8,12 +8,12 @@ from cg.utils import random_color
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, depth=8, shader=None):
+    def __init__(self, camera, width, height, depth=8, shaders=[]):
         """
         :param cg.camera.Camera camera: カメラ
         """
         self.camera = camera
-        self.shader = shader
+        self.shaders = shaders
         self.depth = depth
         self.width = width
         self.height = height
@@ -126,10 +126,17 @@ class Renderer(object):
                     yield x, y, 1.0
 
     def draw_polygon(self, polygon):
-        if self.shader is None:
-            color = random_color(8)
-        else:
-            color = self.shader.calc(polygon)
+        # TODO: 飽和演算の実装の改善
+        color = np.zeros(3, dtype=np.float)
+        for shader in self.shaders:
+            color += shader.calc(polygon)
+        if 255 < color[0]:
+            color[0] = 255
+        if 255 < color[1]:
+            color[1] = 255
+        if 255 < color[2]:
+            color[2] = 255
+        color = color.astype(np.uint8)
         for x, y, z in self.rasterize(polygon):
             # Z バッファでテスト
             if z <= self.zbuffer[y][x]:

@@ -5,8 +5,8 @@ import numpy as np
 
 
 class Camera(object):
-    def __init__(self, positon, angle, focus):
-        self.positon = positon
+    def __init__(self, position, angle, focus):
+        self.position = position
         self.angle = angle
         self.focus = focus
         # カメラ座標系 -> 画像平面の変換行列

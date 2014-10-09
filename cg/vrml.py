@@ -14,7 +14,7 @@ class Vrml(object):
         self.diffuse_color = None
         self.specular_color = None
         self.ambient_intensity = None
-        self.shiness = None
+        self.shininess = None
         self.polygons = []
 
     def load(self, fp):
@@ -37,6 +37,11 @@ class Vrml(object):
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
                         tuple(map(float, items[1:4])))
+                elif items[0] == 'specularColor':
+                    self.specular_color = np.array(
+                        tuple(map(float, items[1:4])))
+                elif items[0] == 'shininess':
+                    self.shininess = float(items[1])
             elif items[0] == 'point':
                 status = Status.point
                 continue
