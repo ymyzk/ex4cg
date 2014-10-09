@@ -9,6 +9,7 @@ import numpy as np
 
 Status = enum.Enum("Status", "material point index")
 
+
 class Vrml(object):
     def __init__(self):
         self.diffuse_color = None

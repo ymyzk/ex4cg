@@ -13,12 +13,6 @@ from cg.utils import random_polygons
 
 
 polygons = random_polygons(3)
-# polygons = (
-#     # 時計周り
-#     np.array(([15, 1, 30], [-15, 1, 30], [1, 12, 25])),
-#     # 反時計回り
-#     np.array(([15, -1, 30], [-13, -1, 45], [-7, -20, 25])),
-# )
 
 # ポリゴンごとに3点の座標を出力する
 for polygon in polygons:
@@ -27,18 +21,20 @@ for polygon in polygons:
 if __name__ == '__main__':
     width = height = 256
     depth = 8
-    camera = Camera(positon=(0.0, 0.0, 0.0),
+    camera = Camera(position=(0.0, 0.0, 0.0),
                     angle=(0.0, 0.0, 1.0),
                     focus=256.0)
     shader = DiffuseShader(direction=np.array((-1.0, -1.0, 2.0)),
-                           color=(1.0, 1.0, 1.0), depth=depth)
-    renderer = Renderer(camera=camera, shader=shader, depth=depth,
+                           color=np.array((1.0, 1.0, 1.0)),
+                           luminance=np.array((1.0, 1.0, 1.0)),
+                           depth=depth)
+    renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
                         width=width, height=height)
 
     for polygon in polygons:
         renderer.draw_polygon(polygon)
 
-    name = "3d.ppm"
+    name = "task1.ppm"
     image = PpmImage(name, width, height, renderer.data, depth=depth)
 
     # ファイルに保存
