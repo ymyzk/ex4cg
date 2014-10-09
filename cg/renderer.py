@@ -18,7 +18,7 @@ class Renderer(object):
         self.width = width
         self.height = height
 
-        self.data = np.zeros((self.height, self.width * 3), dtype=np.int8)
+        self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
         self.zbuffer = np.empty((self.height, self.width), dtype=np.float64)
         self.zbuffer.fill(float('inf'))
         self.half_width = self.width // 2
