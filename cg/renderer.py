@@ -43,23 +43,22 @@ class Renderer(object):
         def calc_z(z1, z2, r):
             return 1 / (r / z1 + (1 - r) / z2)
 
-        def make_range(r1, r2):
-            if r2 < r1:
-                r1, r2 = r2, r1
-            return math.floor(np.asscalar(r1)), math.ceil(np.asscalar(r2))
-
-        def make_range_xz(p1, p2, pz1, pz2):
-            if p2[0] < p1[0]:
-                p1, p2 = p2, p1
-            x1, x2 = make_range(p1[0], p2[0])
+        def make_range_xz(x1, x2, z1, z2):
+            if x2 < x1:
+                x1, x2 = x2, x1
+            x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
             if x1 == x2:
-                return x1, pz1
+                yield x1, z1
+                return
             for x in range(max(x1, -self.half_width),
                            min(x2, self.half_width - 1) + 1):
-                yield x, calc_z(pz1, pz2, (x - p1[0]) / (x2 - p1[0]))
+                yield x, calc_z(z1, z2, (x - x1) / (x2 - x1))
 
-        def make_range_y(p1, p2):
-            y1, y2 = make_range(p1[1], p2[1])
+        def make_range_y(y1, y2):
+            if y2 < y1:
+                y1, y2 = y2, y1
+            y1 = math.ceil(np.asscalar(y1))
+            y2 = math.floor(np.asscalar(y2))
             return range(max(y1, 1 - self.half_height),
                          min(y2, self.half_height) + 1)
 
@@ -74,11 +73,7 @@ class Renderer(object):
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
 
-        # ポリゴン内部に点があるかを判定するためのベクトル
-        vs1 = b[:2] - a[:2]
-        vs2 = c[:2] - a[:2]
-
-        for y in make_range_y(a, c):
+        for y in make_range_y(a[1], c[1]):
             # x の左右を探す:
             if y <= b[1]:
                 # a -> bd
@@ -99,13 +94,8 @@ class Renderer(object):
                 pz = calc_z(c[3], b[3], 1 - s)
                 qz = calc_z(c[3], d[3], 1 - s)
             # x についてループ
-            for x, z in make_range_xz(p, q, pz, qz):
-                # x, y がポリゴン内部にあるかを判定して yield
-                q = np.array((x - a[0], y - a[1]))
-                s = np.cross(q, vs2) / np.cross(vs1, vs2)
-                t = np.cross(vs1, q) / np.cross(vs1, vs2)
-                if 0 <= s and 0 <= t and s + t <= 1:
-                    yield x, y, z
+            for x, z in make_range_xz(p[0], q[0], pz, qz):
+                yield x, y, z
 
     def draw_polygon(self, polygon):
         # TODO: 飽和演算の実装の改善
