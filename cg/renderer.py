@@ -4,8 +4,6 @@
 import math
 import numpy as np
 
-from cg.utils import random_color
-
 
 class Renderer(object):
     def __init__(self, camera, width, height, depth=8, shaders=[]):
@@ -126,7 +124,8 @@ class Renderer(object):
             if z <= self.zbuffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-                data_x = 3 * (self.half_width + x)
+                # TODO: サンプル画像がおかしいので X を反転して表示
+                data_x = 3 * (self.width - 1 - self.half_width + x)
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
                 self.zbuffer[y][x] = z

@@ -3,10 +3,13 @@
 
 import numpy as np
 
+from cg.utils import random_color
+
 
 class Shader(object):
     """シェーダ"""
-    def _orthogonal_vector(self, polygon):
+    @staticmethod
+    def _orthogonal_vector(polygon):
         """ポリゴンの直行ベクトルを求める処理"""
         # 直交ベクトル
         # 反時計回りを表
@@ -15,9 +18,19 @@ class Shader(object):
         cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
         return cross
 
-    def _unit_vector(self, vector):
+    @staticmethod
+    def _unit_vector(vector):
         """単位ベクトルを求める処理"""
         return vector / np.linalg.norm(vector)
+
+
+class RandomColorShader(Shader):
+    """ランダムな色を返すシェーダ"""
+    def __init__(self, depth=8):
+        self.depth = depth
+
+    def calc(self, polygon):
+        return random_color(self.depth)
 
 
 class DiffuseShader(Shader):
