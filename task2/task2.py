@@ -21,6 +21,7 @@ if __name__ == '__main__':
                     angle=(0.0, 0.0, 1.0),
                     focus=256.0)
     shader = DiffuseShader(direction=np.array((-1.0, -1.0, 2.0)),
+                           luminance=np.array((1.0, 1.0, 1.0)),
                            color=vrml.diffuse_color)
     renderer = Renderer(camera=camera, shader=shader,
                         width=width, height=height)
