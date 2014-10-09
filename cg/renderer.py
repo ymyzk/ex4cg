@@ -48,7 +48,7 @@ class Renderer(object):
         def make_range(r1, r2):
             if r2 < r1:
                 r1, r2 = r2, r1
-            return math.ceil(np.asscalar(r1)), math.floor(np.asscalar(r2))
+            return math.floor(np.asscalar(r1)), math.ceil(np.asscalar(r2))
 
         def make_range_xz(p1, p2, pz1, pz2):
             if p2[0] < p1[0]:
@@ -76,6 +76,10 @@ class Renderer(object):
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
 
+        # ポリゴン内部に点があるかを判定するためのベクトル
+        vs1 = b[:2] - a[:2]
+        vs2 = c[:2] - a[:2]
+
         for y in make_range_y(a, c):
             # x の左右を探す:
             if y <= b[1]:
@@ -98,32 +102,12 @@ class Renderer(object):
                 qz = calc_z(c[3], d[3], 1 - s)
             # x についてループ
             for x, z in make_range_xz(p, q, pz, qz):
-                yield x, y, z
-
-    def rasterize_b(self, polygon):
-        """Bresenham's algorithm test"""
-        def to_int(scalar):
-            return round(np.asscalar(scalar))
-
-        vt1, vt2, vt3 = tuple(map(self.convert_point, polygon))
-
-        min_x = to_int(min(vt1[0], vt2[0], vt3[0]))
-        max_x = to_int(max(vt1[0], vt2[0], vt3[0]))
-        min_y = to_int(min(vt1[1], vt2[1], vt3[1]))
-        max_y = to_int(max(vt1[1], vt2[1], vt3[1]))
-
-        vs1 = vt2[:2] - vt1[:2]
-        vs2 = vt3[:2] - vt1[:2]
-
-        for y in range(max(min_y, 1 - self.half_height),
-                       min(max_y, self.half_height) + 1):
-            for x in range(max(min_x, -self.half_width),
-                           min(max_x, self.half_width - 1) + 1):
-                q = np.array((x - vt1[0], y - vt1[1]))
+                # x, y がポリゴン内部にあるかを判定して yield
+                q = np.array((x - a[0], y - a[1]))
                 s = np.cross(q, vs2) / np.cross(vs1, vs2)
                 t = np.cross(vs1, q) / np.cross(vs1, vs2)
                 if 0 <= s and 0 <= t and s + t <= 1:
-                    yield x, y, 1.0
+                    yield x, y, z
 
     def draw_polygon(self, polygon):
         # TODO: 飽和演算の実装の改善
