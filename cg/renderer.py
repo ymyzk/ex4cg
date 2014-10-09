@@ -33,6 +33,7 @@ class Renderer(object):
         converted[3] = point[2]
         return converted
 
+    @profile
     def rasterize(self, polygon):
         """ラスタライズ処理
 
@@ -62,8 +63,15 @@ class Renderer(object):
             return range(max(y1, 1 - self.half_height),
                          min(y2, self.half_height) + 1)
 
-        # 3点を座標変換し, y でソート
-        a, b, c = sorted(map(self.convert_point, polygon), key=lambda p: p[1])
+        # ポリゴンの3点を座標変換
+        a, b, c = map(self.convert_point, polygon)
+        # ポリゴンの3点を y でそーと
+        if a[1] > b[1]:
+            a, b = b, a
+        if b[1] > c[1]:
+            b, c = c, b
+        if a[1] > b[1]:
+            a, b = b, a
 
         # 3点の y 座標が同じであれば処理終了
         if a[1] == c[1]:
