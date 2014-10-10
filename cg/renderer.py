@@ -4,7 +4,7 @@
 import math
 import numpy as np
 
-from .shader import ShadingMode
+from cg.shader import ShadingMode
 
 
 class Renderer(object):
@@ -227,6 +227,11 @@ class Renderer(object):
         return self._saturate_color(color)
 
     def _draw_polygon(self, polygon, normals):
+        """ポリゴンを描画する処理
+
+        :param np.ndarray polygon: ポリゴン 3x3
+        :param np.ndarray normals: 法線ベクトル 3x3
+        """
         for x, y, z, color in self.rasterize_and_shade(polygon, normals):
             # Z バッファでテスト
             if not self.z_buffering or z <= self.z_buffer[y][x]:
@@ -238,12 +243,12 @@ class Renderer(object):
                 self.data[data_y][data_x:data_x + 3] = color
                 self.z_buffer[y][x] = z
 
-    def _polygons_normal(self, points, indexes):
+    @staticmethod
+    def _polygons_normal(points, indexes):
         """ポリゴンの法線ベクトルのリストを作成する処理"""
         normals = []
         for index in indexes:
-            polygon = list((map(lambda i: points[i], index)))
-            polygon.append(index)
+            polygon = [points[i] for i in index]
             # 直交ベクトル (時計回りを表)
             cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -267,7 +272,7 @@ class Renderer(object):
                 normals = (normal, normal, normal)
                 self._draw_polygon(vertexes, normals)
         elif (self.shading_mode is ShadingMode.gouraud or
-                      self.shading_mode is ShadingMode.phong):
+              self.shading_mode is ShadingMode.phong):
             # 各頂点の法線ベクトルを集計
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
@@ -286,7 +291,9 @@ class Renderer(object):
 
             for index in indexes:
                 # ポリゴンの3点の座標
-                verticies = tuple((map(lambda i: points[i], index)))
+                vertexes = np.array([points[i] for i in index],
+                                    dtype=np.float64)
                 # ポリゴンの3点の法線ベクトル
-                normals = tuple((map(lambda i: vertex_normals[i], index)))
-                self._draw_polygon(verticies, normals)
+                normals = np.array([vertex_normals[i] for i in index],
+                                   dtype=np.float64)
+                self._draw_polygon(vertexes, normals)

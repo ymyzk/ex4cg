@@ -6,6 +6,11 @@ import numpy as np
 
 class Camera(object):
     def __init__(self, position, angle, focus):
+        """
+        :param np.ndarray position: カメラの位置 (x, y, z)
+        :param np.ndarray angle: カメラの角度 (x, y, z)
+        :param float focus: カメラの焦点距離
+        """
         self.position = position
         self.angle = angle
         self.focus = focus
@@ -15,4 +20,4 @@ class Camera(object):
             (0.0, 1.0, 0.0, 0.0),
             (0.0, 0.0, 1.0, 0.0),
             (0.0, 0.0, 1.0 / self.focus, 0.0)
-        ))
+        ), dtype=np.float64)

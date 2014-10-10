@@ -8,9 +8,10 @@ class PpmImage(object):
     def __init__(self, name, width, height, image, depth=8):
         """
         :param name:
-        :param width:
-        :param height:
-        :param image:
+        :type name: str or unicode
+        :param int width:
+        :param int height:
+        :param np.ndarray image:
         :param depth depth: 各色の階調数 (bit)
         :return:
         """

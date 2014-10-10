@@ -37,10 +37,10 @@ class Vrml(object):
                             'ambientIntensity', 'shininess',):
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
-                        tuple(map(float, items[1:4])))
+                        tuple(map(float, items[1:4])), dtype=np.float64)
                 elif items[0] == 'specularColor':
                     self.specular_color = np.array(
-                        tuple(map(float, items[1:4])))
+                        tuple(map(float, items[1:4])), dtype=np.float64)
                 elif items[0] == 'shininess':
                     self.shininess = float(items[1])
                 elif items[0] == 'ambientIntensity':
@@ -55,9 +55,9 @@ class Vrml(object):
             if (status is Status.point and
                     len(items) == 3 and
                     items[2].endswith(',')):
-                self.points.append(np.array(
-                    tuple(map(lambda i: float(i.replace(',', '')), items))))
+                l = [float(i.replace(',', '')) for i in items]
+                self.points.append(np.array(l, dtype=np.float64))
 
             if status is Status.index and len(items) == 4:
                 self.indexes.append(
-                    tuple(map(lambda i: int(i.replace(',', '')), items[:3])))
+                    [int(i.replace(',', '')) for i in items[:3]])
