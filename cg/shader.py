@@ -93,8 +93,10 @@ class SpecularShader(Shader):
             return np.zeros(3)
         # ポリゴンの法線ベクトル (単位ベクトル化)
         normal = self._unit_vector(cross)
-        # ポリゴンから視点への単位方向ベクトル
-        e = self._unit_vector(self.camera_position - polygon[0])
+        # ポリゴンの重心
+        g = (polygon[0] + polygon[1] + polygon[2]) / 3
+        # ポリゴンの重心から視点への単位方向ベクトル
+        e = self._unit_vector(self.camera_position - g)
         s = e - self.direction
         s /= np.linalg.norm(s)
         sn = np.dot(s, normal)
