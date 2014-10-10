@@ -168,22 +168,22 @@ class Renderer(object):
         if self.shading_mode is ShadingMode.flat:
             for index, normal in zip(indexes, polygon_normals):
                 # ポリゴンの3点の座標
-                verticies = tuple((map(lambda i: points[i], index)))
+                vertexes = tuple((map(lambda i: points[i], index)))
                 # ポリゴンの面の法線ベクトル
                 normals = (normal,)
-                self._draw_polygon(verticies, normals)
+                self._draw_polygon(vertexes, normals)
         elif self.shading_mode is ShadingMode.gouraud:
             # 各頂点の法線ベクトルを集計
-            verticies = [[] for _ in range(len(points))]
+            vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
                 normal = polygon_normals[i]
-                verticies[index[0]].append(normal)
-                verticies[index[1]].append(normal)
-                verticies[index[2]].append(normal)
+                vertexes[index[0]].append(normal)
+                vertexes[index[1]].append(normal)
+                vertexes[index[2]].append(normal)
 
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
             vertex_normals = []
-            for vertex in verticies:
+            for vertex in vertexes:
                 vertex_normals.append(np.array(sum(vertex) / len(vertex)))
 
             for index in indexes:
