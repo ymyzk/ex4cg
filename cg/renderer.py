@@ -120,25 +120,32 @@ class Renderer(object):
                 z = calc_z(pz, qz, r)
                 yield x, y, z
 
-    def _draw_polygon(self, polygon, normals):
-        # TODO: 飽和演算の実装の改善
-        color = np.zeros(3, dtype=np.float)
-        if self.shading_mode is ShadingMode.flat:
-            for shader in self.shaders:
-                color += shader.calc_flat(polygon, normals[0])
+    @staticmethod
+    def _saturate_color(color):
+        """色を 0-255 の範囲に収める処理"""
         if 255 < color[0]:
             color[0] = 255
         if 255 < color[1]:
             color[1] = 255
         if 255 < color[2]:
             color[2] = 255
-        color = color.astype(np.uint8)
+        return color.astype(np.uint8)
+
+    def _draw_polygon(self, polygon, normals):
+        # TODO: 飽和演算の実装の改善
+        color = np.zeros(3, dtype=np.float)
+        for shader in self.shaders:
+            if self.shading_mode is ShadingMode.flat:
+                color += shader.calc_flat(polygon, normals[0])
+            elif self.shading_mode is ShadingMode.gouraud:
+                color += shader.calc_gouraud(polygon, normals)
+        color = self._saturate_color(color)
         for x, y, z in self.rasterize(polygon):
             # Z バッファでテスト
             if not self.zbuffering or z <= self.zbuffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-                # TODO: サンプル画像がおかしいので X を反転して表示
+                # NOTE: サンプル画像がおかしいので X を反転して表示している
                 data_x = 3 * (self.width - 1 - (self.half_width + x))
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
