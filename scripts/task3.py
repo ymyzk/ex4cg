@@ -43,7 +43,7 @@ def main(args):
     renderer = Renderer(camera=camera, shaders=shaders,
                         width=width, height=height)
 
-    for i, polygon in enumerate(vrml.polygons):
+    for polygon in vrml.polygons:
         print(', '.join(map(str, polygon[:3])), file=sys.stderr)
         renderer.draw_polygon(polygon)
 
