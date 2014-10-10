@@ -35,8 +35,11 @@ class AmbientShader(Shader):
         self.luminance = luminance
         self.intensity = intensity * 2 ** (depth - 1)
 
-    def calc(self, polygon):
+    def _calc(self):
         return self.intensity * self.luminance
+
+    def calc_flat(self, *_):
+        return self._calc()
 
 
 class DiffuseShader(Shader):
@@ -54,14 +57,10 @@ class DiffuseShader(Shader):
         self.color = color
         self.depth = depth
 
-    def calc(self, polygon):
-        # 直交ベクトル
-        cross = self._orthogonal_vector(polygon)
-        # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
-        if np.count_nonzero(cross) == 0:
+    def calc_flat(self, _, normal):
+        # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        if np.count_nonzero(normal) == 0:
             return np.zeros(3)
-        # 法線ベクトル (単位ベクトル化)
-        normal = self._unit_vector(cross)
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
@@ -76,8 +75,11 @@ class RandomColorShader(Shader):
     def __init__(self, depth=8):
         self.depth = depth
 
-    def calc(self, polygon):
+    def _calc(self):
         return random_color(self.depth)
+
+    def calc_flat(self, *_):
+        return self._calc()
 
 
 class SpecularShader(Shader):
@@ -100,14 +102,10 @@ class SpecularShader(Shader):
         self.shininess = shininess * 128
         self.depth = depth
 
-    def calc(self, polygon):
-        # ポリゴンの直交ベクトル
-        cross = self._orthogonal_vector(polygon)
-        # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
-        if np.count_nonzero(cross) == 0:
+    def calc_flat(self, polygon, normal):
+        # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        if np.count_nonzero(normal) == 0:
             return np.zeros(3)
-        # ポリゴンの法線ベクトル (単位ベクトル化)
-        normal = self._unit_vector(cross)
         # ポリゴンの重心
         g = (polygon[0] + polygon[1] + polygon[2]) / 3
         # ポリゴンの重心から視点への単位方向ベクトル

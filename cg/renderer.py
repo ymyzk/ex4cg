@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from enum import Enum
 import math
 import numpy as np
 
 
+class ShadingMode(Enum):
+    flat = 0
+    gouraud = 1
+
+
 class Renderer(object):
     def __init__(self, camera, width, height, zbuffering=True, depth=8,
-                 shaders=[]):
+                 shaders=tuple(), shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
         :param bool zbuffering: Z バッファを有効にするかどうか
@@ -18,6 +24,7 @@ class Renderer(object):
         self.width = width
         self.height = height
         self.zbuffering = zbuffering
+        self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
         self.zbuffer = np.empty((self.height, self.width), dtype=np.float64)
@@ -107,11 +114,12 @@ class Renderer(object):
             for x, z in make_range_xz(p[0], q[0], pz, qz):
                 yield x, y, z
 
-    def _draw_polygon(self, polygon):
+    def _draw_polygon(self, polygon, normals):
         # TODO: 飽和演算の実装の改善
         color = np.zeros(3, dtype=np.float)
-        for shader in self.shaders:
-            color += shader.calc(polygon)
+        if self.shading_mode is ShadingMode.flat:
+            for shader in self.shaders:
+                color += shader.calc_flat(polygon, normals[0])
         if 255 < color[0]:
             color[0] = 255
         if 255 < color[1]:
@@ -130,23 +138,51 @@ class Renderer(object):
                 self.data[data_y][data_x:data_x + 3] = color
                 self.zbuffer[y][x] = z
 
-    def draw_polygons(self, points, indexes):
-        # ポリゴンのリストを作る
-        # リストのそれぞれの要素は1,2,3点の座標とポリゴンの法線ベクトル
-        #  ((x, y, z), (x, y, z), (x, y, z), normal vec.)
-        polygons = []
+    def _polygons_normal(self, points, indexes):
+        """ポリゴンの法線ベクトルのリストを作成する処理"""
+        normals = []
         for index in indexes:
             polygon = list((map(lambda i: points[i], index)))
+            polygon.append(index)
             # 直交ベクトル (時計回りを表)
             cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                polygon.append(np.zeros(3))
+                normals.append(np.zeros(3))
             else:
                 # 法線ベクトル
-                normal = cross / np.linalg.norm(cross)
-                polygon.append(normal)
-            polygons.append(polygon)
+                normals.append(cross / np.linalg.norm(cross))
 
-        for polygon in polygons:
-            self._draw_polygon(polygon[:3])
+        return normals
+
+    def draw_polygons(self, points, indexes):
+        # ポリゴンの法線ベクトルを求める
+        polygon_normals = self._polygons_normal(points, indexes)
+
+        if self.shading_mode is ShadingMode.flat:
+            for index, normal in zip(indexes, polygon_normals):
+                # ポリゴンの3点の座標
+                verticies = tuple((map(lambda i: points[i], index)))
+                # ポリゴンの面の法線ベクトル
+                normals = (normal,)
+                self._draw_polygon(verticies, normals)
+        elif self.shading_mode is ShadingMode.gouraud:
+            # 各頂点の法線ベクトルを集計
+            verticies = [[] for _ in range(len(points))]
+            for i, index in enumerate(indexes):
+                normal = polygon_normals[i]
+                verticies[index[0]].append(normal)
+                verticies[index[1]].append(normal)
+                verticies[index[2]].append(normal)
+
+            # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
+            vertex_normals = []
+            for vertex in verticies:
+                vertex_normals.append(np.array(sum(vertex) / len(vertex)))
+
+            for index in indexes:
+                # ポリゴンの3点の座標
+                verticies = tuple((map(lambda i: points[i], index)))
+                # ポリゴンの3点の法線ベクトル
+                normals = tuple((map(lambda i: vertex_normals[i], index)))
+                self._draw_polygon(verticies, normals)
