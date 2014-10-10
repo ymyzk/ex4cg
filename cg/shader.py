@@ -24,13 +24,19 @@ class Shader(object):
         return vector / np.linalg.norm(vector)
 
 
-class RandomColorShader(Shader):
-    """ランダムな色を返すシェーダ"""
-    def __init__(self, depth=8):
-        self.depth = depth
+class AmbientShader(Shader):
+    """環境光を計算するシェーダ"""
+    def __init__(self, luminance, intensity, depth=8):
+        """
+        :param luminance: 入射光の強さ 0.0-1.0 (r, g, b)
+        :param intensity: 環境光係数 0.0-1.0
+        :param depth:
+        """
+        self.luminance = luminance
+        self.intensity = intensity * 2 ** (depth - 1)
 
     def calc(self, polygon):
-        return random_color(self.depth)
+        return self.intensity * self.luminance
 
 
 class DiffuseShader(Shader):
@@ -63,6 +69,15 @@ class DiffuseShader(Shader):
             return np.zeros(3)
         diffuse = (2 ** self.depth - 1) * cos * self.color * self.luminance
         return diffuse
+
+
+class RandomColorShader(Shader):
+    """ランダムな色を返すシェーダ"""
+    def __init__(self, depth=8):
+        self.depth = depth
+
+    def calc(self, polygon):
+        return random_color(self.depth)
 
 
 class SpecularShader(Shader):

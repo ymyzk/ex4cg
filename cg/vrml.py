@@ -43,6 +43,8 @@ class Vrml(object):
                         tuple(map(float, items[1:4])))
                 elif items[0] == 'shininess':
                     self.shininess = float(items[1])
+                elif items[0] == 'ambientIntensity':
+                    self.ambient_intensity = float(items[1])
             elif items[0] == 'point':
                 status = Status.point
                 continue
