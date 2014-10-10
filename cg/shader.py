@@ -17,18 +17,12 @@ class ShadingMode(Enum):
 class Shader(object):
     """シェーダ"""
     @staticmethod
-    def _orthogonal_vector(polygon):
-        """ポリゴンの直交ベクトルを求める処理"""
-        # 直交ベクトル
-        # 反時計回りを表
-        # cross = np.cross(polygon[0] - polygon[1], polygon[1] - polygon[2])
-        # 時計回りを表
-        cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
-        return cross
-
-    @staticmethod
     def _unit_vector(vector):
-        """単位ベクトルを求める処理"""
+        """単位ベクトルを求める処理
+
+        :param numpy.ndarray vector: 単位ベクトルを求めるベクトル
+        :rtype: numpy.ndarray
+        """
         return vector / np.linalg.norm(vector)
 
 
@@ -38,7 +32,7 @@ class AmbientShader(Shader):
         """
         :param luminance: 入射光の強さ 0.0-1.0 (r, g, b)
         :param intensity: 環境光係数 0.0-1.0
-        :param depth:
+        :param depth: (optional) 階調数 (bit)
         """
         self.luminance = luminance
         self.intensity = intensity * 2 ** (depth - 1)
@@ -54,7 +48,7 @@ class DiffuseShader(Shader):
         :param direction: 入射光の方向 (x, y, z)
         :param luminance: 入射光の強さ (r, g, b)
         :param color: 拡散反射係数 (r, g, b)
-        :param depth:
+        :param depth: (optional) 階調数 (bit)
         """
         # 方向ベクトルを単位ベクトルに変換
         self.direction = self._unit_vector(direction)
@@ -93,8 +87,8 @@ class SpecularShader(Shader):
         :param direction: 入射光の方向 (x, y, z)
         :param luminance: 入射光の強さ (r, g, b)
         :param color: 鏡面反射係数 (r, g, b)
-        :param shininess: 鏡面反射強度 s
-        :param depth:
+        :param shininess: 鏡面反射強度 s 0.0-1.0
+        :param depth: (optional) 階調数 (bit)
         """
         self.camera_position = camera_position
         # 方向ベクトルを単位ベクトルに変換

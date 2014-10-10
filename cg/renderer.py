@@ -12,7 +12,7 @@ class Renderer(object):
                  shaders=tuple(), shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
-        :param bool zbuffering: Z バッファを有効にするかどうか
+        :param bool z_buffering: Z バッファを有効にするかどうか
         """
         self.camera = camera
         self.shaders = shaders
