@@ -53,16 +53,13 @@ class Renderer(object):
         def calc_z(z1, z2, r):
             return 1 / (r / z1 + (1 - r) / z2)
 
-        def make_range_xz(x1, x2, z1, z2):
-            if x2 < x1:
-                x1, x2 = x2, x1
+        def make_range_x(x1, x2):
             x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
             if x1 == x2:
-                yield x1, z1
-                return
-            for x in range(max(x1, -self.half_width),
-                           min(x2, self.half_width - 1) + 1):
-                yield x, calc_z(z1, z2, (x - x1) / (x2 - x1))
+                return range(x1, x1 + 1)
+            else:
+                return range(max(x1, -self.half_width),
+                             min(x2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
             if y2 < y1:
@@ -97,8 +94,8 @@ class Renderer(object):
                 if a[1] == b[1]:
                     continue
                 s = (y - a[1]) / (b[1] - a[1])
-                p = (1 - s) * a + s * b
-                q = (1 - s) * a + s * d
+                px = ((1 - s) * a + s * b)[0]
+                qx = ((1 - s) * a + s * d)[0]
                 pz = calc_z(a[3], b[3], 1 - s)
                 qz = calc_z(a[3], d[3], 1 - s)
             else:
@@ -106,12 +103,21 @@ class Renderer(object):
                 if b[1] == c[1]:
                     continue
                 s = (y - c[1]) / (b[1] - c[1])
-                p = (1 - s) * c + s * b
-                q = (1 - s) * c + s * d
+                px = ((1 - s) * c + s * b)[0]
+                qx = ((1 - s) * c + s * d)[0]
                 pz = calc_z(c[3], b[3], 1 - s)
                 qz = calc_z(c[3], d[3], 1 - s)
             # x についてループ
-            for x, z in make_range_xz(p[0], q[0], pz, qz):
+            if px == qx:
+                # x が同じの時はすぐに終了
+                yield px, y, pz
+                continue
+            elif px > qx:
+                # x についてソート
+                px, qx = qx, px
+            for x in make_range_x(px, qx):
+                r = (x - px) / (qx - px)
+                z = calc_z(pz, qz, r)
                 yield x, y, z
 
     def _draw_polygon(self, polygon, normals):
