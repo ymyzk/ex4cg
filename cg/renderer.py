@@ -72,13 +72,17 @@ class Renderer(object):
 
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
+        an, bn, cn = normals
         # ポリゴンの3点を y でソート
         if a[1] > b[1]:
             a, b = b, a
+            an, bn = bn, an
         if b[1] > c[1]:
             b, c = c, b
+            bn, cn = cn, bn
         if a[1] > b[1]:
             a, b = b, a
+            an, bn = bn, an
 
         # 3点の y 座標が同じであれば処理終了
         if a[1] == c[1]:
@@ -87,9 +91,10 @@ class Renderer(object):
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
+        dn = (1 - r) * an + r * cn
 
         if self.shading_mode is ShadingMode.flat:
-            color = self._shade_flat(polygon, normals)
+            color = self._shade_flat(polygon, normals[0])
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
                 if y <= b[1]:
@@ -123,7 +128,11 @@ class Renderer(object):
                     z = calc_z(pz, qz, r)
                     yield x, y, z, color
         elif self.shading_mode is ShadingMode.gouraud:
-            color = self._shade_flat(polygon, normals)
+            # 点 ABCD をそれぞれの法線ベクトルでシェーディング
+            ac = self._shade_flat(polygon, an)
+            bc = self._shade_flat(polygon, bn)
+            cc = self._shade_flat(polygon, cn)
+            dc = self._shade_flat(polygon, dn)
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
                 if y <= b[1]:
@@ -133,6 +142,8 @@ class Renderer(object):
                     s = (y - a[1]) / (b[1] - a[1])
                     px = ((1 - s) * a + s * b)[0]
                     qx = ((1 - s) * a + s * d)[0]
+                    pc = ((1 - s) * ac + s * bc)
+                    qc = ((1 - s) * ac + s * dc)
                     pz = calc_z(a[3], b[3], 1 - s)
                     qz = calc_z(a[3], d[3], 1 - s)
                 else:
@@ -142,20 +153,24 @@ class Renderer(object):
                     s = (y - c[1]) / (b[1] - c[1])
                     px = ((1 - s) * c + s * b)[0]
                     qx = ((1 - s) * c + s * d)[0]
+                    pc = ((1 - s) * cc + s * bc)
+                    qc = ((1 - s) * cc + s * dc)
                     pz = calc_z(c[3], b[3], 1 - s)
                     qz = calc_z(c[3], d[3], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield px, y, pz, color
+                    yield px, y, pz, pc
                     continue
                 elif px > qx:
                     # x についてソート
+                    pc, qc = qc, pc
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
                     r = (x - px) / (qx - px)
+                    rc = ((1 - r) * pc + r * qc)
                     z = calc_z(pz, qz, r)
-                    yield x, y, z, color
+                    yield x, y, z, rc
 
     @staticmethod
     def _saturate_color(color):
@@ -169,11 +184,11 @@ class Renderer(object):
             color[2] = 255
         return color.astype(np.uint8)
 
-    def _shade_flat(self, polygon, normals):
+    def _shade_flat(self, polygon, normal):
         """コンスタントシェーディング処理"""
         color = np.zeros(3, dtype=np.float)
         for shader in self.shaders:
-            color += shader.calc_flat(polygon, normals[0])
+            color += shader.calc_flat(polygon, normal)
         return self._saturate_color(color)
 
     def _draw_polygon(self, polygon, normals):
@@ -214,7 +229,7 @@ class Renderer(object):
                 # ポリゴンの3点の座標
                 vertexes = tuple((map(lambda i: points[i], index)))
                 # ポリゴンの面の法線ベクトル
-                normals = (normal,)
+                normals = (normal, normal, normal)
                 self._draw_polygon(vertexes, normals)
         elif self.shading_mode is ShadingMode.gouraud:
             # 各頂点の法線ベクトルを集計
