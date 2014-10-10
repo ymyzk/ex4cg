@@ -50,12 +50,13 @@ class Renderer(object):
             return 1 / (ratio / z1 + (1 - ratio) / z2)
 
         def make_range_x(x1, x2):
-            x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
             if x1 == x2:
                 return range(x1, x1 + 1)
-            else:
-                return range(max(x1, -self.half_width),
-                             min(x2, self.half_width - 1) + 1)
+            elif x1 > x2:
+                x1, x2 = x2, x1
+            x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
+            return range(max(x1, -self.half_width),
+                         min(x2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
             y1 = math.ceil(np.asscalar(y1))
