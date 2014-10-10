@@ -33,10 +33,9 @@ class Renderer(object):
 
         画像平面の x, y, z + 元の座標の z
         """
-        vertex = np.append(point, 1)
-        p = np.dot(self.camera.array, vertex)
+        p = np.dot(self.camera.array, point)
         converted = (self.camera.focus / point[2]) * p
-        converted[3] = point[2]
+        converted[2] = point[2]
         return converted
 
     def rasterize_and_shade(self, polygon, normals):
@@ -59,8 +58,6 @@ class Renderer(object):
                              min(x2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
-            if y2 < y1:
-                y1, y2 = y2, y1
             y1 = math.ceil(np.asscalar(y1))
             y2 = math.floor(np.asscalar(y2))
             return range(max(y1, 1 - self.half_height),
@@ -69,16 +66,22 @@ class Renderer(object):
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
         an, bn, cn = normals
+
         # ポリゴンの3点を y でソート
-        if a[1] > b[1]:
-            a, b = b, a
-            an, bn = bn, an
-        if b[1] > c[1]:
+        if a[1] < b[1]:
+            if c[1] < a[1]:
+                a, c = c, a
+                an, cn = cn, an
+        else:
+            if b[1] < c[1]:
+                a, b = b, a
+                an, bn = bn, an
+            else:
+                a, c = c, a
+                an, cn = cn, an
+        if c[1] < b[1]:
             b, c = c, b
             bn, cn = cn, bn
-        if a[1] > b[1]:
-            a, b = b, a
-            an, bn = bn, an
 
         # 3点の y 座標が同じであれば処理終了
         if a[1] == c[1]:
@@ -100,17 +103,17 @@ class Renderer(object):
                     s = (y - a[1]) / (b[1] - a[1])
                     px = ((1 - s) * a[0] + s * b[0])
                     qx = ((1 - s) * a[0] + s * d[0])
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
-                    # 下 bd -> c
+                    # bd -> c
                     if b[1] == c[1]:
                         continue
                     s = (y - c[1]) / (b[1] - c[1])
                     px = ((1 - s) * c[0] + s * b[0])
                     qx = ((1 - s) * c[0] + s * d[0])
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -124,7 +127,7 @@ class Renderer(object):
                     z = calc_z(pz, qz, r)
                     yield x, y, z, color
         elif self.shading_mode is ShadingMode.gouraud:
-            # 点 ABCD をそれぞれの法線ベクトルでシェーディング
+            # 頂点をそれぞれの法線ベクトルでシェーディング
             ac = self._shade_vertex(polygon, an)
             bc = self._shade_vertex(polygon, bn)
             cc = self._shade_vertex(polygon, cn)
@@ -140,8 +143,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pc = ((1 - s) * ac + s * bc)
                     qc = ((1 - s) * ac + s * dc)
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -151,8 +154,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pc = ((1 - s) * cc + s * bc)
                     qc = ((1 - s) * cc + s * dc)
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -179,8 +182,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pn = ((1 - s) * an + s * bn)
                     qn = ((1 - s) * an + s * dn)
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -190,8 +193,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pn = ((1 - s) * cn + s * bn)
                     qn = ((1 - s) * cn + s * dn)
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -221,7 +224,7 @@ class Renderer(object):
 
     def _shade_vertex(self, polygon, normal):
         """シェーディング処理"""
-        color = np.zeros(3, dtype=np.float)
+        color = np.zeros(3, dtype=np.float64)
         for shader in self.shaders:
             color += shader.calc(polygon, normal)
         return self._saturate_color(color)
@@ -238,14 +241,19 @@ class Renderer(object):
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
                 # NOTE: サンプル画像がおかしいので X を反転して表示している
-                data_x = 3 * (self.width - 1 - (self.half_width + x))
+                # data_x = 3 * (self.half_width + x) # 反転させないコード
+                data_x = 3 * (self.half_width - x - 1)
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
                 self.z_buffer[y][x] = z
 
     @staticmethod
     def _polygons_normal(points, indexes):
-        """ポリゴンの法線ベクトルのリストを作成する処理"""
+        """ポリゴンの法線ベクトルのリストを作成する処理
+
+        :param list points: 座標のリスト
+        :param list indexes: ポリゴンのリスト
+        """
         normals = []
         for index in indexes:
             polygon = [points[i] for i in index]
@@ -253,11 +261,10 @@ class Renderer(object):
             cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                normals.append(np.zeros(3))
+                normals.append(np.zeros(3, dtype=np.float64))
             else:
                 # 法線ベクトル
                 normals.append(cross / np.linalg.norm(cross))
-
         return normals
 
     def draw_polygons(self, points, indexes):

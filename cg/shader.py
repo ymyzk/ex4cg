@@ -30,48 +30,51 @@ class AmbientShader(Shader):
     """環境光を計算するシェーダ"""
     def __init__(self, luminance, intensity, depth=8):
         """
-        :param luminance: 入射光の強さ 0.0-1.0 (r, g, b)
-        :param intensity: 環境光係数 0.0-1.0
-        :param depth: (optional) 階調数 (bit)
+        :param numpy.ndarray luminance: 入射光の強さ 0.0-1.0 (r, g, b)
+        :param float intensity: 環境光係数 0.0-1.0
+        :param int depth: (optional) 階調数 (bit)
         """
-        self.luminance = luminance
-        self.intensity = intensity * 2 ** (depth - 1)
+        self.shade = intensity * 2 ** (depth - 1) * luminance
 
     def calc(self, *_):
-        return self.intensity * self.luminance
+        return self.shade
 
 
 class DiffuseShader(Shader):
     """拡散反射を計算するシェーダ"""
     def __init__(self, direction, luminance, color, depth=8):
         """
-        :param direction: 入射光の方向 (x, y, z)
-        :param luminance: 入射光の強さ (r, g, b)
-        :param color: 拡散反射係数 (r, g, b)
-        :param depth: (optional) 階調数 (bit)
+        :param numpy.ndarray direction: 入射光の方向 (x, y, z)
+        :param numpy.ndarray luminance: 入射光の強さ (r, g, b)
+        :param numpy.ndarray color: 拡散反射係数 (r, g, b)
+        :param int depth: (optional) 階調数 (bit)
         """
         # 方向ベクトルを単位ベクトルに変換
         self.direction = self._unit_vector(direction)
-        self.luminance = luminance
-        self.color = color
-        self.depth = depth
+        self._pre_shade = (2 ** depth - 1) * color * luminance
 
     def calc(self, _, normal):
+        """
+        :param numpy.ndarray normal: 法線ベクトル
+        """
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
-            return np.zeros(3)
+            return np.zeros(3, dtype=np.float64)
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
-        if cos < 0:
-            return np.zeros(3)
-        diffuse = (2 ** self.depth - 1) * cos * self.color * self.luminance
+        if cos < 0.0:
+            return np.zeros(3, dtype=np.float64)
+        diffuse = self._pre_shade * cos
         return diffuse
 
 
 class RandomColorShader(Shader):
     """ランダムな色を返すシェーダ"""
     def __init__(self, depth=8):
+        """
+        :param int depth: (optional) 階調数 (bit)
+        """
         self.depth = depth
 
     def calc(self, *_):
@@ -83,25 +86,23 @@ class SpecularShader(Shader):
     def __init__(self, camera_position, direction, luminance, color, shininess,
                  depth=8):
         """
-        :param camera_position: カメラの位置 (x, y, z)
-        :param direction: 入射光の方向 (x, y, z)
-        :param luminance: 入射光の強さ (r, g, b)
-        :param color: 鏡面反射係数 (r, g, b)
-        :param shininess: 鏡面反射強度 s 0.0-1.0
-        :param depth: (optional) 階調数 (bit)
+        :param numpy.ndarray camera_position: カメラの位置 (x, y, z)
+        :param numpy.ndarray direction: 入射光の方向 (x, y, z)
+        :param numpy.ndarray luminance: 入射光の強さ (r, g, b)
+        :param numpy.ndarray color: 鏡面反射係数 (r, g, b)
+        :param float shininess: 鏡面反射強度 s 0.0-1.0
+        :param int depth: (optional) 階調数 (bit)
         """
         self.camera_position = camera_position
         # 方向ベクトルを単位ベクトルに変換
         self.direction = self._unit_vector(direction)
-        self.luminance = luminance
-        self.color = color
         self.shininess = shininess * 128
-        self.depth = depth
+        self._pre_shade = (2 ** depth - 1) * color * luminance
 
     def calc(self, polygon, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
-            return np.zeros(3)
+            return np.zeros(3, dtype=np.float64)
         # ポリゴンの重心
         g = (polygon[0] + polygon[1] + polygon[2]) / 3
         # ポリゴンの重心から視点への単位方向ベクトル
@@ -111,6 +112,5 @@ class SpecularShader(Shader):
         sn = np.dot(s, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0:
-            return np.zeros(3)
-        specular = sn ** self.shininess * self.color * self.luminance
-        return (2 ** self.depth - 1) * specular
+            return np.zeros(3, dtype=np.float64)
+        return sn ** self.shininess * self._pre_shade

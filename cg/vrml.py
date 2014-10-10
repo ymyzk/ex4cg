@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
-import enum
+from enum import Enum
 
 import numpy as np
 
 
-Status = enum.Enum("Status", "material point index")
+class Status(Enum):
+    material = 1
+    point = 2
+    index = 3
 
 
 class Vrml(object):

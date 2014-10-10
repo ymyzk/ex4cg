@@ -11,7 +11,7 @@ class PpmImage(object):
         :type name: str or unicode
         :param int width:
         :param int height:
-        :param np.ndarray image:
+        :param numpy.ndarray image:
         :param depth depth: 各色の階調数 (bit)
         :return:
         """
