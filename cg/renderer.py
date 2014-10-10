@@ -43,11 +43,12 @@ class Renderer(object):
         converted[3] = point[2]
         return converted
 
-    def rasterize(self, polygon):
-        """ラスタライズ処理
+    def rasterize_and_shade(self, polygon, normals):
+        """ラスタライズ + シェーディング処理
 
-        ポリゴンをラスタライズして, 点を順に返すイタレータ
+        ポリゴンをラスタライズして, シェーディングを行い, 座標と色を返すイタレータ
         :param polygon: ポリゴン
+        :param normals: ポリゴンの各点の法線ベクトルのリスト
         """
 
         def calc_z(z1, z2, r):
@@ -87,42 +88,79 @@ class Renderer(object):
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
 
-        for y in make_range_y(a[1], c[1]):
-            # x の左右を探す:
-            if y <= b[1]:
-                # a -> bd
-                if a[1] == b[1]:
+        if self.shading_mode is ShadingMode.flat:
+            color = self._shade_flat(polygon, normals)
+            for y in make_range_y(a[1], c[1]):
+                # x の左右を探す:
+                if y <= b[1]:
+                    # a -> bd
+                    if a[1] == b[1]:
+                        continue
+                    s = (y - a[1]) / (b[1] - a[1])
+                    px = ((1 - s) * a + s * b)[0]
+                    qx = ((1 - s) * a + s * d)[0]
+                    pz = calc_z(a[3], b[3], 1 - s)
+                    qz = calc_z(a[3], d[3], 1 - s)
+                else:
+                    # 下 bd -> c
+                    if b[1] == c[1]:
+                        continue
+                    s = (y - c[1]) / (b[1] - c[1])
+                    px = ((1 - s) * c + s * b)[0]
+                    qx = ((1 - s) * c + s * d)[0]
+                    pz = calc_z(c[3], b[3], 1 - s)
+                    qz = calc_z(c[3], d[3], 1 - s)
+                # x についてループ
+                if px == qx:
+                    # x が同じの時はすぐに終了
+                    yield px, y, pz, color
                     continue
-                s = (y - a[1]) / (b[1] - a[1])
-                px = ((1 - s) * a + s * b)[0]
-                qx = ((1 - s) * a + s * d)[0]
-                pz = calc_z(a[3], b[3], 1 - s)
-                qz = calc_z(a[3], d[3], 1 - s)
-            else:
-                # 下 bd -> c
-                if b[1] == c[1]:
+                elif px > qx:
+                    # x についてソート
+                    px, qx = qx, px
+                for x in make_range_x(px, qx):
+                    r = (x - px) / (qx - px)
+                    z = calc_z(pz, qz, r)
+                    yield x, y, z, color
+        elif self.shading_mode is ShadingMode.gouraud:
+            color = self._shade_flat(polygon, normals)
+            for y in make_range_y(a[1], c[1]):
+                # x の左右を探す:
+                if y <= b[1]:
+                    # a -> bd
+                    if a[1] == b[1]:
+                        continue
+                    s = (y - a[1]) / (b[1] - a[1])
+                    px = ((1 - s) * a + s * b)[0]
+                    qx = ((1 - s) * a + s * d)[0]
+                    pz = calc_z(a[3], b[3], 1 - s)
+                    qz = calc_z(a[3], d[3], 1 - s)
+                else:
+                    # 下 bd -> c
+                    if b[1] == c[1]:
+                        continue
+                    s = (y - c[1]) / (b[1] - c[1])
+                    px = ((1 - s) * c + s * b)[0]
+                    qx = ((1 - s) * c + s * d)[0]
+                    pz = calc_z(c[3], b[3], 1 - s)
+                    qz = calc_z(c[3], d[3], 1 - s)
+                # x についてループ
+                if px == qx:
+                    # x が同じの時はすぐに終了
+                    yield px, y, pz, color
                     continue
-                s = (y - c[1]) / (b[1] - c[1])
-                px = ((1 - s) * c + s * b)[0]
-                qx = ((1 - s) * c + s * d)[0]
-                pz = calc_z(c[3], b[3], 1 - s)
-                qz = calc_z(c[3], d[3], 1 - s)
-            # x についてループ
-            if px == qx:
-                # x が同じの時はすぐに終了
-                yield px, y, pz
-                continue
-            elif px > qx:
-                # x についてソート
-                px, qx = qx, px
-            for x in make_range_x(px, qx):
-                r = (x - px) / (qx - px)
-                z = calc_z(pz, qz, r)
-                yield x, y, z
+                elif px > qx:
+                    # x についてソート
+                    px, qx = qx, px
+                for x in make_range_x(px, qx):
+                    r = (x - px) / (qx - px)
+                    z = calc_z(pz, qz, r)
+                    yield x, y, z, color
 
     @staticmethod
     def _saturate_color(color):
         """色を 0-255 の範囲に収める処理"""
+        # TODO: 飽和演算の実装の改善
         if 255 < color[0]:
             color[0] = 255
         if 255 < color[1]:
@@ -131,16 +169,15 @@ class Renderer(object):
             color[2] = 255
         return color.astype(np.uint8)
 
-    def _draw_polygon(self, polygon, normals):
-        # TODO: 飽和演算の実装の改善
+    def _shade_flat(self, polygon, normals):
+        """コンスタントシェーディング処理"""
         color = np.zeros(3, dtype=np.float)
         for shader in self.shaders:
-            if self.shading_mode is ShadingMode.flat:
-                color += shader.calc_flat(polygon, normals[0])
-            elif self.shading_mode is ShadingMode.gouraud:
-                color += shader.calc_gouraud(polygon, normals)
-        color = self._saturate_color(color)
-        for x, y, z in self.rasterize(polygon):
+            color += shader.calc_flat(polygon, normals[0])
+        return self._saturate_color(color)
+
+    def _draw_polygon(self, polygon, normals):
+        for x, y, z, color in self.rasterize_and_shade(polygon, normals):
             # Z バッファでテスト
             if not self.zbuffering or z <= self.zbuffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
