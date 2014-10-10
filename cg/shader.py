@@ -10,7 +10,7 @@ class Shader(object):
     """シェーダ"""
     @staticmethod
     def _orthogonal_vector(polygon):
-        """ポリゴンの直行ベクトルを求める処理"""
+        """ポリゴンの直交ベクトルを求める処理"""
         # 直交ベクトル
         # 反時計回りを表
         # cross = np.cross(polygon[0] - polygon[1], polygon[1] - polygon[2])

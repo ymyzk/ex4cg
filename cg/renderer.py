@@ -67,7 +67,7 @@ class Renderer(object):
 
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
-        # ポリゴンの3点を y でそーと
+        # ポリゴンの3点を y でソート
         if a[1] > b[1]:
             a, b = b, a
         if b[1] > c[1]:
@@ -131,5 +131,22 @@ class Renderer(object):
                 self.zbuffer[y][x] = z
 
     def draw_polygons(self, points, indexes):
+        # ポリゴンのリストを作る
+        # リストのそれぞれの要素は1,2,3点の座標とポリゴンの法線ベクトル
+        #  ((x, y, z), (x, y, z), (x, y, z), normal vec.)
+        polygons = []
         for index in indexes:
-            self._draw_polygon(tuple((map(lambda i: points[i], index))))
+            polygon = list((map(lambda i: points[i], index)))
+            # 直交ベクトル (時計回りを表)
+            cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
+            # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+            if np.count_nonzero(cross) == 0:
+                polygon.append(np.zeros(3))
+            else:
+                # 法線ベクトル
+                normal = cross / np.linalg.norm(cross)
+                polygon.append(normal)
+            polygons.append(polygon)
+
+        for polygon in polygons:
+            self._draw_polygon(polygon[:3])
