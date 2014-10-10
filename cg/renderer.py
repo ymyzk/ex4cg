@@ -8,7 +8,7 @@ from .shader import ShadingMode
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, zbuffering=True, depth=8,
+    def __init__(self, camera, width, height, z_buffering=True, depth=8,
                  shaders=tuple(), shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
@@ -19,12 +19,12 @@ class Renderer(object):
         self.depth = depth
         self.width = width
         self.height = height
-        self.zbuffering = zbuffering
+        self.z_buffering = z_buffering
         self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
-        self.zbuffer = np.empty((self.height, self.width), dtype=np.float64)
-        self.zbuffer.fill(float('inf'))
+        self.z_buffer = np.empty((self.height, self.width), dtype=np.float64)
+        self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
 
@@ -47,8 +47,8 @@ class Renderer(object):
         :param normals: ポリゴンの各点の法線ベクトルのリスト
         """
 
-        def calc_z(z1, z2, r):
-            return 1 / (r / z1 + (1 - r) / z2)
+        def calc_z(z1, z2, ratio):
+            return 1 / (ratio / z1 + (1 - ratio) / z2)
 
         def make_range_x(x1, x2):
             x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
@@ -98,8 +98,8 @@ class Renderer(object):
                     if a[1] == b[1]:
                         continue
                     s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a + s * b)[0]
-                    qx = ((1 - s) * a + s * d)[0]
+                    px = ((1 - s) * a[0] + s * b[0])
+                    qx = ((1 - s) * a[0] + s * d[0])
                     pz = calc_z(a[3], b[3], 1 - s)
                     qz = calc_z(a[3], d[3], 1 - s)
                 else:
@@ -107,8 +107,8 @@ class Renderer(object):
                     if b[1] == c[1]:
                         continue
                     s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c + s * b)[0]
-                    qx = ((1 - s) * c + s * d)[0]
+                    px = ((1 - s) * c[0] + s * b[0])
+                    qx = ((1 - s) * c[0] + s * d[0])
                     pz = calc_z(c[3], b[3], 1 - s)
                     qz = calc_z(c[3], d[3], 1 - s)
                 # x についてループ
@@ -136,8 +136,8 @@ class Renderer(object):
                     if a[1] == b[1]:
                         continue
                     s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a + s * b)[0]
-                    qx = ((1 - s) * a + s * d)[0]
+                    px = ((1 - s) * a[0] + s * b[0])
+                    qx = ((1 - s) * a[0] + s * d[0])
                     pc = ((1 - s) * ac + s * bc)
                     qc = ((1 - s) * ac + s * dc)
                     pz = calc_z(a[3], b[3], 1 - s)
@@ -147,8 +147,8 @@ class Renderer(object):
                     if b[1] == c[1]:
                         continue
                     s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c + s * b)[0]
-                    qx = ((1 - s) * c + s * d)[0]
+                    px = ((1 - s) * c[0] + s * b[0])
+                    qx = ((1 - s) * c[0] + s * d[0])
                     pc = ((1 - s) * cc + s * bc)
                     qc = ((1 - s) * cc + s * dc)
                     pz = calc_z(c[3], b[3], 1 - s)
@@ -175,8 +175,8 @@ class Renderer(object):
                     if a[1] == b[1]:
                         continue
                     s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a + s * b)[0]
-                    qx = ((1 - s) * a + s * d)[0]
+                    px = ((1 - s) * a[0] + s * b[0])
+                    qx = ((1 - s) * a[0] + s * d[0])
                     pn = ((1 - s) * an + s * bn)
                     qn = ((1 - s) * an + s * dn)
                     pz = calc_z(a[3], b[3], 1 - s)
@@ -186,8 +186,8 @@ class Renderer(object):
                     if b[1] == c[1]:
                         continue
                     s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c + s * b)[0]
-                    qx = ((1 - s) * c + s * d)[0]
+                    px = ((1 - s) * c[0] + s * b[0])
+                    qx = ((1 - s) * c[0] + s * d[0])
                     pn = ((1 - s) * cn + s * bn)
                     qn = ((1 - s) * cn + s * dn)
                     pz = calc_z(c[3], b[3], 1 - s)
@@ -229,14 +229,14 @@ class Renderer(object):
     def _draw_polygon(self, polygon, normals):
         for x, y, z, color in self.rasterize_and_shade(polygon, normals):
             # Z バッファでテスト
-            if not self.zbuffering or z <= self.zbuffer[y][x]:
+            if not self.z_buffering or z <= self.z_buffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
                 # NOTE: サンプル画像がおかしいので X を反転して表示している
                 data_x = 3 * (self.width - 1 - (self.half_width + x))
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
-                self.zbuffer[y][x] = z
+                self.z_buffer[y][x] = z
 
     def _polygons_normal(self, points, indexes):
         """ポリゴンの法線ベクトルのリストを作成する処理"""
@@ -279,7 +279,10 @@ class Renderer(object):
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
             vertex_normals = []
             for vertex in vertexes:
-                vertex_normals.append(np.array(sum(vertex) / len(vertex)))
+                if 0 < len(vertex):
+                    vertex_normals.append(np.array(sum(vertex) / len(vertex)))
+                else:
+                    vertex_normals.append(0)
 
             for index in indexes:
                 # ポリゴンの3点の座標
