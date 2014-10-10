@@ -33,7 +33,6 @@ class Renderer(object):
         converted[3] = point[2]
         return converted
 
-    @profile
     def rasterize(self, polygon):
         """ラスタライズ処理
 
