@@ -3,12 +3,10 @@
 
 import sys
 
-import numpy as np
-
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
-from cg.shader import DiffuseShader
+from cg.shader import RandomColorShader
 from cg.utils import random_polygons
 
 
@@ -24,15 +22,11 @@ if __name__ == '__main__':
     camera = Camera(position=(0.0, 0.0, 0.0),
                     angle=(0.0, 0.0, 1.0),
                     focus=256.0)
-    shader = DiffuseShader(direction=np.array((-1.0, -1.0, 2.0)),
-                           color=np.array((1.0, 1.0, 1.0)),
-                           luminance=np.array((1.0, 1.0, 1.0)),
-                           depth=depth)
+    shader = RandomColorShader(depth=depth)
     renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
-                        width=width, height=height)
+                        width=width, height=height, zbuffering=False)
 
-    for polygon in polygons:
-        renderer.draw_polygon(polygon)
+    renderer.draw_polygons(polygons)
 
     name = "task1.ppm"
     image = PpmImage(name, width, height, renderer.data, depth=depth)

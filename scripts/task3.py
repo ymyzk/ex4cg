@@ -45,7 +45,8 @@ def main(args):
 
     for polygon in vrml.polygons:
         print(', '.join(map(str, polygon[:3])), file=sys.stderr)
-        renderer.draw_polygon(polygon)
+
+    renderer.draw_polygons(vrml.polygons)
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
     image = PpmImage(name, width, height, renderer.data)

@@ -6,15 +6,18 @@ import numpy as np
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, depth=8, shaders=[]):
+    def __init__(self, camera, width, height, zbuffering=True, depth=8,
+                 shaders=[]):
         """
         :param cg.camera.Camera camera: カメラ
+        :param bool zbuffering: Z バッファを有効にするかどうか
         """
         self.camera = camera
         self.shaders = shaders
         self.depth = depth
         self.width = width
         self.height = height
+        self.zbuffering = zbuffering
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
         self.zbuffer = np.empty((self.height, self.width), dtype=np.float64)
@@ -104,7 +107,7 @@ class Renderer(object):
             for x, z in make_range_xz(p[0], q[0], pz, qz):
                 yield x, y, z
 
-    def draw_polygon(self, polygon):
+    def _draw_polygon(self, polygon):
         # TODO: 飽和演算の実装の改善
         color = np.zeros(3, dtype=np.float)
         for shader in self.shaders:
@@ -118,7 +121,7 @@ class Renderer(object):
         color = color.astype(np.uint8)
         for x, y, z in self.rasterize(polygon):
             # Z バッファでテスト
-            if z <= self.zbuffer[y][x]:
+            if not self.zbuffering or z <= self.zbuffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
                 # TODO: サンプル画像がおかしいので X を反転して表示
@@ -126,3 +129,7 @@ class Renderer(object):
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
                 self.zbuffer[y][x] = z
+
+    def draw_polygons(self, polygons):
+        for polygon in polygons:
+            self._draw_polygon(polygon)
