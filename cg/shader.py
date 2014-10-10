@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from enum import Enum
+
 import numpy as np
 
 from cg.utils import random_color
+
+
+class ShadingMode(Enum):
+    flat = 0
+    gouraud = 1
 
 
 class Shader(object):
@@ -35,11 +42,8 @@ class AmbientShader(Shader):
         self.luminance = luminance
         self.intensity = intensity * 2 ** (depth - 1)
 
-    def _calc(self):
+    def calc(self, *_):
         return self.intensity * self.luminance
-
-    def calc_flat(self, *_):
-        return self._calc()
 
 
 class DiffuseShader(Shader):
@@ -57,7 +61,7 @@ class DiffuseShader(Shader):
         self.color = color
         self.depth = depth
 
-    def calc_flat(self, _, normal):
+    def calc(self, _, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
             return np.zeros(3)
@@ -75,11 +79,8 @@ class RandomColorShader(Shader):
     def __init__(self, depth=8):
         self.depth = depth
 
-    def _calc(self):
+    def calc(self, *_):
         return random_color(self.depth)
-
-    def calc_flat(self, *_):
-        return self._calc()
 
 
 class SpecularShader(Shader):
@@ -102,7 +103,7 @@ class SpecularShader(Shader):
         self.shininess = shininess * 128
         self.depth = depth
 
-    def calc_flat(self, polygon, normal):
+    def calc(self, polygon, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
             return np.zeros(3)

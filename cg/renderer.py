@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from enum import Enum
 import math
 import numpy as np
 
-
-class ShadingMode(Enum):
-    flat = 0
-    gouraud = 1
+from .shader import ShadingMode
 
 
 class Renderer(object):
@@ -94,7 +90,7 @@ class Renderer(object):
         dn = (1 - r) * an + r * cn
 
         if self.shading_mode is ShadingMode.flat:
-            color = self._shade_flat(polygon, normals[0])
+            color = self._shade_vertex(polygon, normals[0])
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
                 if y <= b[1]:
@@ -129,10 +125,10 @@ class Renderer(object):
                     yield x, y, z, color
         elif self.shading_mode is ShadingMode.gouraud:
             # 点 ABCD をそれぞれの法線ベクトルでシェーディング
-            ac = self._shade_flat(polygon, an)
-            bc = self._shade_flat(polygon, bn)
-            cc = self._shade_flat(polygon, cn)
-            dc = self._shade_flat(polygon, dn)
+            ac = self._shade_vertex(polygon, an)
+            bc = self._shade_vertex(polygon, bn)
+            cc = self._shade_vertex(polygon, cn)
+            dc = self._shade_vertex(polygon, dn)
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
                 if y <= b[1]:
@@ -184,11 +180,11 @@ class Renderer(object):
             color[2] = 255
         return color.astype(np.uint8)
 
-    def _shade_flat(self, polygon, normal):
-        """コンスタントシェーディング処理"""
+    def _shade_vertex(self, polygon, normal):
+        """シェーディング処理"""
         color = np.zeros(3, dtype=np.float)
         for shader in self.shaders:
-            color += shader.calc_flat(polygon, normal)
+            color += shader.calc(polygon, normal)
         return self._saturate_color(color)
 
     def _draw_polygon(self, polygon, normals):
