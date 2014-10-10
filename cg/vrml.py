@@ -16,14 +16,14 @@ class Vrml(object):
         self.specular_color = None
         self.ambient_intensity = None
         self.shininess = None
-        self.polygons = []
+        self.points = []
+        self.indexes = []
 
     def load(self, fp):
         """VRML ファイルを読み込む処理"""
         status = Status.material
-        points = []
-        indexes = []
-        self.polygons = []
+        self.points = []
+        self.indexes = []
         for l in fp:
             # コメント行の読み飛ばし
             l = l.strip()
@@ -55,14 +55,9 @@ class Vrml(object):
             if (status is Status.point and
                     len(items) == 3 and
                     items[2].endswith(',')):
-                points.append(np.array(
+                self.points.append(np.array(
                     tuple(map(lambda i: float(i.replace(',', '')), items))))
 
             if status is Status.index and len(items) == 4:
-                indexes.append(
+                self.indexes.append(
                     tuple(map(lambda i: int(i.replace(',', '')), items[:3])))
-
-        for index in indexes:
-            self.polygons.append(
-                tuple((map(lambda i: points[i], index)))
-            )

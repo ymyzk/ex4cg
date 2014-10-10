@@ -10,11 +10,12 @@ from cg.shader import RandomColorShader
 from cg.utils import random_polygons
 
 
-polygons = random_polygons(3)
+points, indexes = random_polygons(3)
 
 # ポリゴンごとに3点の座標を出力する
-for polygon in polygons:
-    print(', '.join(map(str, polygon[:3])), file=sys.stderr)
+for index in indexes:
+    polygon = tuple((map(lambda i: points[i], index)))
+    print(', '.join(map(str, polygon)), file=sys.stderr)
 
 if __name__ == '__main__':
     width = height = 256
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
                         width=width, height=height, zbuffering=False)
 
-    renderer.draw_polygons(polygons)
+    renderer.draw_polygons(points, indexes)
 
     name = "task1.ppm"
     image = PpmImage(name, width, height, renderer.data, depth=depth)

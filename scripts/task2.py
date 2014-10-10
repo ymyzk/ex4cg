@@ -36,10 +36,11 @@ def main(args):
     renderer = Renderer(camera=camera, shaders=[shader],
                         width=width, height=height)
 
-    for polygon in vrml.polygons:
-        print(', '.join(map(str, polygon[:3])), file=sys.stderr)
+    for index in vrml.indexes:
+        polygon = tuple((map(lambda i: vrml.points[i], index)))
+        print(', '.join(map(str, polygon)), file=sys.stderr)
 
-    renderer.draw_polygons(vrml.polygons)
+    renderer.draw_polygons(vrml.points, vrml.indexes)
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
     image = PpmImage(name, width, height, renderer.data)

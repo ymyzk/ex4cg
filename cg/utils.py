@@ -24,8 +24,8 @@ def random_points(n):
 def random_polygons(n):
     """ランダムな座標とポリゴンのリストを生成する処理"""
     points = random_points(3 * n)
-    polygons = [points[3*i:3*i+3] for i in range(n)]
-    return polygons
+    indexes = [tuple(range(3 * i, 3 * i + 3)) for i in range(n)]
+    return points, indexes
 
 
 def sample_polygons_1():

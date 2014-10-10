@@ -130,6 +130,6 @@ class Renderer(object):
                 self.data[data_y][data_x:data_x + 3] = color
                 self.zbuffer[y][x] = z
 
-    def draw_polygons(self, polygons):
-        for polygon in polygons:
-            self._draw_polygon(polygon)
+    def draw_polygons(self, points, indexes):
+        for index in indexes:
+            self._draw_polygon(tuple((map(lambda i: points[i], index))))
