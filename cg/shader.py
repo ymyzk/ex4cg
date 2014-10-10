@@ -11,6 +11,7 @@ from cg.utils import random_color
 class ShadingMode(Enum):
     flat = 0
     gouraud = 1
+    phong = 2
 
 
 class Shader(object):

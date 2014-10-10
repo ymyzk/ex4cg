@@ -167,6 +167,45 @@ class Renderer(object):
                     rc = ((1 - r) * pc + r * qc)
                     z = calc_z(pz, qz, r)
                     yield x, y, z, rc
+        elif self.shading_mode is ShadingMode.phong:
+            for y in make_range_y(a[1], c[1]):
+                # x の左右を探す:
+                if y <= b[1]:
+                    # a -> bd
+                    if a[1] == b[1]:
+                        continue
+                    s = (y - a[1]) / (b[1] - a[1])
+                    px = ((1 - s) * a + s * b)[0]
+                    qx = ((1 - s) * a + s * d)[0]
+                    pn = ((1 - s) * an + s * bn)
+                    qn = ((1 - s) * an + s * dn)
+                    pz = calc_z(a[3], b[3], 1 - s)
+                    qz = calc_z(a[3], d[3], 1 - s)
+                else:
+                    # 下 bd -> c
+                    if b[1] == c[1]:
+                        continue
+                    s = (y - c[1]) / (b[1] - c[1])
+                    px = ((1 - s) * c + s * b)[0]
+                    qx = ((1 - s) * c + s * d)[0]
+                    pn = ((1 - s) * cn + s * bn)
+                    qn = ((1 - s) * cn + s * dn)
+                    pz = calc_z(c[3], b[3], 1 - s)
+                    qz = calc_z(c[3], d[3], 1 - s)
+                # x についてループ
+                if px == qx:
+                    # x が同じの時はすぐに終了
+                    yield px, y, pz, self._shade_vertex(polygon, pn)
+                    continue
+                elif px > qx:
+                    # x についてソート
+                    pn, qn = qn, pn
+                    px, qx = qx, px
+                for x in make_range_x(px, qx):
+                    r = (x - px) / (qx - px)
+                    rn = ((1 - r) * pn + r * qn)
+                    z = calc_z(pz, qz, r)
+                    yield x, y, z, self._shade_vertex(polygon, rn)
 
     @staticmethod
     def _saturate_color(color):
@@ -227,7 +266,8 @@ class Renderer(object):
                 # ポリゴンの面の法線ベクトル
                 normals = (normal, normal, normal)
                 self._draw_polygon(vertexes, normals)
-        elif self.shading_mode is ShadingMode.gouraud:
+        elif (self.shading_mode is ShadingMode.gouraud or
+                      self.shading_mode is ShadingMode.phong):
             # 各頂点の法線ベクトルを集計
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
