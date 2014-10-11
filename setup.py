@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import sys
+
+import numpy as np
 from setuptools import setup, Extension
 
 try:
@@ -15,12 +18,21 @@ requires = [
     'numpy>=1.9.0'
 ]
 
+if sys.version_info < (3, 4):
+    requires.append('enum34==1.0')
+
 if USE_CYTHON:
-    ext_modules = [Extension('cg.cython', sources=['cython/shader.pyx'])]
+    ext = '.pyx'
     cmdclass = {'build_ext': build_ext}
 else:
-    ext_modules = [Extension('cg.cython', sources=['cython/shader.c'])]
+    ext = '.c'
     cmdclass = {}
+
+ext_modules = [
+    Extension('cg.cython.renderer',
+              sources=['cg/cython/sample' + ext],
+              include_dirs=[np.get_include()])
+]
 
 setup(
     name='ex4cg',
