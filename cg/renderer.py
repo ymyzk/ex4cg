@@ -8,6 +8,9 @@ import numpy as np
 from cg.shader import ShadingMode
 
 
+DOUBLE = np.float64
+
+
 class Renderer(object):
     def __init__(self, camera, width, height, z_buffering=True, depth=8,
                  shaders=tuple(), shading_mode=ShadingMode.flat):
@@ -24,7 +27,7 @@ class Renderer(object):
         self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
-        self.z_buffer = np.empty((self.height, self.width), dtype=np.float64)
+        self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
         self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
@@ -226,7 +229,7 @@ class Renderer(object):
 
     def _shade_vertex(self, polygon, normal):
         """シェーディング処理"""
-        color = np.zeros(3, dtype=np.float64)
+        color = np.zeros(3, dtype=DOUBLE)
         for shader in self.shaders:
             color += shader.calc(polygon, normal)
         return self._saturate_color(color)
@@ -249,40 +252,39 @@ class Renderer(object):
                 self.data[data_y][data_x:data_x + 3] = color
                 self.z_buffer[y][x] = z
 
-    @staticmethod
-    def _polygons_normal(points, indexes):
-        """ポリゴンの法線ベクトルのリストを作成する処理
+    def draw_polygons(self, points, indexes):
+        # ポリゴンのリストを作成
+        polygons = np.array([[points[i] for i in j] for j in indexes],
+                            dtype=DOUBLE)
 
-        :param list points: 座標のリスト
-        :param list indexes: ポリゴンのリスト
-        """
-        normals = []
-        for index in indexes:
-            polygon = [points[i] for i in index]
+        def normal(polygon):
+            """ポリゴンの面の法線ベクトルを求める処理"""
             # 直交ベクトル (時計回りを表)
-            cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
+            a = polygon[2] - polygon[1]
+            b = polygon[1] - polygon[0]
+            cross = np.array((
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
+            ), dtype=DOUBLE)
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                normals.append(np.zeros(3, dtype=np.float64))
+                return np.zeros(3, dtype=DOUBLE)
             else:
                 # 法線ベクトル
-                normals.append(cross / np.linalg.norm(cross))
-        return normals
+                return cross / np.linalg.norm(cross)
 
-    def draw_polygons(self, points, indexes):
-        # ポリゴンの法線ベクトルを求める
-        polygon_normals = self._polygons_normal(points, indexes)
+        # すべてのポリゴンの面の法線ベクトルを求める
+        polygon_normals = [normal(p) for p in polygons]
 
         if self.shading_mode is ShadingMode.flat:
-            for index, normal in zip(indexes, polygon_normals):
-                # ポリゴンの3点の座標
-                vertexes = tuple((map(lambda i: points[i], index)))
-                # ポリゴンの面の法線ベクトル
-                normals = (normal, normal, normal)
-                self._draw_polygon(vertexes, normals)
+            for i in range(len(polygons)):
+                normal = polygon_normals[i]
+                normals = np.array((normal, normal, normal))
+                self._draw_polygon(polygons[i], normals)
         elif (self.shading_mode is ShadingMode.gouraud or
               self.shading_mode is ShadingMode.phong):
-            # 各頂点の法線ベクトルを集計
+            # 各頂点の法線ベクトルのリストを作成
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
                 normal = polygon_normals[i]
@@ -291,18 +293,18 @@ class Renderer(object):
                 vertexes[index[2]].append(normal)
 
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
-            vertex_normals = []
-            for vertex in vertexes:
+            def mean(vertex):
                 if 0 < len(vertex):
-                    vertex_normals.append(np.array(sum(vertex) / len(vertex)))
+                    return np.array(sum(vertex) / len(vertex), dtype=DOUBLE)
                 else:
-                    vertex_normals.append(0)
+                    return np.zeros(3, dtype=DOUBLE)
+            vertex_normals = [mean(vertex) for vertex in vertexes]
 
-            for index in indexes:
-                # ポリゴンの3点の座標
-                vertexes = np.array([points[i] for i in index],
-                                    dtype=np.float64)
-                # ポリゴンの3点の法線ベクトル
-                normals = np.array([vertex_normals[i] for i in index],
-                                   dtype=np.float64)
-                self._draw_polygon(vertexes, normals)
+            # ポリゴンの各頂点の法線ベクトルのリストを作成
+            polygon_vertex_normals = np.array(
+                [[vertex_normals[i] for i in j] for j in indexes],
+                dtype=DOUBLE)
+
+            # ポリゴンを描画
+            for i in range(len(polygons)):
+                self._draw_polygon(polygons[i], polygon_vertex_normals[i])
