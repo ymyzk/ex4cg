@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import math
+
 import numpy as np
 
-from .shader import ShadingMode
+from cg.shader import ShadingMode
 
 
 class Renderer(object):
@@ -33,10 +34,9 @@ class Renderer(object):
 
         画像平面の x, y, z + 元の座標の z
         """
-        vertex = np.append(point, 1)
-        p = np.dot(self.camera.array, vertex)
+        p = np.dot(self.camera.array, point)
         converted = (self.camera.focus / point[2]) * p
-        converted[3] = point[2]
+        converted[2] = point[2]
         return converted
 
     def rasterize_and_shade(self, polygon, normals):
@@ -51,16 +51,15 @@ class Renderer(object):
             return 1 / (ratio / z1 + (1 - ratio) / z2)
 
         def make_range_x(x1, x2):
-            x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
             if x1 == x2:
                 return range(x1, x1 + 1)
-            else:
-                return range(max(x1, -self.half_width),
-                             min(x2, self.half_width - 1) + 1)
+            elif x1 > x2:
+                x1, x2 = x2, x1
+            x1, x2 = math.ceil(np.asscalar(x1)), math.floor(np.asscalar(x2))
+            return range(max(x1, -self.half_width),
+                         min(x2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
-            if y2 < y1:
-                y1, y2 = y2, y1
             y1 = math.ceil(np.asscalar(y1))
             y2 = math.floor(np.asscalar(y2))
             return range(max(y1, 1 - self.half_height),
@@ -69,16 +68,22 @@ class Renderer(object):
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
         an, bn, cn = normals
+
         # ポリゴンの3点を y でソート
-        if a[1] > b[1]:
-            a, b = b, a
-            an, bn = bn, an
-        if b[1] > c[1]:
+        if a[1] < b[1]:
+            if c[1] < a[1]:
+                a, c = c, a
+                an, cn = cn, an
+        else:
+            if b[1] < c[1]:
+                a, b = b, a
+                an, bn = bn, an
+            else:
+                a, c = c, a
+                an, cn = cn, an
+        if c[1] < b[1]:
             b, c = c, b
             bn, cn = cn, bn
-        if a[1] > b[1]:
-            a, b = b, a
-            an, bn = bn, an
 
         # 3点の y 座標が同じであれば処理終了
         if a[1] == c[1]:
@@ -100,17 +105,17 @@ class Renderer(object):
                     s = (y - a[1]) / (b[1] - a[1])
                     px = ((1 - s) * a[0] + s * b[0])
                     qx = ((1 - s) * a[0] + s * d[0])
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
-                    # 下 bd -> c
+                    # bd -> c
                     if b[1] == c[1]:
                         continue
                     s = (y - c[1]) / (b[1] - c[1])
                     px = ((1 - s) * c[0] + s * b[0])
                     qx = ((1 - s) * c[0] + s * d[0])
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -124,7 +129,7 @@ class Renderer(object):
                     z = calc_z(pz, qz, r)
                     yield x, y, z, color
         elif self.shading_mode is ShadingMode.gouraud:
-            # 点 ABCD をそれぞれの法線ベクトルでシェーディング
+            # 頂点をそれぞれの法線ベクトルでシェーディング
             ac = self._shade_vertex(polygon, an)
             bc = self._shade_vertex(polygon, bn)
             cc = self._shade_vertex(polygon, cn)
@@ -140,8 +145,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pc = ((1 - s) * ac + s * bc)
                     qc = ((1 - s) * ac + s * dc)
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -151,8 +156,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pc = ((1 - s) * cc + s * bc)
                     qc = ((1 - s) * cc + s * dc)
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -179,8 +184,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pn = ((1 - s) * an + s * bn)
                     qn = ((1 - s) * an + s * dn)
-                    pz = calc_z(a[3], b[3], 1 - s)
-                    qz = calc_z(a[3], d[3], 1 - s)
+                    pz = calc_z(a[2], b[2], 1 - s)
+                    qz = calc_z(a[2], d[2], 1 - s)
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -190,8 +195,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pn = ((1 - s) * cn + s * bn)
                     qn = ((1 - s) * cn + s * dn)
-                    pz = calc_z(c[3], b[3], 1 - s)
-                    qz = calc_z(c[3], d[3], 1 - s)
+                    pz = calc_z(c[2], b[2], 1 - s)
+                    qz = calc_z(c[2], d[2], 1 - s)
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -221,38 +226,47 @@ class Renderer(object):
 
     def _shade_vertex(self, polygon, normal):
         """シェーディング処理"""
-        color = np.zeros(3, dtype=np.float)
+        color = np.zeros(3, dtype=np.float64)
         for shader in self.shaders:
             color += shader.calc(polygon, normal)
         return self._saturate_color(color)
 
     def _draw_polygon(self, polygon, normals):
+        """ポリゴンを描画する処理
+
+        :param np.ndarray polygon: ポリゴン 3x3
+        :param np.ndarray normals: 法線ベクトル 3x3
+        """
         for x, y, z, color in self.rasterize_and_shade(polygon, normals):
             # Z バッファでテスト
             if not self.z_buffering or z <= self.z_buffer[y][x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
                 # NOTE: サンプル画像がおかしいので X を反転して表示している
-                data_x = 3 * (self.width - 1 - (self.half_width + x))
+                # data_x = 3 * (self.half_width + x) # 反転させないコード
+                data_x = 3 * (self.half_width - x - 1)
                 data_y = self.half_height - y
                 self.data[data_y][data_x:data_x + 3] = color
                 self.z_buffer[y][x] = z
 
-    def _polygons_normal(self, points, indexes):
-        """ポリゴンの法線ベクトルのリストを作成する処理"""
+    @staticmethod
+    def _polygons_normal(points, indexes):
+        """ポリゴンの法線ベクトルのリストを作成する処理
+
+        :param list points: 座標のリスト
+        :param list indexes: ポリゴンのリスト
+        """
         normals = []
         for index in indexes:
-            polygon = list((map(lambda i: points[i], index)))
-            polygon.append(index)
+            polygon = [points[i] for i in index]
             # 直交ベクトル (時計回りを表)
             cross = np.cross(polygon[2] - polygon[1], polygon[1] - polygon[0])
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                normals.append(np.zeros(3))
+                normals.append(np.zeros(3, dtype=np.float64))
             else:
                 # 法線ベクトル
                 normals.append(cross / np.linalg.norm(cross))
-
         return normals
 
     def draw_polygons(self, points, indexes):
@@ -267,7 +281,7 @@ class Renderer(object):
                 normals = (normal, normal, normal)
                 self._draw_polygon(vertexes, normals)
         elif (self.shading_mode is ShadingMode.gouraud or
-                      self.shading_mode is ShadingMode.phong):
+              self.shading_mode is ShadingMode.phong):
             # 各頂点の法線ベクトルを集計
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
@@ -286,7 +300,9 @@ class Renderer(object):
 
             for index in indexes:
                 # ポリゴンの3点の座標
-                verticies = tuple((map(lambda i: points[i], index)))
+                vertexes = np.array([points[i] for i in index],
+                                    dtype=np.float64)
                 # ポリゴンの3点の法線ベクトル
-                normals = tuple((map(lambda i: vertex_normals[i], index)))
-                self._draw_polygon(verticies, normals)
+                normals = np.array([vertex_normals[i] for i in index],
+                                   dtype=np.float64)
+                self._draw_polygon(vertexes, normals)
