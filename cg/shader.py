@@ -16,6 +16,9 @@ class ShadingMode(Enum):
 
 class Shader(object):
     """シェーダ"""
+    def __init__(self):
+        self._zeros = np.zeros(3, dtype=np.float64)
+
     @staticmethod
     def _unit_vector(vector):
         """単位ベクトルを求める処理
@@ -49,6 +52,7 @@ class DiffuseShader(Shader):
         :param numpy.ndarray color: 拡散反射係数 (r, g, b)
         :param int depth: (optional) 階調数 (bit)
         """
+        super().__init__()
         # 方向ベクトルを単位ベクトルに変換
         self.direction = self._unit_vector(direction)
         self._pre_shade = (2 ** depth - 1) * color * luminance
@@ -59,14 +63,13 @@ class DiffuseShader(Shader):
         """
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
-            return np.zeros(3, dtype=np.float64)
+            return self._zeros
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if cos < 0.0:
-            return np.zeros(3, dtype=np.float64)
-        diffuse = self._pre_shade * cos
-        return diffuse
+            return self._zeros
+        return self._pre_shade * cos
 
 
 class RandomColorShader(Shader):
@@ -93,6 +96,7 @@ class SpecularShader(Shader):
         :param float shininess: 鏡面反射強度 s 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
+        super().__init__()
         self.camera_position = camera_position
         # 方向ベクトルを単位ベクトルに変換
         self.direction = self._unit_vector(direction)
@@ -101,16 +105,17 @@ class SpecularShader(Shader):
 
     def calc(self, polygon, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        # TODO: 現状では実行されないのでなくてもよい
         if np.count_nonzero(normal) == 0:
-            return np.zeros(3, dtype=np.float64)
+            return self._zeros
         # ポリゴンの重心
-        g = (polygon[0] + polygon[1] + polygon[2]) / 3
-        # ポリゴンの重心から視点への単位方向ベクトル
-        e = self._unit_vector(self.camera_position - g)
+        # g = (polygon[0] + polygon[1] + polygon[2]) / 3
+        # ポリゴンから視点への単位方向ベクトル
+        e = self._unit_vector(self.camera_position - polygon[0])
         s = e - self.direction
         s /= np.linalg.norm(s)
         sn = np.dot(s, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
-        if sn < 0:
-            return np.zeros(3, dtype=np.float64)
+        if sn < 0.0:
+            return self._zeros
         return sn ** self.shininess * self._pre_shade
