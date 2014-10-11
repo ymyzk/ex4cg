@@ -49,10 +49,6 @@ def main(args):
                         # shading_mode=ShadingMode.phong)
                         shading_mode=ShadingMode.gouraud)
 
-    for index in vrml.indexes:
-        polygon = tuple((map(lambda i: vrml.points[i], index)))
-        print(', '.join(map(str, polygon)), file=sys.stderr)
-
     renderer.draw_polygons(vrml.points, vrml.indexes)
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
