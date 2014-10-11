@@ -50,9 +50,6 @@ class Renderer(object):
         :param normals: ポリゴンの各点の法線ベクトルのリスト
         """
 
-        def calc_z(z1, z2, ratio):
-            return 1 / (ratio / z1 + (1 - ratio) / z2)
-
         def make_range_x(x1, x2):
             if x1 == x2:
                 return range(x1, x1 + 1)
@@ -108,8 +105,8 @@ class Renderer(object):
                     s = (y - a[1]) / (b[1] - a[1])
                     px = ((1 - s) * a[0] + s * b[0])
                     qx = ((1 - s) * a[0] + s * d[0])
-                    pz = calc_z(a[2], b[2], 1 - s)
-                    qz = calc_z(a[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / a[2] + s / b[2])
+                    qz = 1 / ((1 - s) / a[2] + s / d[2])
                 else:
                     # bd -> c
                     if b[1] == c[1]:
@@ -117,8 +114,8 @@ class Renderer(object):
                     s = (y - c[1]) / (b[1] - c[1])
                     px = ((1 - s) * c[0] + s * b[0])
                     qx = ((1 - s) * c[0] + s * d[0])
-                    pz = calc_z(c[2], b[2], 1 - s)
-                    qz = calc_z(c[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / c[2] + s / b[2])
+                    qz = 1 / ((1 - s) / c[2] + s / d[2])
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -129,8 +126,7 @@ class Renderer(object):
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
                     r = (x - px) / (qx - px)
-                    z = calc_z(pz, qz, r)
-                    yield x, y, z, color
+                    yield x, y, 1 / (r / pz + (1 - r) / qz), color
         elif self.shading_mode is ShadingMode.gouraud:
             # 頂点をそれぞれの法線ベクトルでシェーディング
             ac = self._shade_vertex(polygon, an)
@@ -148,8 +144,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pc = ((1 - s) * ac + s * bc)
                     qc = ((1 - s) * ac + s * dc)
-                    pz = calc_z(a[2], b[2], 1 - s)
-                    qz = calc_z(a[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / a[2] + s / b[2])
+                    qz = 1 / ((1 - s) / a[2] + s / d[2])
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -159,8 +155,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pc = ((1 - s) * cc + s * bc)
                     qc = ((1 - s) * cc + s * dc)
-                    pz = calc_z(c[2], b[2], 1 - s)
-                    qz = calc_z(c[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / c[2] + s / b[2])
+                    qz = 1 / ((1 - s) / c[2] + s / d[2])
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -173,8 +169,7 @@ class Renderer(object):
                 for x in make_range_x(px, qx):
                     r = (x - px) / (qx - px)
                     rc = ((1 - r) * pc + r * qc)
-                    z = calc_z(pz, qz, r)
-                    yield x, y, z, rc
+                    yield x, y, 1 / (r / pz + (1 - r) / qz), rc
         elif self.shading_mode is ShadingMode.phong:
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
@@ -187,8 +182,8 @@ class Renderer(object):
                     qx = ((1 - s) * a[0] + s * d[0])
                     pn = ((1 - s) * an + s * bn)
                     qn = ((1 - s) * an + s * dn)
-                    pz = calc_z(a[2], b[2], 1 - s)
-                    qz = calc_z(a[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / a[2] + s / b[2])
+                    qz = 1 / ((1 - s) / a[2] + s / d[2])
                 else:
                     # 下 bd -> c
                     if b[1] == c[1]:
@@ -198,8 +193,8 @@ class Renderer(object):
                     qx = ((1 - s) * c[0] + s * d[0])
                     pn = ((1 - s) * cn + s * bn)
                     qn = ((1 - s) * cn + s * dn)
-                    pz = calc_z(c[2], b[2], 1 - s)
-                    qz = calc_z(c[2], d[2], 1 - s)
+                    pz = 1 / ((1 - s) / c[2] + s / b[2])
+                    qz = 1 / ((1 - s) / c[2] + s / d[2])
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
@@ -212,7 +207,7 @@ class Renderer(object):
                 for x in make_range_x(px, qx):
                     r = (x - px) / (qx - px)
                     rn = ((1 - r) * pn + r * qn)
-                    z = calc_z(pz, qz, r)
+                    z = 1 / (r / pz + (1 - r) / qz)
                     yield x, y, z, self._shade_vertex(polygon, rn)
 
     def _shade_vertex(self, polygon, normal):
