@@ -215,9 +215,10 @@ class Renderer(object):
                     z = calc_z(pz, qz, r)
                     yield x, y, z, self._shade_vertex(polygon, rn)
 
-    @staticmethod
-    def _saturate_color(color):
-        """色を 0-255 の範囲に収める処理"""
+    def _shade_vertex(self, polygon, normal):
+        """シェーディング処理"""
+        color = sum([s.calc(polygon, normal) for s in self.shaders])
+
         # TODO: 飽和演算の実装の改善
         if 255 < color[0]:
             color[0] = 255
@@ -225,14 +226,8 @@ class Renderer(object):
             color[1] = 255
         if 255 < color[2]:
             color[2] = 255
-        return color.astype(np.uint8)
 
-    def _shade_vertex(self, polygon, normal):
-        """シェーディング処理"""
-        color = np.zeros(3, dtype=DOUBLE)
-        for shader in self.shaders:
-            color += shader.calc(polygon, normal)
-        return self._saturate_color(color)
+        return color.astype(np.uint8)
 
     def _draw_polygon(self, polygon, normals):
         """ポリゴンを描画する処理
