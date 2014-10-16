@@ -8,7 +8,7 @@ import numpy as np
 from cg.shader import ShadingMode
 
 
-DOUBLE = np.float64
+DTYPE = np.float64
 
 
 class Renderer(object):
@@ -27,7 +27,7 @@ class Renderer(object):
         self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
-        self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
+        self.z_buffer = np.empty((self.height, self.width), dtype=DTYPE)
         self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
@@ -245,7 +245,7 @@ class Renderer(object):
     def draw_polygons(self, points, indexes):
         # ポリゴンのリストを作成
         polygons = np.array([[points[i] for i in j] for j in indexes],
-                            dtype=DOUBLE)
+                            dtype=DTYPE)
 
         def normal(polygon):
             """ポリゴンの面の法線ベクトルを求める処理"""
@@ -256,10 +256,10 @@ class Renderer(object):
                 a[1] * b[2] - a[2] * b[1],
                 a[2] * b[0] - a[0] * b[2],
                 a[0] * b[1] - a[1] * b[0]
-            ), dtype=DOUBLE)
+            ), dtype=DTYPE)
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                return np.zeros(3, dtype=DOUBLE)
+                return np.zeros(3, dtype=DTYPE)
             else:
                 # 法線ベクトル
                 return cross / np.linalg.norm(cross)
@@ -285,15 +285,15 @@ class Renderer(object):
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
             def mean(vertex):
                 if 0 < len(vertex):
-                    return np.array(sum(vertex) / len(vertex), dtype=DOUBLE)
+                    return np.array(sum(vertex) / len(vertex), dtype=DTYPE)
                 else:
-                    return np.zeros(3, dtype=DOUBLE)
+                    return np.zeros(3, dtype=DTYPE)
             vertex_normals = [mean(vertex) for vertex in vertexes]
 
             # ポリゴンの各頂点の法線ベクトルのリストを作成
             polygon_vertex_normals = np.array(
                 [[vertex_normals[i] for i in j] for j in indexes],
-                dtype=DOUBLE)
+                dtype=DTYPE)
 
             # ポリゴンを描画
             for i in range(len(polygons)):
