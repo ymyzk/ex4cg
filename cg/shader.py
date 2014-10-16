@@ -8,28 +8,27 @@ import numpy as np
 from cg.utils import random_color
 
 
+DOUBLE = np.float64
+
+_zeros = np.zeros(3, dtype=DOUBLE)
+
+
+def _unit_vector(vector):
+    """単位ベクトルを求める処理
+
+    :param numpy.ndarray vector: 単位ベクトルを求めるベクトル
+    :rtype: numpy.ndarray
+    """
+    return vector / np.linalg.norm(vector)
+
+
 class ShadingMode(Enum):
     flat = 0
     gouraud = 1
     phong = 2
 
 
-class Shader(object):
-    """シェーダ"""
-    def __init__(self):
-        self._zeros = np.zeros(3, dtype=np.float64)
-
-    @staticmethod
-    def _unit_vector(vector):
-        """単位ベクトルを求める処理
-
-        :param numpy.ndarray vector: 単位ベクトルを求めるベクトル
-        :rtype: numpy.ndarray
-        """
-        return vector / np.linalg.norm(vector)
-
-
-class AmbientShader(Shader):
+class AmbientShader(object):
     """環境光を計算するシェーダ"""
     def __init__(self, luminance, intensity, depth=8):
         """
@@ -37,14 +36,13 @@ class AmbientShader(Shader):
         :param float intensity: 環境光係数 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
-        super().__init__()
         self.shade = intensity * 2 ** (depth - 1) * luminance
 
     def calc(self, *_):
         return self.shade
 
 
-class DiffuseShader(Shader):
+class DiffuseShader(object):
     """拡散反射を計算するシェーダ"""
     def __init__(self, direction, luminance, color, depth=8):
         """
@@ -53,9 +51,8 @@ class DiffuseShader(Shader):
         :param numpy.ndarray color: 拡散反射係数 (r, g, b)
         :param int depth: (optional) 階調数 (bit)
         """
-        super().__init__()
         # 方向ベクトルを単位ベクトルに変換
-        self.direction = self._unit_vector(direction)
+        self.direction = _unit_vector(direction)
         self._pre_shade = (2 ** depth - 1) * color * luminance
 
     def calc(self, _, normal):
@@ -64,29 +61,28 @@ class DiffuseShader(Shader):
         """
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
-            return self._zeros
+            return _zeros
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if cos < 0.0:
-            return self._zeros
+            return _zeros
         return self._pre_shade * cos
 
 
-class RandomColorShader(Shader):
+class RandomColorShader(object):
     """ランダムな色を返すシェーダ"""
     def __init__(self, depth=8):
         """
         :param int depth: (optional) 階調数 (bit)
         """
-        super().__init__()
         self.depth = depth
 
     def calc(self, *_):
         return random_color(self.depth)
 
 
-class SpecularShader(Shader):
+class SpecularShader(object):
     """鏡面反射を計算するシェーダ"""
     def __init__(self, camera_position, direction, luminance, color, shininess,
                  depth=8):
@@ -98,10 +94,9 @@ class SpecularShader(Shader):
         :param float shininess: 鏡面反射強度 s 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
-        super().__init__()
         self.camera_position = camera_position
         # 方向ベクトルを単位ベクトルに変換
-        self.direction = self._unit_vector(direction)
+        self.direction = _unit_vector(direction)
         self.shininess = shininess * 128
         self._pre_shade = (2 ** depth - 1) * color * luminance
 
@@ -109,15 +104,15 @@ class SpecularShader(Shader):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         # TODO: 現状では実行されないのでなくてもよい
         if np.count_nonzero(normal) == 0:
-            return self._zeros
+            return _zeros
         # ポリゴンの重心
         # g = (polygon[0] + polygon[1] + polygon[2]) / 3
         # ポリゴンから視点への単位方向ベクトル
-        e = self._unit_vector(self.camera_position - polygon[0])
+        e = _unit_vector(self.camera_position - polygon[0])
         s = e - self.direction
         s /= np.linalg.norm(s)
         sn = np.dot(s, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0.0:
-            return self._zeros
+            return _zeros
         return sn ** self.shininess * self._pre_shade
