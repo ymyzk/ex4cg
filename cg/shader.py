@@ -37,6 +37,7 @@ class AmbientShader(Shader):
         :param float intensity: 環境光係数 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
+        super().__init__()
         self.shade = intensity * 2 ** (depth - 1) * luminance
 
     def calc(self, *_):
@@ -78,6 +79,7 @@ class RandomColorShader(Shader):
         """
         :param int depth: (optional) 階調数 (bit)
         """
+        super().__init__()
         self.depth = depth
 
     def calc(self, *_):
