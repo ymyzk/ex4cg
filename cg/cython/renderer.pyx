@@ -129,7 +129,7 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield px, y, pz, color
+                    yield int(px), y, pz, color
                     continue
                 elif px > qx:
                     # x についてソート
@@ -170,7 +170,7 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield px, y, pz, pc
+                    yield int(px), y, pz, pc
                     continue
                 elif px > qx:
                     # x についてソート
@@ -208,7 +208,7 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield px, y, pz, self._shade_vertex(polygon, pn)
+                    yield int(px), y, pz, self._shade_vertex(polygon, pn)
                     continue
                 elif px > qx:
                     # x についてソート
