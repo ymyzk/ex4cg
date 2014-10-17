@@ -8,9 +8,9 @@ import numpy as np
 from cg.utils import random_color
 
 
-DTYPE = np.float64
+DOUBLE = np.float64
 
-_zeros = np.zeros(3, dtype=DTYPE)
+_zeros = np.zeros(3, dtype=DOUBLE)
 
 
 def _unit_vector(vector):

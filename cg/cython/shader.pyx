@@ -1,30 +1,43 @@
 #cython: language_level=3, boundscheck=False, nonecheck=False
 # -*- coding: utf-8 -*-
 
+from libc.math cimport sqrt
 import numpy as np
 cimport numpy as np
 
 from cg.utils import random_color
 
 
-DTYPE = np.float64
-ctypedef np.float64_t DTYPE_t
+DOUBLE = np.float64
+ctypedef np.float64_t DOUBLE_t
 
-_zeros = np.zeros(3, dtype=DTYPE)
+_zeros = np.zeros(3, dtype=DOUBLE)
 
 
-def _unit_vector(np.ndarray[DTYPE_t] vector):
+def _unit_vector(np.ndarray[DOUBLE_t, ndim=1] vector):
     """単位ベクトルを求める処理
 
     :param np.ndarray vector: 単位ベクトルを求めるベクトル
     :rtype: np.ndarray
     """
-    return vector / np.linalg.norm(vector)
+    cdef DOUBLE_t norm
+    norm = sqrt(vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2)
+    return vector / norm
+
+
+def _dot_vectors(np.ndarray[DOUBLE_t, ndim=1] v1,
+                 np.ndarray[DOUBLE_t, ndim=1] v2):
+    cdef int i, l
+    cdef DOUBLE_t dot = 0.0
+    l = len(v1)
+    for i in range(l):
+        dot += v1[i] * v2[i]
+    return dot
 
 
 class AmbientShader(object):
     """環境光を計算するシェーダ"""
-    def __init__(self, np.ndarray[DTYPE_t] luminance, float intensity,
+    def __init__(self, np.ndarray[DOUBLE_t, ndim=1] luminance, float intensity,
                  int depth=8):
         """
         :param numpy.ndarray luminance: 入射光の強さ 0.0-1.0 (r, g, b)
@@ -39,9 +52,9 @@ class AmbientShader(object):
 
 class DiffuseShader(object):
     """拡散反射を計算するシェーダ"""
-    def __init__(self, np.ndarray[DTYPE_t] direction,
-                 np.ndarray[DTYPE_t] luminance,
-                 np.ndarray[DTYPE_t] color, int depth=8):
+    def __init__(self, np.ndarray[DOUBLE_t, ndim=1] direction,
+                 np.ndarray[DOUBLE_t, ndim=1] luminance,
+                 np.ndarray[DOUBLE_t, ndim=1] color, int depth=8):
         """
         :param np.ndarray direction: 入射光の方向 (x, y, z)
         :param np.ndarray luminance: 入射光の強さ (r, g, b)
@@ -52,11 +65,11 @@ class DiffuseShader(object):
         self.direction = _unit_vector(direction)
         self._pre_shade = (2 ** depth - 1) * color * luminance
 
-    def calc(self, _, np.ndarray[DTYPE_t] normal):
+    def calc(self, _, np.ndarray[DOUBLE_t, ndim=1] normal):
         """
         :param np.ndarray normal: 法線ベクトル
         """
-        cdef DTYPE_t cos
+        cdef DOUBLE_t cos
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         if np.count_nonzero(normal) == 0:
@@ -83,10 +96,10 @@ class RandomColorShader(object):
 
 class SpecularShader(object):
     """鏡面反射を計算するシェーダ"""
-    def __init__(self, np.ndarray[DTYPE_t] camera_position,
-                 np.ndarray[DTYPE_t] direction,
-                 np.ndarray[DTYPE_t] luminance,
-                 np.ndarray[DTYPE_t] color, float shininess,
+    def __init__(self, np.ndarray[DOUBLE_t, ndim=1] camera_position,
+                 np.ndarray[DOUBLE_t, ndim=1] direction,
+                 np.ndarray[DOUBLE_t, ndim=1] luminance,
+                 np.ndarray[DOUBLE_t, ndim=1] color, float shininess,
                  int depth=8):
         """
         :param np.ndarray camera_position: カメラの位置 (x, y, z)
@@ -102,22 +115,22 @@ class SpecularShader(object):
         self.shininess = shininess * 128
         self._pre_shade = (2 ** depth - 1) * color * luminance
 
-    def calc(self, np.ndarray[DTYPE_t, ndim=2] polygon,
-             np.ndarray[DTYPE_t] normal):
-        cdef np.ndarray[DTYPE_t] e, s
-        cdef DTYPE_t sn
+    def calc(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
+             np.ndarray[DOUBLE_t, ndim=1] normal):
+        cdef np.ndarray[DOUBLE_t, ndim=1] e, s
+        cdef DOUBLE_t sn
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         # TODO: 現状では実行されないのでなくてもよい
-        if np.count_nonzero(normal) == 0:
-            return _zeros
+        # if np.count_nonzero(normal) == 0:
+        #     return _zeros
         # ポリゴンの重心
         # g = (polygon[0] + polygon[1] + polygon[2]) / 3
         # ポリゴンから視点への単位方向ベクトル
         e = _unit_vector(self.camera_position - polygon[0])
         s = e - self.direction
         s = _unit_vector(s)
-        sn = np.dot(s, normal)
+        sn = _dot_vectors(s, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0.0:
             return _zeros

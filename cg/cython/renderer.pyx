@@ -9,8 +9,8 @@ cimport numpy as np
 from cg.shader import ShadingMode
 
 
-DTYPE = np.float64
-ctypedef np.float64_t DTYPE_t
+DOUBLE = np.float64
+ctypedef np.float64_t DOUBLE_t
 
 
 class Renderer(object):
@@ -29,17 +29,17 @@ class Renderer(object):
         self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
-        self.z_buffer = np.empty((self.height, self.width), dtype=DTYPE)
+        self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
         self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
 
-    def convert_point(self, np.ndarray[DTYPE_t] point):
+    def convert_point(self, np.ndarray[DOUBLE_t] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z + 元の座標の z
         """
-        cdef np.ndarray[DTYPE_t] p, converted
+        cdef np.ndarray[DOUBLE_t] p, converted
 
         p = np.dot(self.camera.array, point)
         converted = (self.camera.focus / point[2]) * p
@@ -58,7 +58,7 @@ class Renderer(object):
         cdef np.ndarray an, bn, cn, dn, pn, qn, tn
         cdef int x, y
         cdef float px, pz, qx, qz, r, t
-        cdef DTYPE_t s
+        cdef DOUBLE_t s
         cdef np.ndarray color, ac, bc, cc, dc, pc, qc, tc
 
         def make_range_x(float x1, float x2):
@@ -220,10 +220,10 @@ class Renderer(object):
                     z = 1 / (t / pz + (1 - t) / qz)
                     yield x, y, z, self._shade_vertex(polygon, tn)
 
-    def _shade_vertex(self, np.ndarray[DTYPE_t, ndim=2] polygon,
-                      np.ndarray[DTYPE_t] normal):
+    def _shade_vertex(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
+                      np.ndarray[DOUBLE_t] normal):
         """シェーディング処理"""
-        cdef np.ndarray[DTYPE_t] color
+        cdef np.ndarray[DOUBLE_t] color
 
         color = sum([s.calc(polygon, normal) for s in self.shaders])
 
@@ -237,8 +237,8 @@ class Renderer(object):
 
         return color.astype(np.uint8)
 
-    def _draw_polygon(self, np.ndarray[DTYPE_t, ndim=2] polygon,
-                      np.ndarray[DTYPE_t, ndim=2] normals):
+    def _draw_polygon(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
+                      np.ndarray[DOUBLE_t, ndim=2] normals):
         """ポリゴンを描画する処理
 
         :param np.ndarray polygon: ポリゴン 3x3
@@ -267,9 +267,9 @@ class Renderer(object):
 
         # ポリゴンのリストを作成
         polygons = np.array([[points[i] for i in j] for j in indexes],
-                            dtype=DTYPE)
+                            dtype=DOUBLE)
 
-        def calc_normal(np.ndarray[DTYPE_t, ndim=2] polygon):
+        def calc_normal(np.ndarray[DOUBLE_t, ndim=2] polygon):
             """ポリゴンの面の法線ベクトルを求める処理"""
             cdef np.ndarray a, b, cross
 
@@ -280,10 +280,10 @@ class Renderer(object):
                 a[1] * b[2] - a[2] * b[1],
                 a[2] * b[0] - a[0] * b[2],
                 a[0] * b[1] - a[1] * b[0]
-            ), dtype=DTYPE)
+            ), dtype=DOUBLE)
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
-                return np.zeros(3, dtype=DTYPE)
+                return np.zeros(3, dtype=DOUBLE)
             else:
                 # 法線ベクトル
                 return cross / np.linalg.norm(cross)
@@ -309,15 +309,15 @@ class Renderer(object):
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
             def mean(vertex):
                 if 0 < len(vertex):
-                    return np.array(sum(vertex) / len(vertex), dtype=DTYPE)
+                    return np.array(sum(vertex) / len(vertex), dtype=DOUBLE)
                 else:
-                    return np.zeros(3, dtype=DTYPE)
+                    return np.zeros(3, dtype=DOUBLE)
             vertex_normals = [mean(vertex) for vertex in vertexes]
 
             # ポリゴンの各頂点の法線ベクトルのリストを作成
             polygon_vertex_normals = np.array(
                 [[vertex_normals[i] for i in j] for j in indexes],
-                dtype=DTYPE)
+                dtype=DOUBLE)
 
             # ポリゴンを描画
             for i in range(len(polygons)):
