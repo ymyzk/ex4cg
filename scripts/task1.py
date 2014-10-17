@@ -8,31 +8,28 @@ import numpy as np
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
-from cg.shader import DiffuseShader
+from cg.shader import RandomColorShader
 from cg.utils import random_polygons
 
 
-polygons = random_polygons(3)
+points, indexes = random_polygons(3)
 
 # ポリゴンごとに3点の座標を出力する
-for polygon in polygons:
-    print(', '.join(map(str, polygon[:3])), file=sys.stderr)
+for index in indexes:
+    polygon = tuple((map(lambda i: points[i], index)))
+    print(', '.join(map(str, polygon)), file=sys.stderr)
 
 if __name__ == '__main__':
     width = height = 256
     depth = 8
-    camera = Camera(position=(0.0, 0.0, 0.0),
-                    angle=(0.0, 0.0, 1.0),
+    camera = Camera(position=np.array((0.0, 0.0, 0.0)),
+                    angle=np.array((0.0, 0.0, 1.0)),
                     focus=256.0)
-    shader = DiffuseShader(direction=np.array((-1.0, -1.0, 2.0)),
-                           color=np.array((1.0, 1.0, 1.0)),
-                           luminance=np.array((1.0, 1.0, 1.0)),
-                           depth=depth)
+    shader = RandomColorShader(depth=depth)
     renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
-                        width=width, height=height)
+                        width=width, height=height, z_buffering=False)
 
-    for polygon in polygons:
-        renderer.draw_polygon(polygon)
+    renderer.draw_polygons(points, indexes)
 
     name = "task1.ppm"
     image = PpmImage(name, width, height, renderer.data, depth=depth)

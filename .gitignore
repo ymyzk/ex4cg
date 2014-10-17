@@ -53,5 +53,11 @@ docs/_build/
 # PyBuilder
 target/
 
+# Profile
+*.lprof
+
+# Cython annotated HTML
+*.html
+
 .idea/
 venv/

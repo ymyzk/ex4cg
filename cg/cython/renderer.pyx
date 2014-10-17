@@ -1,19 +1,21 @@
-#!/usr/bin/env python
+#cython: language_level=3, boundscheck=False, nonecheck=False
 # -*- coding: utf-8 -*-
 
 import math
 
 import numpy as np
+cimport numpy as np
 
 from cg.shader import ShadingMode
 
 
 DTYPE = np.float64
+ctypedef np.float64_t DTYPE_t
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, z_buffering=True, depth=8,
-                 shaders=tuple(), shading_mode=ShadingMode.flat):
+    def __init__(self, camera, int width, int height, z_buffering=True,
+                 int depth=8, shaders=tuple(), shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
         :param bool z_buffering: Z バッファを有効にするかどうか
@@ -32,11 +34,13 @@ class Renderer(object):
         self.half_width = self.width // 2
         self.half_height = self.height // 2
 
-    def convert_point(self, point):
+    def convert_point(self, np.ndarray[DTYPE_t] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z + 元の座標の z
         """
+        cdef np.ndarray[DTYPE_t] p, converted
+
         p = np.dot(self.camera.array, point)
         converted = (self.camera.focus / point[2]) * p
         converted[2] = point[2]
@@ -50,17 +54,26 @@ class Renderer(object):
         :param normals: ポリゴンの各点の法線ベクトルのリスト
         """
 
-        def make_range_x(x1, x2):
-            x1 = math.ceil(np.asscalar(x1))
-            x2 = math.floor(np.asscalar(x2))
-            return range(max(x1, -self.half_width),
-                         min(x2, self.half_width - 1) + 1)
+        cdef np.ndarray a, b, c, d
+        cdef np.ndarray an, bn, cn, dn, pn, qn, tn
+        cdef int x, y
+        cdef float px, pz, qx, qz, r, t
+        cdef DTYPE_t s
+        cdef np.ndarray color, ac, bc, cc, dc, pc, qc, tc
+
+        def make_range_x(float x1, float x2):
+            cdef int xi1, xi2
+            xi1 = math.ceil(x1)
+            xi2 = math.floor(x2)
+            return range(max(xi1, -self.half_width),
+                         min(xi2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
-            y1 = math.ceil(np.asscalar(y1))
-            y2 = math.floor(np.asscalar(y2))
-            return range(max(y1, 1 - self.half_height),
-                         min(y2, self.half_height) + 1)
+            cdef int yi1, yi2
+            yi1 = math.ceil(np.asscalar(y1))
+            yi2 = math.floor(np.asscalar(y2))
+            return range(max(yi1, 1 - self.half_height),
+                         min(yi2, self.half_height) + 1)
 
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
@@ -122,8 +135,8 @@ class Renderer(object):
                     # x についてソート
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    yield x, y, 1 / (r / pz + (1 - r) / qz), color
+                    t = (x - px) / (qx - px)
+                    yield x, y, 1 / (t / pz + (1 - t) / qz), color
         elif self.shading_mode is ShadingMode.gouraud:
             # 頂点をそれぞれの法線ベクトルでシェーディング
             ac = self._shade_vertex(polygon, an)
@@ -164,9 +177,9 @@ class Renderer(object):
                     pc, qc = qc, pc
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    rc = ((1 - r) * pc + r * qc)
-                    yield x, y, 1 / (r / pz + (1 - r) / qz), rc
+                    t = (x - px) / (qx - px)
+                    tc = ((1 - t) * pc + t * qc)
+                    yield x, y, 1 / (t / pz + (1 - t) / qz), tc
         elif self.shading_mode is ShadingMode.phong:
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
@@ -202,13 +215,16 @@ class Renderer(object):
                     pn, qn = qn, pn
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    rn = ((1 - r) * pn + r * qn)
-                    z = 1 / (r / pz + (1 - r) / qz)
-                    yield x, y, z, self._shade_vertex(polygon, rn)
+                    t = (x - px) / (qx - px)
+                    tn = ((1 - t) * pn + t * qn)
+                    z = 1 / (t / pz + (1 - t) / qz)
+                    yield x, y, z, self._shade_vertex(polygon, tn)
 
-    def _shade_vertex(self, polygon, normal):
+    def _shade_vertex(self, np.ndarray[DTYPE_t, ndim=2] polygon,
+                      np.ndarray[DTYPE_t] normal):
         """シェーディング処理"""
+        cdef np.ndarray[DTYPE_t] color
+
         color = sum([s.calc(polygon, normal) for s in self.shaders])
 
         # TODO: 飽和演算の実装の改善
@@ -221,15 +237,20 @@ class Renderer(object):
 
         return color.astype(np.uint8)
 
-    def _draw_polygon(self, polygon, normals):
+    def _draw_polygon(self, np.ndarray[DTYPE_t, ndim=2] polygon,
+                      np.ndarray[DTYPE_t, ndim=2] normals):
         """ポリゴンを描画する処理
 
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normals: 法線ベクトル 3x3
         """
+        cdef int x, y, data_x, data_y
+        cdef float z
+        cdef np.ndarray color
+
         for x, y, z, color in self.rasterize_and_shade(polygon, normals):
             # Z バッファでテスト
-            if not self.z_buffering or z <= self.z_buffer[y][x]:
+            if not self.z_buffering or z <= self.z_buffer[y,x]:
                 # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
                 # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
                 # NOTE: サンプル画像がおかしいので X を反転して表示している
@@ -239,13 +260,19 @@ class Renderer(object):
                 self.data[data_y][data_x:data_x + 3] = color
                 self.z_buffer[y][x] = z
 
-    def draw_polygons(self, points, indexes):
+    def draw_polygons(self, list points, list indexes):
+        cdef np.ndarray normal, normals, polygons, polygon_vertex_normals
+        cdef list vertexes, polygon_normals, vertex_normals
+        cdef int i
+
         # ポリゴンのリストを作成
         polygons = np.array([[points[i] for i in j] for j in indexes],
                             dtype=DTYPE)
 
-        def normal(polygon):
+        def calc_normal(np.ndarray[DTYPE_t, ndim=2] polygon):
             """ポリゴンの面の法線ベクトルを求める処理"""
+            cdef np.ndarray a, b, cross
+
             # 直交ベクトル (時計回りを表)
             a = polygon[2] - polygon[1]
             b = polygon[1] - polygon[0]
@@ -262,7 +289,7 @@ class Renderer(object):
                 return cross / np.linalg.norm(cross)
 
         # すべてのポリゴンの面の法線ベクトルを求める
-        polygon_normals = [normal(p) for p in polygons]
+        polygon_normals = [calc_normal(p) for p in polygons]
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(len(polygons)):

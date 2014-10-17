@@ -10,7 +10,8 @@ import numpy as np
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
-from cg.shader import DiffuseShader, RandomColorShader, SpecularShader
+from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
+                       ShadingMode, SpecularShader)
 from cg.vrml import Vrml
 
 
@@ -37,11 +38,16 @@ def main(args):
                                       luminance=np.array((1.0, 1.0, 1.0)),
                                       color=vrml.specular_color,
                                       shininess=vrml.specular_color))
+    if vrml.ambient_intensity is not None:
+        shaders.append(AmbientShader(luminance=np.array((1.0, 1.0, 1.0)),
+                                     intensity=vrml.ambient_intensity))
     if len(shaders) == 0:
         shaders.append(RandomColorShader())
 
     renderer = Renderer(camera=camera, shaders=shaders,
-                        width=width, height=height)
+                        width=width, height=height,
+                        # shading_mode=ShadingMode.phong)
+                        shading_mode=ShadingMode.gouraud)
 
     renderer.draw_polygons(vrml.points, vrml.indexes)
 
@@ -54,7 +60,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Task 3')
+    parser = argparse.ArgumentParser(description='Task 4')
     parser.add_argument('-o', type=argparse.FileType('w'), metavar='file',
                         default=None, help='Write ppm image to <file>')
     parser.add_argument('input', type=argparse.FileType('r'),
