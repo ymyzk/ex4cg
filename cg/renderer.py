@@ -51,14 +51,14 @@ class Renderer(object):
         """
 
         def make_range_x(x1, x2):
-            x1 = int(math.ceil(np.asscalar(x1)))
-            x2 = int(math.floor(np.asscalar(x2)))
+            x1 = int(math.ceil(x1))
+            x2 = int(math.floor(x2))
             return range(max(x1, -self.half_width),
                          min(x2, self.half_width - 1) + 1)
 
         def make_range_y(y1, y2):
-            y1 = int(math.ceil(np.asscalar(y1)))
-            y2 = int(math.floor(np.asscalar(y2)))
+            y1 = int(math.ceil(y1))
+            y2 = int(math.floor(y2))
             return range(max(y1, 1 - self.half_height),
                          min(y2, self.half_height) + 1)
 

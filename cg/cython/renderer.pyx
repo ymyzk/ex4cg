@@ -68,10 +68,10 @@ class Renderer(object):
             return range(max(xi1, -self.half_width),
                          min(xi2, self.half_width - 1) + 1)
 
-        def make_range_y(y1, y2):
+        def make_range_y(float y1, float y2):
             cdef int yi1, yi2
-            yi1 = math.ceil(np.asscalar(y1))
-            yi2 = math.floor(np.asscalar(y2))
+            yi1 = math.ceil(y1)
+            yi2 = math.floor(y2)
             return range(max(yi1, 1 - self.half_height),
                          min(yi2, self.half_height) + 1)
 
