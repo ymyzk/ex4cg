@@ -56,5 +56,8 @@ target/
 # Profile
 *.lprof
 
+# Cython annotated HTML
+*.html
+
 .idea/
 venv/
