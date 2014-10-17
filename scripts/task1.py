@@ -3,6 +3,8 @@
 
 import sys
 
+import numpy as np
+
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
@@ -20,12 +22,12 @@ for index in indexes:
 if __name__ == '__main__':
     width = height = 256
     depth = 8
-    camera = Camera(position=(0.0, 0.0, 0.0),
-                    angle=(0.0, 0.0, 1.0),
+    camera = Camera(position=np.array((0.0, 0.0, 0.0)),
+                    angle=np.array((0.0, 0.0, 1.0)),
                     focus=256.0)
     shader = RandomColorShader(depth=depth)
     renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
-                        width=width, height=height, zbuffering=False)
+                        width=width, height=height, z_buffering=False)
 
     renderer.draw_polygons(points, indexes)
 
