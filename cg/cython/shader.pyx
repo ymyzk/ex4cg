@@ -25,18 +25,25 @@ def _unit_vector(np.ndarray[DOUBLE_t, ndim=1] vector):
     return vector / norm
 
 
-def _dot_vectors(np.ndarray[DOUBLE_t, ndim=1] v1,
-                 np.ndarray[DOUBLE_t, ndim=1] v2):
-    cdef int i, l
-    cdef DOUBLE_t dot = 0.0
-    l = len(v1)
+cdef inline double _dot_vectors_internal(double *v1, double *v2, int l):
+    cdef int i
+    cdef double dot = 0.0
     for i in range(l):
         dot += v1[i] * v2[i]
     return dot
 
 
-class AmbientShader(object):
+def _dot_vectors(np.ndarray[DOUBLE_t, ndim=1] v1,
+                 np.ndarray[DOUBLE_t, ndim=1] v2):
+    cdef int l
+    l = len(v1)
+    return _dot_vectors_internal(<double *>v1.data, <double *>v2.data, l)
+
+
+cdef class AmbientShader:
     """環境光を計算するシェーダ"""
+    cdef np.ndarray shade
+
     def __init__(self, np.ndarray[DOUBLE_t, ndim=1] luminance, float intensity,
                  int depth=8):
         """
@@ -50,8 +57,10 @@ class AmbientShader(object):
         return self.shade
 
 
-class DiffuseShader(object):
+cdef class DiffuseShader:
     """拡散反射を計算するシェーダ"""
+    cdef np.ndarray direction, _pre_shade
+
     def __init__(self, np.ndarray[DOUBLE_t, ndim=1] direction,
                  np.ndarray[DOUBLE_t, ndim=1] luminance,
                  np.ndarray[DOUBLE_t, ndim=1] color, int depth=8):
@@ -75,7 +84,7 @@ class DiffuseShader(object):
         if np.count_nonzero(normal) == 0:
             return _zeros
         # 反射光を計算
-        cos = np.dot(self.direction, normal)
+        cos = _dot_vectors(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
         if 0.0 < cos:
             return _zeros
@@ -94,8 +103,11 @@ class RandomColorShader(object):
         return random_color(self.depth)
 
 
-class SpecularShader(object):
+cdef class SpecularShader:
     """鏡面反射を計算するシェーダ"""
+    cdef np.ndarray camera_position, direction, _pre_shade
+    cdef DOUBLE_t shininess
+
     def __init__(self, np.ndarray[DOUBLE_t, ndim=1] camera_position,
                  np.ndarray[DOUBLE_t, ndim=1] direction,
                  np.ndarray[DOUBLE_t, ndim=1] luminance,

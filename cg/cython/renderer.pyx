@@ -39,21 +39,45 @@ class Renderer(object):
 
         画像平面の x, y, z + 元の座標の z
         """
-        cdef np.ndarray[DOUBLE_t] p, converted
-
-        p = np.dot(self.camera.array, point)
-        converted = (self.camera.focus / point[2]) * p
-        converted[2] = point[2]
+        cdef np.ndarray[DOUBLE_t] converted
+        cdef DOUBLE_t z_ip
+        z_ip = self.camera.focus / point[2]
+        converted = np.array((z_ip * point[0], z_ip * point[1], point[2]),
+                             dtype=DOUBLE)
         return converted
 
-    def rasterize_and_shade(self, polygon, normals):
-        """ラスタライズ + シェーディング処理
+    def _shade_vertex(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
+                      np.ndarray[DOUBLE_t] normal):
+        """シェーディング処理"""
+        cdef int i, l
+        cdef np.ndarray[DOUBLE_t] color, c
 
-        ポリゴンをラスタライズして, シェーディングを行い, 座標と色を返すイタレータ
-        :param polygon: ポリゴン
-        :param normals: ポリゴンの各点の法線ベクトルのリスト
+        l = len(self.shaders)
+        color = np.zeros(3, dtype=DOUBLE)
+
+        for i in range(l):
+            c = self.shaders[i].calc(polygon, normal)
+            color[0] += c[0]
+            color[1] += c[1]
+            color[2] += c[2]
+
+        # TODO: 飽和演算の実装の改善
+        if 255 < color[0]:
+            color[0] = 255
+        if 255 < color[1]:
+            color[1] = 255
+        if 255 < color[2]:
+            color[2] = 255
+
+        return color.astype(np.uint8)
+
+    def _draw_polygon(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
+                  np.ndarray[DOUBLE_t, ndim=2] normals):
+        """ポリゴンを描画する処理
+
+        :param np.ndarray polygon: ポリゴン 3x3
+        :param np.ndarray normals: 法線ベクトル 3x3
         """
-
         cdef np.ndarray a, b, c, d
         cdef np.ndarray an, bn, cn, dn, pn, qn, tn
         cdef int x, y
@@ -61,19 +85,30 @@ class Renderer(object):
         cdef DOUBLE_t s
         cdef np.ndarray color, ac, bc, cc, dc, pc, qc, tc
 
-        def make_range_x(float x1, float x2):
-            cdef int xi1, xi2
-            xi1 = math.ceil(x1)
-            xi2 = math.floor(x2)
-            return range(max(xi1, -self.half_width),
-                         min(xi2, self.half_width - 1) + 1)
+        def draw_pixel(x, y, z, cl):
+            """画素を描画する処理"""
+            # Z バッファでテスト
+            if not self.z_buffering or z <= self.z_buffer[y][x]:
+                # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
+                # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
+                # NOTE: サンプル画像がおかしいので X を反転して表示している
+                # data_x = 3 * (self.half_width + x) # 反転させないコード
+                data_x = 3 * (self.half_width - x - 1)
+                data_y = self.half_height - y
+                self.data[data_y][data_x:data_x + 3] = cl
+                self.z_buffer[y][x] = z
 
-        def make_range_y(float y1, float y2):
-            cdef int yi1, yi2
-            yi1 = math.ceil(y1)
-            yi2 = math.floor(y2)
-            return range(max(yi1, 1 - self.half_height),
-                         min(yi2, self.half_height) + 1)
+        def make_range_x(x1, x2):
+            x1 = int(math.ceil(x1))
+            x2 = int(math.floor(x2))
+            return range(max(x1, -self.half_width),
+                         min(x2, self.half_width - 1) + 1)
+
+        def make_range_y(y1, y2):
+            y1 = int(math.ceil(y1))
+            y2 = int(math.floor(y2))
+            return range(max(y1, 1 - self.half_height),
+                         min(y2, self.half_height) + 1)
 
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
@@ -129,14 +164,14 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield int(px), y, pz, color
+                    draw_pixel(int(px), y, pz, color)
                     continue
                 elif px > qx:
                     # x についてソート
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    t = (x - px) / (qx - px)
-                    yield x, y, 1 / (t / pz + (1 - t) / qz), color
+                    r = (x - px) / (qx - px)
+                    draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
         elif self.shading_mode is ShadingMode.gouraud:
             # 頂点をそれぞれの法線ベクトルでシェーディング
             ac = self._shade_vertex(polygon, an)
@@ -170,16 +205,16 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield int(px), y, pz, pc
+                    draw_pixel(int(px), y, pz, pc)
                     continue
                 elif px > qx:
                     # x についてソート
                     pc, qc = qc, pc
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    t = (x - px) / (qx - px)
-                    tc = ((1 - t) * pc + t * qc)
-                    yield x, y, 1 / (t / pz + (1 - t) / qz), tc
+                    r = (x - px) / (qx - px)
+                    rc = ((1 - r) * pc + r * qc)
+                    draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
         elif self.shading_mode is ShadingMode.phong:
             for y in make_range_y(a[1], c[1]):
                 # x の左右を探す:
@@ -208,57 +243,17 @@ class Renderer(object):
                 # x についてループ
                 if px == qx:
                     # x が同じの時はすぐに終了
-                    yield int(px), y, pz, self._shade_vertex(polygon, pn)
+                    draw_pixel(int(px), y, pz, self._shade_vertex(polygon, pn))
                     continue
                 elif px > qx:
                     # x についてソート
                     pn, qn = qn, pn
                     px, qx = qx, px
                 for x in make_range_x(px, qx):
-                    t = (x - px) / (qx - px)
-                    tn = ((1 - t) * pn + t * qn)
-                    z = 1 / (t / pz + (1 - t) / qz)
-                    yield x, y, z, self._shade_vertex(polygon, tn)
-
-    def _shade_vertex(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
-                      np.ndarray[DOUBLE_t] normal):
-        """シェーディング処理"""
-        cdef np.ndarray[DOUBLE_t] color
-
-        color = sum([s.calc(polygon, normal) for s in self.shaders])
-
-        # TODO: 飽和演算の実装の改善
-        if 255 < color[0]:
-            color[0] = 255
-        if 255 < color[1]:
-            color[1] = 255
-        if 255 < color[2]:
-            color[2] = 255
-
-        return color.astype(np.uint8)
-
-    def _draw_polygon(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
-                      np.ndarray[DOUBLE_t, ndim=2] normals):
-        """ポリゴンを描画する処理
-
-        :param np.ndarray polygon: ポリゴン 3x3
-        :param np.ndarray normals: 法線ベクトル 3x3
-        """
-        cdef int x, y, data_x, data_y
-        cdef float z
-        cdef np.ndarray color
-
-        for x, y, z, color in self.rasterize_and_shade(polygon, normals):
-            # Z バッファでテスト
-            if not self.z_buffering or z <= self.z_buffer[y,x]:
-                # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-                # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-                # NOTE: サンプル画像がおかしいので X を反転して表示している
-                # data_x = 3 * (self.half_width + x) # 反転させないコード
-                data_x = 3 * (self.half_width - x - 1)
-                data_y = self.half_height - y
-                self.data[data_y][data_x:data_x + 3] = color
-                self.z_buffer[y][x] = z
+                    r = (x - px) / (qx - px)
+                    rn = ((1 - r) * pn + r * qn)
+                    z = 1 / (r / pz + (1 - r) / qz)
+                    draw_pixel(x, y, z, self._shade_vertex(polygon, rn))
 
     def draw_polygons(self, list points, list indexes):
         cdef np.ndarray normal, normals, polygons, polygon_vertex_normals
@@ -271,7 +266,7 @@ class Renderer(object):
 
         def calc_normal(np.ndarray[DOUBLE_t, ndim=2] polygon):
             """ポリゴンの面の法線ベクトルを求める処理"""
-            cdef np.ndarray a, b, cross
+            cdef np.ndarray[DOUBLE_t] a, b, cross
 
             # 直交ベクトル (時計回りを表)
             a = polygon[2] - polygon[1]
