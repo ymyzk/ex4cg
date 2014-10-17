@@ -1,0 +1,9 @@
+language: python
+python:
+    - "3.4"
+install:
+    - pip install numpy
+    - pip install cython
+    - pip install .
+script:
+    python setup.py test
