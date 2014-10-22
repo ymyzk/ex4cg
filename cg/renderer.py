@@ -32,7 +32,7 @@ class Renderer(object):
         self.half_width = self.width // 2
         self.half_height = self.height // 2
 
-    def convert_point(self, point):
+    def _convert_point(self, point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z + 元の座標の z
@@ -89,9 +89,9 @@ class Renderer(object):
         :param np.ndarray normal: 法線ベクトル
         """
         # ポリゴンの3点を座標変換
-        a = self.convert_point(polygon[0])
-        b = self.convert_point(polygon[1])
-        c = self.convert_point(polygon[2])
+        a = self._convert_point(polygon[0])
+        b = self._convert_point(polygon[1])
+        c = self._convert_point(polygon[2])
 
         # ポリゴンの3点を y でソート
         if a[1] < b[1]:
@@ -156,7 +156,9 @@ class Renderer(object):
         :param np.ndarray normals: 法線ベクトル 3x3
         """
         # ポリゴンの3点を座標変換
-        a, b, c = map(self.convert_point, polygon)
+        a = self._convert_point(polygon[0])
+        b = self._convert_point(polygon[1])
+        c = self._convert_point(polygon[2])
         an, bn, cn = normals
 
         # ポリゴンの3点を y でソート
@@ -236,7 +238,9 @@ class Renderer(object):
         """
 
         # ポリゴンの3点を座標変換
-        a, b, c = map(self.convert_point, polygon)
+        a = self._convert_point(polygon[0])
+        b = self._convert_point(polygon[1])
+        c = self._convert_point(polygon[2])
         an, bn, cn = normals
 
         # ポリゴンの3点を y でソート
