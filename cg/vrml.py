@@ -7,6 +7,9 @@ from enum import Enum
 import numpy as np
 
 
+DOUBLE = np.float64
+
+
 class Status(Enum):
     material = 1
     point = 2
@@ -32,35 +35,35 @@ class Vrml(object):
             l = l.strip()
             if l.startswith('#'):
                 continue
-            items = tuple(filter(lambda i: i != '', l.split(' ')))
+            items = tuple(filter(lambda i: i != '',
+                                 l.replace(',', '').split(' ')))
             if len(items) == 0:
                 continue
 
-            if items[0] in ('diffuseColor', 'specularColor',
-                            'ambientIntensity', 'shininess',):
+            if status is Status.index and len(items) == 4:
+                self.indexes.append((
+                    int(items[0]),
+                    int(items[1]),
+                    int(items[2])
+                ))
+            elif status is Status.point and len(items) == 3:
+                self.points.append(np.array((
+                    float(items[0]),
+                    float(items[1]),
+                    float(items[2])
+                ), dtype=DOUBLE))
+            elif status is Status.material:
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
-                        tuple(map(float, items[1:4])), dtype=np.float64)
+                        tuple(map(float, items[1:4])), dtype=DOUBLE)
                 elif items[0] == 'specularColor':
                     self.specular_color = np.array(
-                        tuple(map(float, items[1:4])), dtype=np.float64)
+                        tuple(map(float, items[1:4])), dtype=DOUBLE)
                 elif items[0] == 'shininess':
                     self.shininess = float(items[1])
                 elif items[0] == 'ambientIntensity':
                     self.ambient_intensity = float(items[1])
-            elif items[0] == 'point':
+            if items[0] == 'point':
                 status = Status.point
-                continue
-            elif items[0] == 'coordIndex':
+            if items[0] == 'coordIndex':
                 status = Status.index
-                continue
-
-            if (status is Status.point and
-                    len(items) == 3 and
-                    items[2].endswith(',')):
-                l = [float(i.replace(',', '')) for i in items]
-                self.points.append(np.array(l, dtype=np.float64))
-
-            if status is Status.index and len(items) == 4:
-                self.indexes.append(
-                    [int(i.replace(',', '')) for i in items[:3]])
