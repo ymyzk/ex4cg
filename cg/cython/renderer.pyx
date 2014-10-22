@@ -1,5 +1,4 @@
 #cython: language_level=3, boundscheck=False, cdivision=True
-#cython: profile=True
 # -*- coding: utf-8 -*-
 
 from libc.math cimport ceil, floor, sqrt
@@ -379,8 +378,9 @@ cdef class Renderer:
                     self._draw_pixel(x, y, z, color)
 
     def draw_polygons(self, list points, list indexes):
-        cdef np.ndarray normal, normals, polygons, polygon_vertex_normals
-        cdef list vertexes, polygon_normals, vertex_normals
+        cdef np.ndarray normal, normals, polygons
+        cdef list vertexes
+        cdef list polygon_normals, vertex_normals, polygon_vertex_normals
         cdef int i
 
         # ポリゴンのリストを作成
@@ -429,15 +429,14 @@ cdef class Renderer:
             # 各頂点の法線ベクトルを, 面法線ベクトルの平均として求める
             def mean(vertex):
                 if 0 < len(vertex):
-                    return np.array(sum(vertex) / len(vertex), dtype=DOUBLE)
+                    return sum(vertex) / len(vertex)
                 else:
                     return np.zeros(3, dtype=DOUBLE)
             vertex_normals = [mean(vertex) for vertex in vertexes]
 
             # ポリゴンの各頂点の法線ベクトルのリストを作成
-            polygon_vertex_normals = np.array(
-                [[vertex_normals[i] for i in j] for j in indexes],
-                dtype=DOUBLE)
+            polygon_vertex_normals = [[vertex_normals[i] for i in j]
+                                      for j in indexes]
 
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
