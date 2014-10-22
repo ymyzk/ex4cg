@@ -56,36 +56,184 @@ class Renderer(object):
 
         return color.astype(np.uint8)
 
-    def _draw_polygon(self, polygon, normals):
+    def make_range_x(self, x1, x2):
+        x1 = int(math.ceil(x1))
+        x2 = int(math.floor(x2))
+        return range(max(x1, -self.half_width),
+                     min(x2, self.half_width - 1) + 1)
+
+    def make_range_y(self, y1, y2):
+        y1 = int(math.ceil(y1))
+        y2 = int(math.floor(y2))
+        return range(max(y1, 1 - self.half_height),
+                     min(y2, self.half_height) + 1)
+
+    def draw_pixel(self, x, y, z, cl):
+        """画素を描画する処理"""
+        # Z バッファでテスト
+        if not self.z_buffering or z <= self.z_buffer[y][x]:
+            # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
+            # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
+            # NOTE: サンプル画像がおかしいので X を反転して表示している
+            # data_x = 3 * (self.half_width + x) # 反転させないコード
+            data_x = 3 * (self.half_width - x - 1)
+            data_y = self.half_height - y
+            self.data[data_y][data_x:data_x + 3] = cl
+            self.z_buffer[y][x] = z
+
+    def _draw_polygon_flat(self, polygon, normal):
         """ポリゴンを描画する処理
+        フラット (コンスタント) シェーディング
+
+        :param np.ndarray polygon: ポリゴン 3x3
+        :param np.ndarray normal: 法線ベクトル
+        """
+        # ポリゴンの3点を座標変換
+        a = self.convert_point(polygon[0])
+        b = self.convert_point(polygon[1])
+        c = self.convert_point(polygon[2])
+
+        # ポリゴンの3点を y でソート
+        if a[1] < b[1]:
+            if c[1] < a[1]:
+                a, c = c, a
+        else:
+            if b[1] < c[1]:
+                a, b = b, a
+            else:
+                a, c = c, a
+        if c[1] < b[1]:
+            b, c = c, b
+
+        # 3点の y 座標が同じであれば処理終了
+        if a[1] == c[1]:
+            return
+
+        # d の座標を求める
+        r = (b[1] - a[1]) / (c[1] - a[1])
+        d = (1 - r) * a + r * c
+
+        # ポリゴン全体を1色でシェーディング
+        color = self._shade_vertex(polygon, normal)
+
+        for y in self.make_range_y(a[1], c[1]):
+            # x の左右を探す:
+            if y <= b[1]:
+                # a -> bd
+                if a[1] == b[1]:
+                    continue
+                s = (y - a[1]) / (b[1] - a[1])
+                px = ((1 - s) * a[0] + s * b[0])
+                qx = ((1 - s) * a[0] + s * d[0])
+                pz = 1 / ((1 - s) / a[2] + s / b[2])
+                qz = 1 / ((1 - s) / a[2] + s / d[2])
+            else:
+                # bd -> c
+                if b[1] == c[1]:
+                    continue
+                s = (y - c[1]) / (b[1] - c[1])
+                px = ((1 - s) * c[0] + s * b[0])
+                qx = ((1 - s) * c[0] + s * d[0])
+                pz = 1 / ((1 - s) / c[2] + s / b[2])
+                qz = 1 / ((1 - s) / c[2] + s / d[2])
+            # x についてループ
+            if px == qx:
+                # x が同じの時はすぐに終了
+                self.draw_pixel(int(px), y, pz, color)
+                continue
+            elif px > qx:
+                # x についてソート
+                px, qx = qx, px
+            for x in self.make_range_x(px, qx):
+                r = (x - px) / (qx - px)
+                self.draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
+
+    def _draw_polygon_gouraud(self, polygon, normals):
+        """ポリゴンを描画する処理
+        グーローシェーディング
 
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normals: 法線ベクトル 3x3
         """
-        def draw_pixel(x, y, z, cl):
-            """画素を描画する処理"""
-            # Z バッファでテスト
-            if not self.z_buffering or z <= self.z_buffer[y][x]:
-                # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-                # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-                # NOTE: サンプル画像がおかしいので X を反転して表示している
-                # data_x = 3 * (self.half_width + x) # 反転させないコード
-                data_x = 3 * (self.half_width - x - 1)
-                data_y = self.half_height - y
-                self.data[data_y][data_x:data_x + 3] = cl
-                self.z_buffer[y][x] = z
+        # ポリゴンの3点を座標変換
+        a, b, c = map(self.convert_point, polygon)
+        an, bn, cn = normals
 
-        def make_range_x(x1, x2):
-            x1 = int(math.ceil(x1))
-            x2 = int(math.floor(x2))
-            return range(max(x1, -self.half_width),
-                         min(x2, self.half_width - 1) + 1)
+        # ポリゴンの3点を y でソート
+        if a[1] < b[1]:
+            if c[1] < a[1]:
+                a, c = c, a
+                an, cn = cn, an
+        else:
+            if b[1] < c[1]:
+                a, b = b, a
+                an, bn = bn, an
+            else:
+                a, c = c, a
+                an, cn = cn, an
+        if c[1] < b[1]:
+            b, c = c, b
+            bn, cn = cn, bn
 
-        def make_range_y(y1, y2):
-            y1 = int(math.ceil(y1))
-            y2 = int(math.floor(y2))
-            return range(max(y1, 1 - self.half_height),
-                         min(y2, self.half_height) + 1)
+        # 3点の y 座標が同じであれば処理終了
+        if a[1] == c[1]:
+            return
+
+        # d の座標を求める
+        r = (b[1] - a[1]) / (c[1] - a[1])
+        d = (1 - r) * a + r * c
+        dn = (1 - r) * an + r * cn
+
+        # 頂点をそれぞれの法線ベクトルでシェーディング
+        ac = self._shade_vertex(polygon, an)
+        bc = self._shade_vertex(polygon, bn)
+        cc = self._shade_vertex(polygon, cn)
+        dc = self._shade_vertex(polygon, dn)
+        for y in self.make_range_y(a[1], c[1]):
+            # x の左右を探す:
+            if y <= b[1]:
+                # a -> bd
+                if a[1] == b[1]:
+                    continue
+                s = (y - a[1]) / (b[1] - a[1])
+                px = ((1 - s) * a[0] + s * b[0])
+                qx = ((1 - s) * a[0] + s * d[0])
+                pc = ((1 - s) * ac + s * bc)
+                qc = ((1 - s) * ac + s * dc)
+                pz = 1 / ((1 - s) / a[2] + s / b[2])
+                qz = 1 / ((1 - s) / a[2] + s / d[2])
+            else:
+                # 下 bd -> c
+                if b[1] == c[1]:
+                    continue
+                s = (y - c[1]) / (b[1] - c[1])
+                px = ((1 - s) * c[0] + s * b[0])
+                qx = ((1 - s) * c[0] + s * d[0])
+                pc = ((1 - s) * cc + s * bc)
+                qc = ((1 - s) * cc + s * dc)
+                pz = 1 / ((1 - s) / c[2] + s / b[2])
+                qz = 1 / ((1 - s) / c[2] + s / d[2])
+            # x についてループ
+            if px == qx:
+                # x が同じの時はすぐに終了
+                self.draw_pixel(int(px), y, pz, pc)
+                continue
+            elif px > qx:
+                # x についてソート
+                pc, qc = qc, pc
+                px, qx = qx, px
+            for x in self.make_range_x(px, qx):
+                r = (x - px) / (qx - px)
+                rc = ((1 - r) * pc + r * qc)
+                self.draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
+
+    def _draw_polygon_phong(self, polygon, normals):
+        """ポリゴンを描画する処理
+        フォンシェーディング
+
+        :param np.ndarray polygon: ポリゴン 3x3
+        :param np.ndarray normals: 法線ベクトル 3x3
+        """
 
         # ポリゴンの3点を座標変換
         a, b, c = map(self.convert_point, polygon)
@@ -116,128 +264,51 @@ class Renderer(object):
         d = (1 - r) * a + r * c
         dn = (1 - r) * an + r * cn
 
-        if self.shading_mode is ShadingMode.flat:
-            color = self._shade_vertex(polygon, normals[0])
-            for y in make_range_y(a[1], c[1]):
-                # x の左右を探す:
-                if y <= b[1]:
-                    # a -> bd
-                    if a[1] == b[1]:
-                        continue
-                    s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a[0] + s * b[0])
-                    qx = ((1 - s) * a[0] + s * d[0])
-                    pz = 1 / ((1 - s) / a[2] + s / b[2])
-                    qz = 1 / ((1 - s) / a[2] + s / d[2])
-                else:
-                    # bd -> c
-                    if b[1] == c[1]:
-                        continue
-                    s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c[0] + s * b[0])
-                    qx = ((1 - s) * c[0] + s * d[0])
-                    pz = 1 / ((1 - s) / c[2] + s / b[2])
-                    qz = 1 / ((1 - s) / c[2] + s / d[2])
-                # x についてループ
-                if px == qx:
-                    # x が同じの時はすぐに終了
-                    draw_pixel(int(px), y, pz, color)
+        for y in self.make_range_y(a[1], c[1]):
+            # x の左右を探す:
+            if y <= b[1]:
+                # a -> bd
+                if a[1] == b[1]:
                     continue
-                elif px > qx:
-                    # x についてソート
-                    px, qx = qx, px
-                for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
-        elif self.shading_mode is ShadingMode.gouraud:
-            # 頂点をそれぞれの法線ベクトルでシェーディング
-            ac = self._shade_vertex(polygon, an)
-            bc = self._shade_vertex(polygon, bn)
-            cc = self._shade_vertex(polygon, cn)
-            dc = self._shade_vertex(polygon, dn)
-            for y in make_range_y(a[1], c[1]):
-                # x の左右を探す:
-                if y <= b[1]:
-                    # a -> bd
-                    if a[1] == b[1]:
-                        continue
-                    s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a[0] + s * b[0])
-                    qx = ((1 - s) * a[0] + s * d[0])
-                    pc = ((1 - s) * ac + s * bc)
-                    qc = ((1 - s) * ac + s * dc)
-                    pz = 1 / ((1 - s) / a[2] + s / b[2])
-                    qz = 1 / ((1 - s) / a[2] + s / d[2])
-                else:
-                    # 下 bd -> c
-                    if b[1] == c[1]:
-                        continue
-                    s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c[0] + s * b[0])
-                    qx = ((1 - s) * c[0] + s * d[0])
-                    pc = ((1 - s) * cc + s * bc)
-                    qc = ((1 - s) * cc + s * dc)
-                    pz = 1 / ((1 - s) / c[2] + s / b[2])
-                    qz = 1 / ((1 - s) / c[2] + s / d[2])
-                # x についてループ
-                if px == qx:
-                    # x が同じの時はすぐに終了
-                    draw_pixel(int(px), y, pz, pc)
+                s = (y - a[1]) / (b[1] - a[1])
+                px = ((1 - s) * a[0] + s * b[0])
+                qx = ((1 - s) * a[0] + s * d[0])
+                pn = ((1 - s) * an + s * bn)
+                qn = ((1 - s) * an + s * dn)
+                pz = 1 / ((1 - s) / a[2] + s / b[2])
+                qz = 1 / ((1 - s) / a[2] + s / d[2])
+            else:
+                # 下 bd -> c
+                if b[1] == c[1]:
                     continue
-                elif px > qx:
-                    # x についてソート
-                    pc, qc = qc, pc
-                    px, qx = qx, px
-                for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    rc = ((1 - r) * pc + r * qc)
-                    draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
-        elif self.shading_mode is ShadingMode.phong:
-            for y in make_range_y(a[1], c[1]):
-                # x の左右を探す:
-                if y <= b[1]:
-                    # a -> bd
-                    if a[1] == b[1]:
-                        continue
-                    s = (y - a[1]) / (b[1] - a[1])
-                    px = ((1 - s) * a[0] + s * b[0])
-                    qx = ((1 - s) * a[0] + s * d[0])
-                    pn = ((1 - s) * an + s * bn)
-                    qn = ((1 - s) * an + s * dn)
-                    pz = 1 / ((1 - s) / a[2] + s / b[2])
-                    qz = 1 / ((1 - s) / a[2] + s / d[2])
-                else:
-                    # 下 bd -> c
-                    if b[1] == c[1]:
-                        continue
-                    s = (y - c[1]) / (b[1] - c[1])
-                    px = ((1 - s) * c[0] + s * b[0])
-                    qx = ((1 - s) * c[0] + s * d[0])
-                    pn = ((1 - s) * cn + s * bn)
-                    qn = ((1 - s) * cn + s * dn)
-                    pz = 1 / ((1 - s) / c[2] + s / b[2])
-                    qz = 1 / ((1 - s) / c[2] + s / d[2])
-                # x についてループ
-                if px == qx:
-                    # x が同じの時はすぐに終了
-                    draw_pixel(int(px), y, pz, self._shade_vertex(polygon, pn))
-                    continue
-                elif px > qx:
-                    # x についてソート
-                    pn, qn = qn, pn
-                    px, qx = qx, px
-                for x in make_range_x(px, qx):
-                    r = (x - px) / (qx - px)
-                    rn = ((1 - r) * pn + r * qn)
-                    z = 1 / (r / pz + (1 - r) / qz)
-                    draw_pixel(x, y, z, self._shade_vertex(polygon, rn))
+                s = (y - c[1]) / (b[1] - c[1])
+                px = ((1 - s) * c[0] + s * b[0])
+                qx = ((1 - s) * c[0] + s * d[0])
+                pn = ((1 - s) * cn + s * bn)
+                qn = ((1 - s) * cn + s * dn)
+                pz = 1 / ((1 - s) / c[2] + s / b[2])
+                qz = 1 / ((1 - s) / c[2] + s / d[2])
+            # x についてループ
+            if px == qx:
+                # x が同じの時はすぐに終了
+                self.draw_pixel(int(px), y, pz, self._shade_vertex(polygon, pn))
+                continue
+            elif px > qx:
+                # x についてソート
+                pn, qn = qn, pn
+                px, qx = qx, px
+            for x in self.make_range_x(px, qx):
+                r = (x - px) / (qx - px)
+                rn = ((1 - r) * pn + r * qn)
+                z = 1 / (r / pz + (1 - r) / qz)
+                self.draw_pixel(x, y, z, self._shade_vertex(polygon, rn))
 
     def draw_polygons(self, points, indexes):
         # ポリゴンのリストを作成
         polygons = np.array([[points[i] for i in j] for j in indexes],
                             dtype=DOUBLE)
 
-        def normal(polygon):
+        def calc_normal(polygon):
             """ポリゴンの面の法線ベクトルを求める処理"""
             # 直交ベクトル (時計回りを表)
             a = polygon[2] - polygon[1]
@@ -255,15 +326,12 @@ class Renderer(object):
                 return cross / np.linalg.norm(cross)
 
         # すべてのポリゴンの面の法線ベクトルを求める
-        polygon_normals = [normal(p) for p in polygons]
+        polygon_normals = [calc_normal(p) for p in polygons]
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(len(polygons)):
-                normal = polygon_normals[i]
-                normals = np.array((normal, normal, normal))
-                self._draw_polygon(polygons[i], normals)
-        elif (self.shading_mode is ShadingMode.gouraud or
-              self.shading_mode is ShadingMode.phong):
+                self._draw_polygon_flat(polygons[i], polygon_normals[i])
+        else:
             # 各頂点の法線ベクトルのリストを作成
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
@@ -286,5 +354,11 @@ class Renderer(object):
                 dtype=DOUBLE)
 
             # ポリゴンを描画
-            for i in range(len(polygons)):
-                self._draw_polygon(polygons[i], polygon_vertex_normals[i])
+            if self.shading_mode is ShadingMode.gouraud:
+                for i in range(len(polygons)):
+                    self._draw_polygon_gouraud(polygons[i],
+                                               polygon_vertex_normals[i])
+            elif self.shading_mode is ShadingMode.phong:
+                for i in range(len(polygons)):
+                    self._draw_polygon_phong(polygons[i],
+                                             polygon_vertex_normals[i])
