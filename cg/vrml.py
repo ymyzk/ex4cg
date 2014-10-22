@@ -35,16 +35,23 @@ class Vrml(object):
             l = l.strip()
             if l.startswith('#'):
                 continue
-            items = tuple(filter(lambda i: i != '', l.split(' ')))
+            items = tuple(filter(lambda i: i != '',
+                                 l.replace(',', '').split(' ')))
             if len(items) == 0:
                 continue
 
-            if status is Status.point and len(items) == 3:
-                l = [float(i.replace(',', '')) for i in items]
-                self.points.append(np.array(l, dtype=DOUBLE))
-            elif status is Status.index and len(items) == 4:
-                self.indexes.append(
-                    [int(i.replace(',', '')) for i in items[:3]])
+            if status is Status.index and len(items) == 4:
+                self.indexes.append((
+                    int(items[0]),
+                    int(items[1]),
+                    int(items[2])
+                ))
+            elif status is Status.point and len(items) == 3:
+                self.points.append(np.array((
+                    float(items[0]),
+                    float(items[1]),
+                    float(items[2])
+                ), dtype=DOUBLE))
             elif status is Status.material:
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
