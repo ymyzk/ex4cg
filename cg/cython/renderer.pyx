@@ -74,8 +74,6 @@ cdef class Renderer:
             color[1] += cl[1]
             color[2] += cl[2]
 
-        return
-
     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):
         """画素を描画する処理"""
         cdef int data_x, data_y

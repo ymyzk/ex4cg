@@ -41,7 +41,8 @@ cdef class AmbientShader:
         :param float intensity: 環境光係数 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
-        self.shade = intensity * 2 ** (depth - 1) * luminance
+        # self.shade = intensity * 2 ** (depth - 1) * luminance
+        self.shade = intensity * luminance
 
     cpdef calc(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
                DOUBLE_t[:] n, DOUBLE_t[:] cl):
