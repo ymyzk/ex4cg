@@ -11,8 +11,6 @@ from cg.cython.utils import random_color
 DOUBLE = np.float64
 ctypedef np.float64_t DOUBLE_t
 
-_zeros = np.zeros(3, dtype=DOUBLE)
-
 
 cdef inline void _unit_vector(DOUBLE_t[:] v):
     """単位ベクトルに変換する処理"""
@@ -163,6 +161,7 @@ cdef class SpecularShader:
             cl[1] = 0.0
             cl[2] = 0.0
             return
-        cl[0] = sn ** self.shininess * self._pre_shade[0]
-        cl[1] = sn ** self.shininess * self._pre_shade[1]
-        cl[2] = sn ** self.shininess * self._pre_shade[2]
+        sn **= self.shininess
+        cl[0] = sn * self._pre_shade[0]
+        cl[1] = sn * self._pre_shade[1]
+        cl[2] = sn * self._pre_shade[2]
