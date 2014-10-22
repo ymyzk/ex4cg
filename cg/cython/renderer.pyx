@@ -1,7 +1,5 @@
-#cython: language_level=3, boundscheck=False, cdivision=True
+#cython: language_level=3, boundscheck=False, cdivision=True, profile=True
 # -*- coding: utf-8 -*-
-
-import math
 
 from libc.math cimport ceil, floor
 import numpy as np
@@ -23,6 +21,7 @@ cdef class Renderer:
     cdef int depth, width, height, half_width, half_height, z_buffering
     cdef readonly np.ndarray data
     cdef np.ndarray z_buffer
+    cdef DOUBLE_t focus
 
     def __init__(self, camera, int width, int height, z_buffering=True,
                  int depth=8, shaders=tuple(), shading_mode=ShadingMode.flat):
@@ -43,34 +42,32 @@ cdef class Renderer:
         self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
+        self.focus = self.camera.focus
 
-    cpdef _convert_point(self, np.ndarray[DOUBLE_t] point):
+    cdef inline void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z + 元の座標の z
         """
-        cdef np.ndarray[DOUBLE_t] converted
         cdef DOUBLE_t z_ip
-        z_ip = self.camera.focus / point[2]
-        converted = np.array((z_ip * point[0], z_ip * point[1], point[2]),
-                             dtype=DOUBLE)
-        return converted
+        z_ip = self.focus / point[2]
+        point[0] = z_ip * point[0]
+        point[1] = z_ip * point[1]
 
-    cdef void _shade_vertex_internal(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                     DOUBLE_t[:] c, DOUBLE_t[:] n,
-                                     DOUBLE_t[:] color):
+    cdef inline void _shade_vertex_internal(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
+                                            DOUBLE_t[:] c, DOUBLE_t[:] n,
+                                            DOUBLE_t[:] color):
         """シェーディング処理"""
-        cdef int i, l
+        cdef int i
         cdef DOUBLE_t _cl[3]
         cdef DOUBLE_t[:] cl = _cl
 
-        l = len(self.shaders)
         color[0] = 0.0
         color[1] = 0.0
         color[2] = 0.0
 
         # シェーディング
-        for i in range(l):
+        for i in range(len(self.shaders)):
             self.shaders[i].calc(a, b, c, n, cl)
             color[0] += cl[0]
             color[1] += cl[1]
@@ -78,11 +75,13 @@ cdef class Renderer:
 
         return
 
-    cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):
+    cdef inline void _draw_pixel(self, int x, int y, DOUBLE_t z,
+                                 DOUBLE_t[:] cl):
         """画素を描画する処理"""
         cdef int data_x, data_y
+
         # Z バッファでテスト
-        if not self.z_buffering or z <= self.z_buffer[y][x]:
+        if not self.z_buffering or z <= self.z_buffer[y,x]:
             # 飽和
             if 255 < cl[0]:
                 cl[0] = 255
@@ -102,12 +101,17 @@ cdef class Renderer:
             self.data[data_y][data_x+2] = <UINT_t>cl[2]
             self.z_buffer[y][x] = z
 
-    cdef void _draw_polygon_flat_internal(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                          DOUBLE_t[:] c, DOUBLE_t[:] n):
+    cdef void __draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
+                                  DOUBLE_t[:] c, DOUBLE_t[:] n):
         cdef int x, y
         cdef DOUBLE_t [3] d
         cdef DOUBLE_t px, qx, pz, qz, r, s
         cdef DOUBLE_t [3] color
+
+        # ポリゴンの3点を座標変換
+        self._convert_point(a)
+        self._convert_point(b)
+        self._convert_point(c)
 
         # ポリゴンの3点を y でソート
         if a[1] < b[1]:
@@ -176,13 +180,12 @@ cdef class Renderer:
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normal: 法線ベクトル
         """
-        # ポリゴンの3点を座標変換
-        cdef DOUBLE_t [:] a = self._convert_point(polygon[0])
-        cdef DOUBLE_t [:] b = self._convert_point(polygon[1])
-        cdef DOUBLE_t [:] c = self._convert_point(polygon[2])
-        cdef DOUBLE_t [:] n = normal
+        cdef DOUBLE_t[:] a = polygon[0]
+        cdef DOUBLE_t[:] b = polygon[1]
+        cdef DOUBLE_t[:] c = polygon[2]
+        cdef DOUBLE_t[:] n = normal
 
-        self._draw_polygon_flat_internal(a, b, c, n)
+        self.__draw_polygon_flat(a, b, c, n)
 
     cdef void __draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                      DOUBLE_t[:] c, DOUBLE_t[:] an,
@@ -191,6 +194,11 @@ cdef class Renderer:
         cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
         cdef DOUBLE_t [3] ac, bc, cc, dc, pc, qc, rc
+
+        # ポリゴンの3点を座標変換
+        self._convert_point(a)
+        self._convert_point(b)
+        self._convert_point(c)
 
         # ポリゴンの3点を y でソート
         if a[1] < b[1]:
@@ -290,14 +298,12 @@ cdef class Renderer:
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normals: 法線ベクトル 3x3
         """
-        # ポリゴンの3点を座標変換
-        cdef DOUBLE_t [:] a = self._convert_point(polygon[0])
-        cdef DOUBLE_t [:] b = self._convert_point(polygon[1])
-        cdef DOUBLE_t [:] c = self._convert_point(polygon[2])
-        # 法線ベクトル
-        cdef DOUBLE_t [:] an = normals[0]
-        cdef DOUBLE_t [:] bn = normals[1]
-        cdef DOUBLE_t [:] cn = normals[2]
+        cdef DOUBLE_t[:] a = polygon[0]
+        cdef DOUBLE_t[:] b = polygon[1]
+        cdef DOUBLE_t[:] c = polygon[2]
+        cdef DOUBLE_t[:] an = normals[0]
+        cdef DOUBLE_t[:] bn = normals[1]
+        cdef DOUBLE_t[:] cn = normals[2]
 
         self.__draw_polygon_gouraud(a, b, c, an, bn, cn)
 
@@ -308,6 +314,11 @@ cdef class Renderer:
         cdef DOUBLE_t[3] d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
         cdef DOUBLE_t[3] color
+
+        # ポリゴンの3点を座標変換
+        self._convert_point(a)
+        self._convert_point(b)
+        self._convert_point(c)
 
         # ポリゴンの3点を y でソート
         if a[1] < b[1]:
@@ -406,14 +417,12 @@ cdef class Renderer:
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normals: 法線ベクトル 3x3
         """
-        # ポリゴンの3点を座標変換
-        cdef DOUBLE_t [:] a = self._convert_point(polygon[0])
-        cdef DOUBLE_t [:] b = self._convert_point(polygon[1])
-        cdef DOUBLE_t [:] c = self._convert_point(polygon[2])
-        # 法線ベクトル
-        cdef DOUBLE_t [:] an = normals[0]
-        cdef DOUBLE_t [:] bn = normals[1]
-        cdef DOUBLE_t [:] cn = normals[2]
+        cdef DOUBLE_t[:] a = polygon[0]
+        cdef DOUBLE_t[:] b = polygon[1]
+        cdef DOUBLE_t[:] c = polygon[2]
+        cdef DOUBLE_t[:] an = normals[0]
+        cdef DOUBLE_t[:] bn = normals[1]
+        cdef DOUBLE_t[:] cn = normals[2]
 
         self.__draw_polygon_phong(a, b, c, an, bn, cn)
 
