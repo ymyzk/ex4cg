@@ -44,17 +44,7 @@ class Renderer(object):
 
     def _shade_vertex(self, polygon, normal):
         """シェーディング処理"""
-        color = sum([s.calc(polygon, normal) for s in self.shaders])
-
-        # TODO: 飽和演算の実装の改善
-        if 255 < color[0]:
-            color[0] = 255
-        if 255 < color[1]:
-            color[1] = 255
-        if 255 < color[2]:
-            color[2] = 255
-
-        return color.astype(np.uint8)
+        return sum([s.calc(polygon, normal) for s in self.shaders])
 
     def make_range_x(self, x1, x2):
         x1 = int(math.ceil(x1))
@@ -72,6 +62,15 @@ class Renderer(object):
         """画素を描画する処理"""
         # Z バッファでテスト
         if not self.z_buffering or z <= self.z_buffer[y][x]:
+            # 飽和
+            if 255 < cl[0]:
+                cl[0] = 255
+            if 255 < cl[1]:
+                cl[1] = 255
+            if 255 < cl[2]:
+                cl[2] = 255
+            cl =  cl.astype(np.uint8)
+
             # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
             # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
             # NOTE: サンプル画像がおかしいので X を反転して表示している
@@ -295,7 +294,8 @@ class Renderer(object):
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
-                self.draw_pixel(int(px), y, pz, self._shade_vertex(polygon, pn))
+                self.draw_pixel(int(px), y, pz,
+                                self._shade_vertex(polygon, pn))
                 continue
             elif px > qx:
                 # x についてソート
@@ -353,9 +353,8 @@ class Renderer(object):
             vertex_normals = [mean(vertex) for vertex in vertexes]
 
             # ポリゴンの各頂点の法線ベクトルのリストを作成
-            polygon_vertex_normals = np.array(
-                [[vertex_normals[i] for i in j] for j in indexes],
-                dtype=DOUBLE)
+            polygon_vertex_normals = [[vertex_normals[i] for i in j]
+                                      for j in indexes]
 
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:

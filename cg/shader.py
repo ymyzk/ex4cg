@@ -36,7 +36,8 @@ class AmbientShader(object):
         :param float intensity: 環境光係数 0.0-1.0
         :param int depth: (optional) 階調数 (bit)
         """
-        self.shade = intensity * 2 ** (depth - 1) * luminance
+        # self.shade = intensity * 2 ** (depth - 1) * luminance
+        self.shade = intensity * luminance
 
     def calc(self, *_):
         return self.shade
@@ -60,6 +61,7 @@ class DiffuseShader(object):
         :param numpy.ndarray normal: 法線ベクトル
         """
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        # TODO: 現状では実行されないのでなくてもよい
         if np.count_nonzero(normal) == 0:
             return _zeros
         # 反射光を計算
