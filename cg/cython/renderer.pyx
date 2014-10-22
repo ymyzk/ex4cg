@@ -79,7 +79,7 @@ cdef class Renderer:
         cdef int data_x, data_y
 
         # Z バッファでテスト
-        if not self.z_buffering or z <= self.z_buffer[y,x]:
+        if not self.z_buffering or z <= self.z_buffer[y][x]:
             # 飽和
             if 255 < cl[0]:
                 cl[0] = 255
@@ -100,7 +100,8 @@ cdef class Renderer:
             self.z_buffer[y][x] = z
 
     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                  DOUBLE_t[:] c, DOUBLE_t[:] n):
+                                 DOUBLE_t[:] c, DOUBLE_t[:] n):
+        """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t [3] d
         cdef DOUBLE_t px, qx, pz, qz, r, s
@@ -170,9 +171,10 @@ cdef class Renderer:
                 r = (x - px) / (qx - px)
                 self._draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
 
-    cdef void __draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                     DOUBLE_t[:] c, DOUBLE_t[:] an,
-                                     DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+    cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
+                                    DOUBLE_t[:] c, DOUBLE_t[:] an,
+                                    DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+        """ポリゴンを描画する処理 (グーローシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
@@ -273,26 +275,10 @@ cdef class Renderer:
                     rc[2] = ((1 - r) * qc[2] + r * pc[2])
                     self._draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
 
-    def _draw_polygon_gouraud(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
-                              np.ndarray[DOUBLE_t, ndim=2] normals):
-        """ポリゴンを描画する処理
-        グーローシェーディング
-
-        :param np.ndarray polygon: ポリゴン 3x3
-        :param np.ndarray normals: 法線ベクトル 3x3
-        """
-        cdef DOUBLE_t[:] a = polygon[0]
-        cdef DOUBLE_t[:] b = polygon[1]
-        cdef DOUBLE_t[:] c = polygon[2]
-        cdef DOUBLE_t[:] an = normals[0]
-        cdef DOUBLE_t[:] bn = normals[1]
-        cdef DOUBLE_t[:] cn = normals[2]
-
-        self.__draw_polygon_gouraud(a, b, c, an, bn, cn)
-
-    cdef void __draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                   DOUBLE_t[:] c, DOUBLE_t[:] an,
-                                   DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+    cdef void _draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
+                                  DOUBLE_t[:] c, DOUBLE_t[:] an,
+                                  DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+        """ポリゴンを描画する処理 (フォンシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t[3] d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
@@ -392,23 +378,6 @@ cdef class Renderer:
                     self._shade_vertex(a, b, c, rn, color)
                     self._draw_pixel(x, y, z, color)
 
-    def _draw_polygon_phong(self, np.ndarray[DOUBLE_t, ndim=2] polygon,
-                            np.ndarray[DOUBLE_t, ndim=2] normals):
-        """ポリゴンを描画する処理
-        フォンシェーディング
-
-        :param np.ndarray polygon: ポリゴン 3x3
-        :param np.ndarray normals: 法線ベクトル 3x3
-        """
-        cdef DOUBLE_t[:] a = polygon[0]
-        cdef DOUBLE_t[:] b = polygon[1]
-        cdef DOUBLE_t[:] c = polygon[2]
-        cdef DOUBLE_t[:] an = normals[0]
-        cdef DOUBLE_t[:] bn = normals[1]
-        cdef DOUBLE_t[:] cn = normals[2]
-
-        self.__draw_polygon_phong(a, b, c, an, bn, cn)
-
     def draw_polygons(self, list points, list indexes):
         cdef np.ndarray normal, normals, polygons, polygon_vertex_normals
         cdef list vertexes, polygon_normals, vertex_normals
@@ -433,13 +402,13 @@ cdef class Renderer:
             # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
             if np.count_nonzero(cross) == 0:
                 return np.zeros(3, dtype=DOUBLE)
-            else:
-                # 法線ベクトル (単位ベクトル化)
-                norm = sqrt(cross[0] ** 2 + cross[1] ** 2 + cross[2] ** 2)
-                cross[0] /= norm
-                cross[1] /= norm
-                cross[2] /= norm
-                return cross
+
+            # 法線ベクトル (単位ベクトル化)
+            norm = sqrt(cross[0] ** 2 + cross[1] ** 2 + cross[2] ** 2)
+            cross[0] /= norm
+            cross[1] /= norm
+            cross[2] /= norm
+            return cross
 
         # すべてのポリゴンの面の法線ベクトルを求める
         polygon_normals = [calc_normal(p) for p in polygons]
@@ -473,11 +442,17 @@ cdef class Renderer:
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
                 for i in range(len(polygons)):
-                    self.__draw_polygon_gouraud(polygons[i][0], polygons[i][1], polygons[i][2],
+                    self._draw_polygon_gouraud(polygons[i][0],
+                                               polygons[i][1],
+                                               polygons[i][2],
                                                polygon_vertex_normals[i][0],
                                                polygon_vertex_normals[i][1],
                                                polygon_vertex_normals[i][2])
             elif self.shading_mode is ShadingMode.phong:
                 for i in range(len(polygons)):
-                    self._draw_polygon_phong(polygons[i],
-                                             polygon_vertex_normals[i])
+                    self._draw_polygon_phong(polygons[i][0],
+                                             polygons[i][1],
+                                             polygons[i][2],
+                                             polygon_vertex_normals[i][0],
+                                             polygon_vertex_normals[i][1],
+                                             polygon_vertex_normals[i][2])
