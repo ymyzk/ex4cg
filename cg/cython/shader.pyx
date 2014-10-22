@@ -1,4 +1,4 @@
-#cython: language_level=3, boundscheck=False, profile=True
+#cython: language_level=3, boundscheck=False, cdivision=True
 # -*- coding: utf-8 -*-
 
 from libc.math cimport sqrt

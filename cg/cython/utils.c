@@ -233,6 +233,7 @@ void __Pyx_call_destructor(T* x) {
 #include <math.h>
 #define __PYX_HAVE__cg__cython__utils
 #define __PYX_HAVE_API__cg__cython__utils
+#include "math.h"
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -729,7 +730,7 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "cg/cython/utils.pyx":8
+/* "cg/cython/utils.pyx":9
  * 
  * DOUBLE = np.float64
  * ctypedef np.float64_t DOUBLE_t             # <<<<<<<<<<<<<<
@@ -1391,6 +1392,8 @@ static PyObject *__pyx_memoryview_assign_item_from_object(struct __pyx_memoryvie
 static PyObject *__pyx_memoryviewslice_convert_item_to_object(struct __pyx_memoryviewslice_obj *__pyx_v_self, char *__pyx_v_itemp); /* proto*/
 static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memoryviewslice_obj *__pyx_v_self, char *__pyx_v_itemp, PyObject *__pyx_v_value); /* proto*/
 
+/* Module declarations from 'libc.math' */
+
 /* Module declarations from 'cpython.buffer' */
 
 /* Module declarations from 'cpython.ref' */
@@ -1728,7 +1731,7 @@ static PyObject *__pyx_tuple__24;
 static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_codeobj__20;
 
-/* "cg/cython/utils.pyx":10
+/* "cg/cython/utils.pyx":11
  * ctypedef np.float64_t DOUBLE_t
  * 
  * def random_color(DOUBLE_t[:] color, int depth):             # <<<<<<<<<<<<<<
@@ -1769,11 +1772,11 @@ static PyObject *__pyx_pw_2cg_6cython_5utils_1random_color(PyObject *__pyx_self,
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_depth)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("random_color", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("random_color", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "random_color") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "random_color") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1781,12 +1784,12 @@ static PyObject *__pyx_pw_2cg_6cython_5utils_1random_color(PyObject *__pyx_self,
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_color = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_5utils_DOUBLE_t(values[0]); if (unlikely(!__pyx_v_color.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_depth = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_depth == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_color = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_5utils_DOUBLE_t(values[0]); if (unlikely(!__pyx_v_color.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_depth = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_depth == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("random_color", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("random_color", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cg.cython.utils.random_color", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1823,7 +1826,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("random_color", 0);
 
-  /* "cg/cython/utils.pyx":13
+  /* "cg/cython/utils.pyx":14
  *     """"""
  *     cdef int c
  *     c = 2 ** depth - 1             # <<<<<<<<<<<<<<
@@ -1832,25 +1835,25 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
  */
   __pyx_v_c = (__Pyx_pow_long(2, ((long)__pyx_v_depth)) - 1);
 
-  /* "cg/cython/utils.pyx":14
+  /* "cg/cython/utils.pyx":15
  *     cdef int c
  *     c = 2 ** depth - 1
  *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *     color[0] = _color[0]
  *     color[1] = _color[1]
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_array); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_array); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   for (__pyx_t_3 = 0; __pyx_t_3 < 3; __pyx_t_3+=1) {
     __pyx_v__ = __pyx_t_3;
-    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_randint); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_randint); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_c); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_c); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_7 = NULL;
     __pyx_t_8 = 0;
@@ -1864,7 +1867,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
         __pyx_t_8 = 1;
       }
     }
-    __pyx_t_9 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_9 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_9);
     if (__pyx_t_7) {
       PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __Pyx_GIVEREF(__pyx_t_7); __pyx_t_7 = NULL;
@@ -1875,25 +1878,25 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
     PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_8, __pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_6);
     __pyx_t_6 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_4))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_4))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -1901,16 +1904,16 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   __pyx_v__color = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "cg/cython/utils.pyx":15
+  /* "cg/cython/utils.pyx":16
  *     c = 2 ** depth - 1
  *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)
  *     color[0] = _color[0]             # <<<<<<<<<<<<<<
  *     color[1] = _color[1]
  *     color[2] = _color[2]
  */
-  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_8 = 0;
   __pyx_t_11 = -1;
@@ -1920,19 +1923,19 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   } else if (unlikely(__pyx_t_8 >= __pyx_v_color.shape[0])) __pyx_t_11 = 0;
   if (unlikely(__pyx_t_11 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_11);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   *((__pyx_t_2cg_6cython_5utils_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_8 * __pyx_v_color.strides[0]) )) = __pyx_t_10;
 
-  /* "cg/cython/utils.pyx":16
+  /* "cg/cython/utils.pyx":17
  *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)
  *     color[0] = _color[0]
  *     color[1] = _color[1]             # <<<<<<<<<<<<<<
  *     color[2] = _color[2]
  */
-  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_12 = 1;
   __pyx_t_11 = -1;
@@ -1942,18 +1945,18 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   } else if (unlikely(__pyx_t_12 >= __pyx_v_color.shape[0])) __pyx_t_11 = 0;
   if (unlikely(__pyx_t_11 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_11);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   *((__pyx_t_2cg_6cython_5utils_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_12 * __pyx_v_color.strides[0]) )) = __pyx_t_10;
 
-  /* "cg/cython/utils.pyx":17
+  /* "cg/cython/utils.pyx":18
  *     color[0] = _color[0]
  *     color[1] = _color[1]
  *     color[2] = _color[2]             # <<<<<<<<<<<<<<
  */
-  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_t_5 = __Pyx_GetItemInt(__pyx_v__color, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_5); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_13 = 2;
   __pyx_t_11 = -1;
@@ -1963,11 +1966,11 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   } else if (unlikely(__pyx_t_13 >= __pyx_v_color.shape[0])) __pyx_t_11 = 0;
   if (unlikely(__pyx_t_11 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_11);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   *((__pyx_t_2cg_6cython_5utils_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_13 * __pyx_v_color.strides[0]) )) = __pyx_t_10;
 
-  /* "cg/cython/utils.pyx":10
+  /* "cg/cython/utils.pyx":11
  * ctypedef np.float64_t DOUBLE_t
  * 
  * def random_color(DOUBLE_t[:] color, int depth):             # <<<<<<<<<<<<<<
@@ -15392,7 +15395,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 799; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 142; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -15602,17 +15605,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
 
-  /* "cg/cython/utils.pyx":10
+  /* "cg/cython/utils.pyx":11
  * ctypedef np.float64_t DOUBLE_t
  * 
  * def random_color(DOUBLE_t[:] color, int depth):             # <<<<<<<<<<<<<<
  *     """"""
  *     cdef int c
  */
-  __pyx_tuple__19 = PyTuple_Pack(5, __pyx_n_s_color, __pyx_n_s_depth, __pyx_n_s_c, __pyx_n_s_color_2, __pyx_n_s__18); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__19 = PyTuple_Pack(5, __pyx_n_s_color, __pyx_n_s_depth, __pyx_n_s_c, __pyx_n_s_color_2, __pyx_n_s__18); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
-  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_yusuke_Development_kougi, __pyx_n_s_random_color, 10, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_yusuke_Development_kougi, __pyx_n_s_random_color, 11, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "View.MemoryView":276
  *         return self.name
@@ -15818,7 +15821,7 @@ PyMODINIT_FUNC PyInit_utils(void)
   /* "cg/cython/utils.pyx":1
  * from random import randint             # <<<<<<<<<<<<<<
  * 
- * import numpy as np
+ * from libc.math cimport sqrt
  */
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
@@ -15834,49 +15837,49 @@ PyMODINIT_FUNC PyInit_utils(void)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cg/cython/utils.pyx":3
- * from random import randint
+  /* "cg/cython/utils.pyx":4
  * 
+ * from libc.math cimport sqrt
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * 
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cg/cython/utils.pyx":7
+  /* "cg/cython/utils.pyx":8
  * 
  * 
  * DOUBLE = np.float64             # <<<<<<<<<<<<<<
  * ctypedef np.float64_t DOUBLE_t
  * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DOUBLE, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DOUBLE, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cg/cython/utils.pyx":10
+  /* "cg/cython/utils.pyx":11
  * ctypedef np.float64_t DOUBLE_t
  * 
  * def random_color(DOUBLE_t[:] color, int depth):             # <<<<<<<<<<<<<<
  *     """"""
  *     cdef int c
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_2cg_6cython_5utils_1random_color, NULL, __pyx_n_s_cg_cython_utils); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_2cg_6cython_5utils_1random_color, NULL, __pyx_n_s_cg_cython_utils); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_random_color, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_random_color, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cg/cython/utils.pyx":1
  * from random import randint             # <<<<<<<<<<<<<<
  * 
- * import numpy as np
+ * from libc.math cimport sqrt
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);

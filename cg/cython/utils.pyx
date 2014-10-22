@@ -1,5 +1,6 @@
 from random import randint
 
+from libc.math cimport sqrt
 import numpy as np
 cimport numpy as np
 
