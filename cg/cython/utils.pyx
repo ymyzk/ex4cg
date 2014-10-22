@@ -1,6 +1,8 @@
+#cython: language_level=3, boundscheck=False, cdivision=True
+# -*- coding: utf-8 -*-
+
 from random import randint
 
-from libc.math cimport sqrt
 import numpy as np
 cimport numpy as np
 
