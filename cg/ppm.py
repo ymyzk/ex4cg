@@ -22,13 +22,16 @@ class PpmImage(object):
         self.depth = depth
 
     def dump(self, fp):
-        """ファイルに画像データを書き込む処理"""
+        """ファイルに画像データを書き込む処理
+
+        :param fp: ファイルオブジェクト
+        """
         fp.write('P3\n')
         fp.write('# ' + self.name + '\n')
         fp.write('{0:d} {1:d}\n'.format(self.width, self.height))
         fp.write('{0:d}\n'.format(2 ** self.depth - 1))
 
         for row in self.image:
-            buffer = ['{0:3d} {1:3d} {2:3d}\n'.format(*row[x*3:x*3+3])
-                      for x in range(self.width)]
-            fp.write(''.join(buffer))
+            fp.write(''.join(['{0:3d} {1:3d} {2:3d}\n'.format(
+                row[x * 3], row[x * 3 + 1], row[x * 3 + 2])
+                for x in range(self.width)]))

@@ -18,6 +18,5 @@ class Camera(object):
         self.array = np.array((
             (1.0, 0.0, 0.0),
             (0.0, 1.0, 0.0),
-            (0.0, 0.0, 1.0),
-            (0.0, 0.0, 1.0 / self.focus)
+            (0.0, 0.0, 1.0)
         ), dtype=np.float64)
