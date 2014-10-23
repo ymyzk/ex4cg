@@ -1562,7 +1562,6 @@ static char __pyx_k_color_2[] = "_color";
 static char __pyx_k_float64[] = "float64";
 static char __pyx_k_fortran[] = "fortran";
 static char __pyx_k_memview[] = "memview";
-static char __pyx_k_randint[] = "randint";
 static char __pyx_k_Ellipsis[] = "Ellipsis";
 static char __pyx_k_itemsize[] = "itemsize";
 static char __pyx_k_TypeError[] = "TypeError";
@@ -1673,7 +1672,6 @@ static PyObject *__pyx_n_s_obj;
 static PyObject *__pyx_n_s_pack;
 static PyObject *__pyx_n_s_pyx_getbuffer;
 static PyObject *__pyx_n_s_pyx_vtable;
-static PyObject *__pyx_n_s_randint;
 static PyObject *__pyx_n_s_random;
 static PyObject *__pyx_n_s_random_color;
 static PyObject *__pyx_n_s_range;
@@ -1817,7 +1815,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
  *     """"""
  *     cdef int c
  *     c = 2 ** depth - 1             # <<<<<<<<<<<<<<
- *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)
+ *     _color = np.array([random(0, c) for _ in range(3)], dtype=DOUBLE)
  *     color[0] = _color[0]
  */
   __pyx_v_c = (__Pyx_pow_long(2, ((long)__pyx_v_depth)) - 1);
@@ -1825,7 +1823,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   /* "cg/cython/utils.pyx":17
  *     cdef int c
  *     c = 2 ** depth - 1
- *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)             # <<<<<<<<<<<<<<
+ *     _color = np.array([random(0, c) for _ in range(3)], dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *     color[0] = _color[0]
  *     color[1] = _color[1]
  */
@@ -1840,7 +1838,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
     __Pyx_GOTREF(__pyx_t_1);
     for (__pyx_t_3 = 0; __pyx_t_3 < 3; __pyx_t_3+=1) {
       __pyx_7genexpr__pyx_v__ = __pyx_t_3;
-      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_randint); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_c); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
@@ -1896,7 +1894,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
 
   /* "cg/cython/utils.pyx":18
  *     c = 2 ** depth - 1
- *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)
+ *     _color = np.array([random(0, c) for _ in range(3)], dtype=DOUBLE)
  *     color[0] = _color[0]             # <<<<<<<<<<<<<<
  *     color[1] = _color[1]
  *     color[2] = _color[2]
@@ -1910,7 +1908,7 @@ static PyObject *__pyx_pf_2cg_6cython_5utils_random_color(CYTHON_UNUSED PyObject
   *((__pyx_t_2cg_6cython_5utils_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_8 * __pyx_v_color.strides[0]) )) = __pyx_t_10;
 
   /* "cg/cython/utils.pyx":19
- *     _color = np.array([randint(0, c) for _ in range(3)], dtype=DOUBLE)
+ *     _color = np.array([random(0, c) for _ in range(3)], dtype=DOUBLE)
  *     color[0] = _color[0]
  *     color[1] = _color[1]             # <<<<<<<<<<<<<<
  *     color[2] = _color[2]
@@ -15338,7 +15336,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_getbuffer, __pyx_k_pyx_getbuffer, sizeof(__pyx_k_pyx_getbuffer), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
-  {&__pyx_n_s_randint, __pyx_k_randint, sizeof(__pyx_k_randint), 0, 0, 1, 1},
   {&__pyx_n_s_random, __pyx_k_random, sizeof(__pyx_k_random), 0, 0, 1, 1},
   {&__pyx_n_s_random_color, __pyx_k_random_color, sizeof(__pyx_k_random_color), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
@@ -15786,26 +15783,26 @@ PyMODINIT_FUNC PyInit_utils(void)
   /* "cg/cython/utils.pyx":4
  * # -*- coding: utf-8 -*-
  * 
- * from random import randint             # <<<<<<<<<<<<<<
+ * from random import random             # <<<<<<<<<<<<<<
  * 
  * import numpy as np
  */
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_n_s_randint);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_randint);
-  __Pyx_GIVEREF(__pyx_n_s_randint);
+  __Pyx_INCREF(__pyx_n_s_random);
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_random);
+  __Pyx_GIVEREF(__pyx_n_s_random);
   __pyx_t_2 = __Pyx_Import(__pyx_n_s_random, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_randint); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_randint, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_random, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "cg/cython/utils.pyx":6
- * from random import randint
+ * from random import random
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np

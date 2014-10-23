@@ -33,14 +33,12 @@ cdef class AmbientShader:
     """環境光を計算するシェーダ"""
     cdef DOUBLE_t[:] shade
 
-    def __init__(self, np.ndarray[DOUBLE_t, ndim=1] luminance, float intensity,
-                 int depth=8):
+    def __init__(self,
+                 np.ndarray[DOUBLE_t, ndim=1] luminance, float intensity):
         """
         :param numpy.ndarray luminance: 入射光の強さ 0.0-1.0 (r, g, b)
         :param float intensity: 環境光係数 0.0-1.0
-        :param int depth: (optional) 階調数 (bit)
         """
-        # self.shade = intensity * 2 ** (depth - 1) * luminance
         self.shade = intensity * luminance
 
     cpdef calc(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
@@ -56,17 +54,16 @@ cdef class DiffuseShader:
 
     def __init__(self, np.ndarray[DOUBLE_t, ndim=1] direction,
                  np.ndarray[DOUBLE_t, ndim=1] luminance,
-                 np.ndarray[DOUBLE_t, ndim=1] color, int depth=8):
+                 np.ndarray[DOUBLE_t, ndim=1] color):
         """
         :param np.ndarray direction: 入射光の方向 (x, y, z)
         :param np.ndarray luminance: 入射光の強さ (r, g, b)
         :param np.ndarray color: 拡散反射係数 (r, g, b)
-        :param int depth: (optional) 階調数 (bit)
         """
         # 方向ベクトルを単位ベクトルに変換
         _unit_vector(direction)
         self.direction = direction
-        self._pre_shade = (2 ** depth - 1) * color * luminance
+        self._pre_shade = color * luminance
 
     cpdef calc(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
                DOUBLE_t[:] n, DOUBLE_t[:] cl):
@@ -93,17 +90,9 @@ cdef class DiffuseShader:
 
 cdef class RandomColorShader:
     """ランダムな色を返すシェーダ"""
-    cdef int depth
-
-    def __init__(self, int depth=8):
-        """
-        :param int depth: (optional) 階調数 (bit)
-        """
-        self.depth = depth
-
     cpdef calc(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
                DOUBLE_t[:] n, DOUBLE_t[:] cl):
-        random_color(cl, self.depth)
+        random_color(cl)
 
 
 cdef class SpecularShader:
@@ -114,22 +103,20 @@ cdef class SpecularShader:
     def __init__(self, np.ndarray[DOUBLE_t, ndim=1] camera_position,
                  np.ndarray[DOUBLE_t, ndim=1] direction,
                  np.ndarray[DOUBLE_t, ndim=1] luminance,
-                 np.ndarray[DOUBLE_t, ndim=1] color, float shininess,
-                 int depth=8):
+                 np.ndarray[DOUBLE_t, ndim=1] color, float shininess):
         """
         :param np.ndarray camera_position: カメラの位置 (x, y, z)
         :param np.ndarray direction: 入射光の方向 (x, y, z)
         :param np.ndarray luminance: 入射光の強さ (r, g, b)
         :param np.ndarray color: 鏡面反射係数 (r, g, b)
-        :param np shininess: 鏡面反射強度 s 0.0-1.0
-        :param int depth: (optional) 階調数 (bit)
+        :param np shininess: 鏡面反射強度 s 0.0-1.0)
         """
         self.camera_position = camera_position
         # 方向ベクトルを単位ベクトルに変換
         _unit_vector(direction)
         self.direction = direction
         self.shininess = shininess * 128
-        self._pre_shade = (2 ** depth - 1) * color * luminance
+        self._pre_shade = color * luminance
 
     cpdef calc(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
                DOUBLE_t[:] n, DOUBLE_t[:] cl):

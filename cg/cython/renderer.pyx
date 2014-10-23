@@ -19,6 +19,7 @@ cdef inline int int_min(int a, int b): return a if a <= b else b
 cdef class Renderer:
     cdef object camera, shaders, shading_mode
     cdef int depth, width, height, half_width, half_height, z_buffering
+    cdef int _depth
     cdef readonly np.ndarray data
     cdef np.ndarray z_buffer
     cdef DOUBLE_t focus
@@ -43,6 +44,7 @@ cdef class Renderer:
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self.focus = self.camera.focus
+        self._depth = 2 ** depth - 1
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -80,12 +82,12 @@ cdef class Renderer:
         # Z バッファでテスト
         if not self.z_buffering or z <= self.z_buffer[y][x]:
             # 飽和
-            if 255 < cl[0]:
-                cl[0] = 255
-            if 255 < cl[1]:
-                cl[1] = 255
-            if 255 < cl[2]:
-                cl[2] = 255
+            if 1.0 < cl[0]:
+                cl[0] = 1.0
+            if 1.0 < cl[1]:
+                cl[1] = 1.0
+            if 1.0 < cl[2]:
+                cl[2] = 1.0
 
             # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
             # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
@@ -93,9 +95,9 @@ cdef class Renderer:
             # data_x = 3 * (self.half_width + x) # 反転させないコード
             data_x = 3 * (self.half_width - x - 1)
             data_y = self.half_height - y
-            self.data[data_y][data_x+0] = <UINT_t>cl[0]
-            self.data[data_y][data_x+1] = <UINT_t>cl[1]
-            self.data[data_y][data_x+2] = <UINT_t>cl[2]
+            self.data[data_y][data_x+0] = <UINT_t>(cl[0] * self._depth)
+            self.data[data_y][data_x+1] = <UINT_t>(cl[1] * self._depth)
+            self.data[data_y][data_x+2] = <UINT_t>(cl[2] * self._depth)
             self.z_buffer[y][x] = z
 
     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
