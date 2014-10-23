@@ -3,9 +3,10 @@ import sys
 import numpy as np
 from PyQt4 import QtCore, QtGui
 
-from cg import shader
+from cg import shader as py_shader
 from cg.camera import Camera
 from cg.renderer import Renderer
+from cg.shader import ShadingMode
 from cg.vrml import Vrml
 
 
@@ -36,6 +37,8 @@ def main():
         camera = Camera(position=np.array((0.0, 0.0, 0.0)),
                         angle=np.array((0.0, 0.0, 1.0)),
                         focus=camera_focus.value())
+
+        shader = py_shader
         shaders = []
         if (diffuse_checkbox.checkState() == 2 and
                 vrml.diffuse_color is not None):
@@ -74,8 +77,17 @@ def main():
                 intensity=vrml.ambient_intensity))
         if len(shaders) == 0:
             shaders.append(shader.RandomColorShader())
+
+        mode = ShadingMode.flat
+        if shading_mode_flat.isChecked():
+            mode = ShadingMode.flat
+        elif shading_mode_gouraud.isChecked():
+            mode = ShadingMode.gouraud
+        elif shading_mode_phong.isChecked():
+            mode = ShadingMode.phong
         renderer = Renderer(camera=camera, shaders=shaders,
-                            width=width, height=height)
+                            width=width, height=height,
+                            shading_mode=mode)
         renderer.draw_polygons(vrml.points, vrml.indexes)
         image_label.set_image(renderer.data.data)
 
@@ -290,9 +302,23 @@ def main():
     render_panel.setLayout(render_panel_layout)
     control_tab.addTab(render_panel, 'Render')
 
+    shading_mode = QtGui.QGroupBox()
+    shading_mode_layout = QtGui.QHBoxLayout()
+    shading_mode.setLayout(shading_mode_layout)
+    shading_mode.setTitle('Shading Mode')
+    render_panel_layout.addWidget(shading_mode, 0, 0)
+
+    shading_mode_flat = QtGui.QRadioButton('Flat (Constant)')
+    shading_mode_flat.setChecked(1)
+    shading_mode_layout.addWidget(shading_mode_flat)
+    shading_mode_gouraud = QtGui.QRadioButton('Gouraud')
+    shading_mode_layout.addWidget(shading_mode_gouraud)
+    shading_mode_phong = QtGui.QRadioButton('Phong')
+    shading_mode_layout.addWidget(shading_mode_phong)
+
     render_button = QtGui.QPushButton('Render')
     render_button.clicked.connect(render)
-    render_panel_layout.addWidget(render_button, 0, 0)
+    render_panel_layout.addWidget(render_button, 1, 0)
 
     main_window.setCentralWidget(main_panel)
     main_window.show()
