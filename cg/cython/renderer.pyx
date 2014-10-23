@@ -377,6 +377,37 @@ cdef class Renderer:
                     self._shade_vertex(a, b, c, rn, color)
                     self._draw_pixel(x, y, z, color)
 
+    cdef np.ndarray calc_normal(self, DOUBLE_t[:,:] polygon):
+        """ポリゴンの面の法線ベクトルを求める処理"""
+        cdef DOUBLE_t[3] ab, bc, cr
+        cdef DOUBLE_t norm
+        cdef np.ndarray[DOUBLE_t] cross
+
+        ab[0] = polygon[1][0] - polygon[0][0]
+        ab[1] = polygon[1][1] - polygon[0][1]
+        ab[2] = polygon[1][2] - polygon[0][2]
+        bc[0] = polygon[2][0] - polygon[1][0]
+        bc[1] = polygon[2][1] - polygon[1][1]
+        bc[2] = polygon[2][2] - polygon[1][2]
+
+        # 直交ベクトル (時計回りを表)
+        cr[0] = bc[1] * ab[2] - bc[2] * ab[1]
+        cr[1] = bc[2] * ab[0] - bc[0] * ab[2]
+        cr[2] = bc[0] * ab[1] - bc[1] * ab[0]
+
+        # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        if cr[0] == 0 and cr[1] == 0 and cr[2] == 0:
+            return np.zeros(3, dtype=DOUBLE)
+
+        # 法線ベクトル (単位ベクトル化)
+        norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)
+        cross = np.array((
+            cr[0] / norm,
+            cr[1] / norm,
+            cr[2] / norm
+        ), dtype=DOUBLE)
+        return cross
+
     def draw_polygons(self, list points, list indexes):
         cdef np.ndarray normal, normals, polygons
         cdef list vertexes
@@ -387,31 +418,8 @@ cdef class Renderer:
         polygons = np.array([[points[i] for i in j] for j in indexes],
                             dtype=DOUBLE)
 
-        def calc_normal(np.ndarray[DOUBLE_t, ndim=2] polygon):
-            """ポリゴンの面の法線ベクトルを求める処理"""
-            cdef np.ndarray[DOUBLE_t] a, b, cross
-
-            # 直交ベクトル (時計回りを表)
-            a = polygon[2] - polygon[1]
-            b = polygon[1] - polygon[0]
-            cross = np.array((
-                a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]
-            ), dtype=DOUBLE)
-            # 直交ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
-            if np.count_nonzero(cross) == 0:
-                return np.zeros(3, dtype=DOUBLE)
-
-            # 法線ベクトル (単位ベクトル化)
-            norm = sqrt(cross[0] ** 2 + cross[1] ** 2 + cross[2] ** 2)
-            cross[0] /= norm
-            cross[1] /= norm
-            cross[2] /= norm
-            return cross
-
         # すべてのポリゴンの面の法線ベクトルを求める
-        polygon_normals = [calc_normal(p) for p in polygons]
+        polygon_normals = [self.calc_normal(p) for p in polygons]
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(len(polygons)):
