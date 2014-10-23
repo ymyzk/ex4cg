@@ -26,7 +26,7 @@ if __name__ == '__main__':
     camera = Camera(position=np.array((0.0, 0.0, 0.0)),
                     angle=np.array((0.0, 0.0, 1.0)),
                     focus=256.0)
-    shader = RandomColorShader(depth=depth)
+    shader = RandomColorShader()
     renderer = Renderer(camera=camera, shaders=[shader], depth=depth,
                         width=width, height=height, z_buffering=False)
 

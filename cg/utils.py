@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from random import randint
+from random import randint, random
 
 import numpy as np
 
 
-def random_color(depth):
+def random_color():
     """ランダムな色を生成する処理
 
     :rtype: numpy.ndarray
     """
-    color = 2 ** depth - 1
-    return np.array([randint(0, color) for _ in range(3)], dtype=np.float64)
+    return np.array([random() for _ in range(3)], dtype=np.float64)
 
 
 def random_point():

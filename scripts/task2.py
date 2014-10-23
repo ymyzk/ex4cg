@@ -23,8 +23,8 @@ def main(args):
         args.input.close()
 
     width = height = 256
-    camera = Camera(position=(0.0, 0.0, 0.0),
-                    angle=(0.0, 0.0, 1.0),
+    camera = Camera(position=np.array((0.0, 0.0, 0.0)),
+                    angle=np.array((0.0, 0.0, 1.0)),
                     focus=256.0)
     if vrml.diffuse_color is None:
         shader = RandomColorShader()

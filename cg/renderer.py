@@ -31,6 +31,7 @@ class Renderer(object):
         self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
+        self._depth = 2 ** depth - 1
 
     def _convert_point(self, point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -63,13 +64,13 @@ class Renderer(object):
         # Z バッファでテスト
         if not self.z_buffering or z <= self.z_buffer[y][x]:
             # 飽和
-            if 255 < cl[0]:
-                cl[0] = 255
-            if 255 < cl[1]:
-                cl[1] = 255
-            if 255 < cl[2]:
-                cl[2] = 255
-            cl =  cl.astype(np.uint8)
+            if 1.0 < cl[0]:
+                cl[0] = 1.0
+            if 1.0 < cl[1]:
+                cl[1] = 1.0
+            if 1.0 < cl[2]:
+                cl[2] = 1.0
+            cl = (cl * self._depth).astype(np.uint8)
 
             # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
             # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
@@ -235,7 +236,6 @@ class Renderer(object):
         :param np.ndarray polygon: ポリゴン 3x3
         :param np.ndarray normals: 法線ベクトル 3x3
         """
-
         # ポリゴンの3点を座標変換
         a = self._convert_point(polygon[0])
         b = self._convert_point(polygon[1])

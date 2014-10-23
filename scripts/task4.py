@@ -46,8 +46,7 @@ def main(args):
 
     renderer = Renderer(camera=camera, shaders=shaders,
                         width=width, height=height,
-                        # shading_mode=ShadingMode.phong)
-                        shading_mode=ShadingMode.gouraud)
+                        shading_mode=ShadingMode.flat)
 
     renderer.draw_polygons(vrml.points, vrml.indexes)
 
