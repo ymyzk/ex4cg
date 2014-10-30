@@ -39,6 +39,8 @@ def main():
         render()
 
     def render():
+        status_bar.showMessage('Rendering..')
+
         camera = Camera(position=np.array((0.0, 0.0, 0.0)),
                         angle=np.array((0.0, 0.0, 1.0)),
                         focus=camera_focus.value())
@@ -102,6 +104,8 @@ def main():
         renderer.draw_polygons(vrml.points, vrml.indexes)
         image_label.set_image(renderer.data.data)
 
+        status_bar.showMessage('Rendered.')
+
 
     # VRML ファイルの読み込み
 
@@ -112,6 +116,11 @@ def main():
     main_panel = QtGui.QWidget()
     main_panel_layout = QtGui.QVBoxLayout()
     main_panel.setLayout(main_panel_layout)
+
+    # Status Bar
+    status_bar = QtGui.QStatusBar()
+    main_window.setStatusBar(status_bar)
+    status_bar.showMessage('Ready.')
 
     # Image
     image_panel = QtGui.QWidget()
