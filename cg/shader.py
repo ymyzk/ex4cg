@@ -51,7 +51,7 @@ class DiffuseShader(object):
         """
         # 方向ベクトルを単位ベクトルに変換
         self.direction = _unit_vector(direction)
-        self._pre_shade = color * luminance
+        self.pre_shade = color * luminance
 
     def calc(self, _, normal):
         """
@@ -66,7 +66,7 @@ class DiffuseShader(object):
         # ポリゴンが裏を向いているときは, 反射光なし
         if cos < 0.0:
             return _zeros
-        return self._pre_shade * cos
+        return self.pre_shade * cos
 
 
 class RandomColorShader(object):
@@ -90,7 +90,7 @@ class SpecularShader(object):
         # 方向ベクトルを単位ベクトルに変換
         self.direction = _unit_vector(direction)
         self.shininess = shininess * 128
-        self._pre_shade = color * luminance
+        self.pre_shade = color * luminance
 
     def calc(self, polygon, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -107,4 +107,4 @@ class SpecularShader(object):
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0.0:
             return _zeros
-        return sn ** self.shininess * self._pre_shade
+        return sn ** self.shininess * self.pre_shade

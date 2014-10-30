@@ -29,11 +29,9 @@ cdef inline void _unit_vector(DOUBLE_t[:] v):
     v[1] /= norm
     v[2] /= norm
 
-cdef inline double _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2, int l):
-    cdef int i
-    cdef double dot = 0.0
-    for i in range(l):
-        dot += v1[i] * v2[i]
+cdef inline DOUBLE_t _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2):
+    cdef DOUBLE_t dot
+    dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
     return dot
 
 cdef class Renderer:
@@ -42,6 +40,7 @@ cdef class Renderer:
     cdef int depth, width, height, half_width, half_height, z_buffering
     cdef int _depth
     cdef readonly np.ndarray data
+    cdef UINT8_t[:,:] _data
     cdef np.ndarray z_buffer
     cdef DOUBLE_t[:,:] _z_buffer
     cdef DOUBLE_t[:] camera_position
@@ -74,6 +73,7 @@ cdef class Renderer:
         self.shading_mode = shading_mode
 
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
+        self._data = self.data
         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
         self.z_buffer.fill(float('inf'))
         self._z_buffer = self.z_buffer
@@ -101,9 +101,9 @@ cdef class Renderer:
                     self._diffuse_direction[0] = shader.direction[0]
                     self._diffuse_direction[1] = shader.direction[1]
                     self._diffuse_direction[2] = shader.direction[2]
-                    self._diffuse_pre_shade[0] = shader._pre_shade[0]
-                    self._diffuse_pre_shade[1] = shader._pre_shade[1]
-                    self._diffuse_pre_shade[2] = shader._pre_shade[2]
+                    self._diffuse_pre_shade[0] = shader.pre_shade[0]
+                    self._diffuse_pre_shade[1] = shader.pre_shade[1]
+                    self._diffuse_pre_shade[2] = shader.pre_shade[2]
                 elif isinstance(shader, RandomColorShader):
                     self._is_random_shader_enabled = 1
                 elif isinstance(shader, SpecularShader):
@@ -112,9 +112,9 @@ cdef class Renderer:
                     self._specular_direction[1] = shader.direction[1]
                     self._specular_direction[2] = shader.direction[2]
                     self._specular_shininess = shader.shininess
-                    self._specular_pre_shade[0] = shader._pre_shade[0]
-                    self._specular_pre_shade[1] = shader._pre_shade[1]
-                    self._specular_pre_shade[2] = shader._pre_shade[2]
+                    self._specular_pre_shade[0] = shader.pre_shade[0]
+                    self._specular_pre_shade[1] = shader.pre_shade[1]
+                    self._specular_pre_shade[2] = shader.pre_shade[2]
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -140,7 +140,7 @@ cdef class Renderer:
         #     return
 
         # 反射光を計算
-        cos = _dot_vectors(self._diffuse_direction, n, 3)
+        cos = _dot_vectors(self._diffuse_direction, n)
 
         # ポリゴンが裏を向いているときは, 反射光なし
         if 0.0 < cos:
@@ -158,8 +158,7 @@ cdef class Renderer:
 
     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                             DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] cl):
-        cdef DOUBLE_t e[3]
-        cdef DOUBLE_t s[3]
+        cdef DOUBLE_t[3] e, s
         cdef DOUBLE_t sn
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -179,7 +178,7 @@ cdef class Renderer:
         s[1] = e[1] - self._specular_direction[1]
         s[2] = e[2] - self._specular_direction[2]
         _unit_vector(s)
-        sn = _dot_vectors(s, n, 3)
+        sn = _dot_vectors(s, n)
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0.0:
             return
@@ -191,8 +190,6 @@ cdef class Renderer:
     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                             DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] color):
         """シェーディング処理"""
-        cdef int i
-
         color[0] = 0.0
         color[1] = 0.0
         color[2] = 0.0
@@ -229,9 +226,9 @@ cdef class Renderer:
             # data_x = 3 * (self.half_width + x) # 反転させないコード
             data_x = 3 * (self.half_width - x - 1)
             data_y = self.half_height - y
-            self.data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
-            self.data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
-            self.data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)
+            self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
+            self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
+            self._data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)
             self._z_buffer[y][x] = z
 
     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
@@ -521,6 +518,7 @@ cdef class Renderer:
         :param polygon_normals: ポリゴンの面の法線ベクトルを格納する配列 (n x 3)
         """
         cdef DOUBLE_t[:,:] polygon
+        cdef DOUBLE_t[:] a, b, c, polygon_normal
         cdef DOUBLE_t[3] ab, bc, cr
         cdef DOUBLE_t norm
         cdef int i, l
@@ -529,12 +527,15 @@ cdef class Renderer:
 
         for i in range(l):
             polygon = polygons[i]
-            ab[0] = polygon[1][0] - polygon[0][0]
-            ab[1] = polygon[1][1] - polygon[0][1]
-            ab[2] = polygon[1][2] - polygon[0][2]
-            bc[0] = polygon[2][0] - polygon[1][0]
-            bc[1] = polygon[2][1] - polygon[1][1]
-            bc[2] = polygon[2][2] - polygon[1][2]
+            a = polygon[0]
+            b = polygon[1]
+            c = polygon[2]
+            ab[0] = b[0] - a[0]
+            ab[1] = b[1] - a[1]
+            ab[2] = b[2] - a[2]
+            bc[0] = c[0] - b[0]
+            bc[1] = c[1] - b[1]
+            bc[2] = c[2] - b[2]
 
             # 直交ベクトル (時計回りを表)
             cr[0] = bc[1] * ab[2] - bc[2] * ab[1]
@@ -547,9 +548,10 @@ cdef class Renderer:
 
             # 法線ベクトル (単位ベクトル化)
             norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)
-            polygon_normals[i][0] = cr[0] / norm
-            polygon_normals[i][1] = cr[1] / norm
-            polygon_normals[i][2] = cr[2] / norm
+            polygon_normal = polygon_normals[i]
+            polygon_normal[0] = cr[0] / norm
+            polygon_normal[1] = cr[1] / norm
+            polygon_normal[2] = cr[2] / norm
 
     cdef void calc_vertex_normals(self, UINT64_t[:,:] indexes,
                                   DOUBLE_t[:,:] polygon_normals,
@@ -563,7 +565,7 @@ cdef class Renderer:
         :param vertex_normals: 頂点の法線ベクトルの配列 (m x 3)
         """
         cdef DOUBLE_t[:,:] vertexes
-        cdef DOUBLE_t[:] normal, vertex
+        cdef DOUBLE_t[:] normal, vertex, vertex_normal
         cdef UINT64_t[:] vertexes_n, index
         cdef UINT64_t vertex_n
         cdef int i, j, l
@@ -577,20 +579,26 @@ cdef class Renderer:
         for i in range(l):
             index = indexes[i]
             normal = polygon_normals[i]
+
             j = index[0]
-            vertexes[j][0] += normal[0]
-            vertexes[j][1] += normal[1]
-            vertexes[j][2] += normal[2]
+            vertex = vertexes[j]
+            vertex[0] += normal[0]
+            vertex[1] += normal[1]
+            vertex[2] += normal[2]
             vertexes_n[j] += 1
+
             j = index[1]
-            vertexes[j][0] += normal[0]
-            vertexes[j][1] += normal[1]
-            vertexes[j][2] += normal[2]
+            vertex = vertexes[j]
+            vertex[0] += normal[0]
+            vertex[1] += normal[1]
+            vertex[2] += normal[2]
             vertexes_n[j] += 1
+
             j = index[2]
-            vertexes[j][0] += normal[0]
-            vertexes[j][1] += normal[1]
-            vertexes[j][2] += normal[2]
+            vertex = vertexes[j]
+            vertex[0] += normal[0]
+            vertex[1] += normal[1]
+            vertex[2] += normal[2]
             vertexes_n[j] += 1
 
         # 各頂点の法線ベクトルの平均値を求める
@@ -598,14 +606,15 @@ cdef class Renderer:
         for i in range(l):
             vertex = vertexes[i]
             vertex_n = vertexes_n[i]
+            vertex_normal = vertex_normals[i]
             if 0 < vertex_n:
-                vertex_normals[i][0] = vertex[0] / vertex_n
-                vertex_normals[i][1] = vertex[1] / vertex_n
-                vertex_normals[i][2] = vertex[2] / vertex_n
+                vertex_normal[0] = vertex[0] / vertex_n
+                vertex_normal[1] = vertex[1] / vertex_n
+                vertex_normal[2] = vertex[2] / vertex_n
             else:
-                vertex_normals[i][0] = 0.0
-                vertex_normals[i][1] = 0.0
-                vertex_normals[i][2] = 0.0
+                vertex_normal[0] = 0.0
+                vertex_normal[1] = 0.0
+                vertex_normal[2] = 0.0
 
     def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
         cdef DOUBLE_t[:,:,:] polygons
