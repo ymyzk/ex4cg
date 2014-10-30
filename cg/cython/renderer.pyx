@@ -551,7 +551,7 @@ cdef class Renderer:
             polygon_normals[i][1] = cr[1] / norm
             polygon_normals[i][2] = cr[2] / norm
 
-    cdef void calc_vertex_normals(self, list indexes,
+    cdef void calc_vertex_normals(self, UINT64_t[:,:] indexes,
                                   DOUBLE_t[:,:] polygon_normals,
                                   DOUBLE_t[:,:] vertex_normals):
         """各頂点の法線ベクトルを計算する処理
@@ -564,9 +564,8 @@ cdef class Renderer:
         """
         cdef DOUBLE_t[:,:] vertexes
         cdef DOUBLE_t[:] normal, vertex
-        cdef UINT64_t[:] vertexes_n
+        cdef UINT64_t[:] vertexes_n, index
         cdef UINT64_t vertex_n
-        cdef tuple index
         cdef int i, j, l
 
         l = vertex_normals.shape[0]
@@ -574,7 +573,8 @@ cdef class Renderer:
         vertexes_n = np.zeros(l, dtype=UINT64)
 
         # 各頂点を含む面の法線ベクトルの和を求める
-        for i in range(len(indexes)):
+        l = indexes.shape[0]
+        for i in range(l):
             index = indexes[i]
             normal = polygon_normals[i]
             j = index[0]
@@ -594,7 +594,8 @@ cdef class Renderer:
             vertexes_n[j] += 1
 
         # 各頂点の法線ベクトルの平均値を求める
-        for i in range(len(vertexes)):
+        l = vertexes.shape[0]
+        for i in range(l):
             vertex = vertexes[i]
             vertex_n = vertexes_n[i]
             if 0 < vertex_n:
@@ -606,42 +607,56 @@ cdef class Renderer:
                 vertex_normals[i][1] = 0.0
                 vertex_normals[i][2] = 0.0
 
-    def draw_polygons(self, list points, list indexes):
-        cdef np.ndarray normal, normals, polygons, polygon_normals
-        cdef np.ndarray vertex_normals
+    def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
+        cdef DOUBLE_t[:,:,:] polygons
+        cdef DOUBLE_t[:,:] polygon, polygon_normals, vertex_normals
+        cdef UINT64_t[:] index
         cdef int i
 
         # ポリゴンのリストを作成
-        polygons = np.array([[points[i] for i in j] for j in indexes],
-                            dtype=DOUBLE)
+        polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)
+        for i in range(indexes.shape[0]):
+            polygon = polygons[i]
+            index = indexes[i]
+            polygon[0] = points[index[0]]
+            polygon[1] = points[index[1]]
+            polygon[2] = points[index[2]]
 
         # すべてのポリゴンの面の法線ベクトルを求める
-        polygon_normals = np.empty((len(indexes), 3), dtype=DOUBLE)
+        polygon_normals = np.empty((indexes.shape[0], 3), dtype=DOUBLE)
         self.calc_polygon_normals(polygons, polygon_normals)
 
         if self.shading_mode is ShadingMode.flat:
-            for i in range(len(polygons)):
-                self._draw_polygon_flat(polygons[i][0], polygons[i][1],
-                                        polygons[i][2], polygon_normals[i])
+            for i in range(polygons.shape[0]):
+                polygon = polygons[i]
+                self._draw_polygon_flat(polygon[0], polygon[1],
+                                        polygon[2], polygon_normals[i])
         else:
             # 各頂点の法線ベクトルを計算
-            vertex_normals = np.empty((len(points), 3), dtype=DOUBLE)
+            vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
             self.calc_vertex_normals(indexes, polygon_normals, vertex_normals)
 
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
-                for i in range(len(polygons)):
-                    self._draw_polygon_gouraud(polygons[i][0],
-                                               polygons[i][1],
-                                               polygons[i][2],
-                                               vertex_normals[indexes[i][0]],
-                                               vertex_normals[indexes[i][1]],
-                                               vertex_normals[indexes[i][2]])
+                for i in range(polygons.shape[0]):
+                    polygon = polygons[i]
+                    index = indexes[i]
+                    self._draw_polygon_gouraud(polygon[0],
+                                               polygon[1],
+                                               polygon[2],
+                                               vertex_normals[index[0]],
+                                               vertex_normals[index[1]],
+                                               vertex_normals[index[2]])
             elif self.shading_mode is ShadingMode.phong:
-                for i in range(len(polygons)):
-                    self._draw_polygon_phong(polygons[i][0],
-                                             polygons[i][1],
-                                             polygons[i][2],
-                                             vertex_normals[indexes[i][0]],
-                                             vertex_normals[indexes[i][1]],
-                                             vertex_normals[indexes[i][2]])
+                for i in range(polygons.shape[0]):
+                    polygon = polygons[i]
+                    index = indexes[i]
+                    self._draw_polygon_phong(polygon[0],
+                                             polygon[1],
+                                             polygon[2],
+                                             vertex_normals[index[0]],
+                                             vertex_normals[index[1]],
+                                             vertex_normals[index[2]])
+
+    def draw_polygons(self, np.ndarray points, np.ndarray indexes):
+        self._draw_polygons(points, indexes)
