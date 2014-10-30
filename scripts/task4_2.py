@@ -12,11 +12,13 @@ from cg.ppm import PpmImage
 from cg.shader import ShadingMode
 from cg.vrml import Vrml
 
-from cg.renderer import Renderer
+from cg.cython.renderer import Renderer
 from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
                        SpecularShader)
 
 
+# For line profiler
+#@profile
 def main(args):
     # VRML ファイルの読み込み
     vrml = Vrml()
@@ -51,11 +53,19 @@ def main(args):
     if len(shaders) == 0:
         shaders.append(RandomColorShader())
 
-    renderer = Renderer(camera=camera, shaders=shaders,
+    renderer = Renderer(camera=camera,
                         width=width, height=height,
                         shading_mode=ShadingMode.phong)
+    renderer.shaders = shaders
 
     renderer.draw_polygons(vrml.points, vrml.indexes)
+
+    # C Profiling
+    # import cProfile
+    # import pstats
+    # cProfile.runctx("renderer.draw_polygons(vrml.points, vrml.indexes)", globals(), locals(), "Profile.prof")
+    # s = pstats.Stats("Profile.prof")
+    # s.strip_dirs().sort_stats("time").print_stats()
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
     image = PpmImage(name, width, height, renderer.data)
@@ -66,7 +76,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Task 5')
+    parser = argparse.ArgumentParser(description='Task 4 (Python + Cython')
     parser.add_argument('-o', type=argparse.FileType('w'), metavar='file',
                         default=None, help='Write ppm image to <file>')
     parser.add_argument('input', type=argparse.FileType('r'),
