@@ -27,20 +27,6 @@ cdef inline int int_min(int a, int b) nogil:
     return a if a <= b else b
 
 
-cdef inline void _unit_vector(DOUBLE_t[:] v) nogil:
-    """単位ベクトルに変換する処理"""
-    cdef DOUBLE_t norm
-    norm = sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)
-    v[0] /= norm
-    v[1] /= norm
-    v[2] /= norm
-
-cdef inline DOUBLE_t _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2) nogil:
-    cdef DOUBLE_t dot
-    dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
-    return dot
-
-
 cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,
                                DOUBLE_t[:,:] polygon_normals) nogil:
     """ポリゴンの面の法線ベクトルを求める処理
@@ -240,7 +226,7 @@ cdef class Renderer:
             self.focus = self.camera.focus
             self.camera_position = self.camera.position
 
-    cdef void _convert_point(self, DOUBLE_t[:] point):
+    cdef void _convert_point(self, DOUBLE_t[:] point) nogil:
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z + 元の座標の z
@@ -255,7 +241,7 @@ cdef class Renderer:
         cl[1] += self._ambient_shade[1]
         cl[2] += self._ambient_shade[2]
 
-    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl):
+    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl) nogil:
         cdef DOUBLE_t cos
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -264,7 +250,9 @@ cdef class Renderer:
         #     return
 
         # 反射光を計算
-        cos = _dot_vectors(self._diffuse_direction, n)
+        cos = (self._diffuse_direction[0] * n[0]
+               + self._diffuse_direction[1] * n[1]
+               + self._diffuse_direction[2] * n[2])
 
         # ポリゴンが裏を向いているときは, 反射光なし
         if 0.0 < cos:
@@ -281,9 +269,10 @@ cdef class Renderer:
         cl[2] += random()
 
     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                            DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] cl):
+                              DOUBLE_t[:] c, DOUBLE_t[:] n,
+                              DOUBLE_t[:] cl) nogil:
         cdef DOUBLE_t[3] e, s
-        cdef DOUBLE_t sn
+        cdef DOUBLE_t sn, norm
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         # TODO: 現状では実行されない
@@ -297,22 +286,33 @@ cdef class Renderer:
         e[0] = self.camera_position[0] - a[0]
         e[1] = self.camera_position[1] - a[1]
         e[2] = self.camera_position[2] - a[2]
-        _unit_vector(e)
+        norm = sqrt(e[0] ** 2 + e[1] ** 2 + e[2] ** 2)
+        e[0] /= norm
+        e[1] /= norm
+        e[2] /= norm
+
         s[0] = e[0] - self._specular_direction[0]
         s[1] = e[1] - self._specular_direction[1]
         s[2] = e[2] - self._specular_direction[2]
-        _unit_vector(s)
-        sn = _dot_vectors(s, n)
+        norm = sqrt(s[0] ** 2 + s[1] ** 2 + s[2] ** 2)
+        s[0] /= norm
+        s[1] /= norm
+        s[2] /= norm
+
+        sn = s[0] * n[0] + s[1] * n[1] + s[2] * n[2]
+
         # ポリゴンが裏を向いているときは, 反射光なし
         if sn < 0.0:
             return
+
         sn **= self._specular_shininess
         cl[0] += sn * self._specular_pre_shade[0]
         cl[1] += sn * self._specular_pre_shade[1]
         cl[2] += sn * self._specular_pre_shade[2]
 
     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                            DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] color):
+                            DOUBLE_t[:] c, DOUBLE_t[:] n,
+                            DOUBLE_t[:] color) nogil:
         """シェーディング処理"""
         color[0] = 0.0
         color[1] = 0.0
@@ -325,12 +325,14 @@ cdef class Renderer:
             self._shade_diffuse(n, color)
 
         if self._is_random_shader_enabled == 1:
-            self._shade_random(color)
+            with gil:
+                self._shade_random(color)
 
         if self._is_specular_shader_enabled == 1:
             self._shade_specular(a, b, c, n, color)
 
-    cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):
+    cdef void _draw_pixel(self, int x, int y, DOUBLE_t z,
+                          DOUBLE_t[:] cl) nogil:
         """画素を描画する処理"""
         cdef int data_x, data_y
 
@@ -359,9 +361,8 @@ cdef class Renderer:
                                  DOUBLE_t[:] c, DOUBLE_t[:] n):
         """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t [3] d
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t [3] color
+        cdef DOUBLE_t[3] d, color
 
         # ポリゴンの3点を座標変換
         self._convert_point(a)
@@ -425,7 +426,8 @@ cdef class Renderer:
             for x in range(int_max(<int>ceil(px), 1 - self.half_width),
                            int_min(<int>floor(qx), self.half_width) + 1):
                 r = (x - px) / (qx - px)
-                self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)
+                self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz),
+                                 color)
 
     cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                     DOUBLE_t[:] c, DOUBLE_t[:] an,
