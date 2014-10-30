@@ -22,6 +22,7 @@ cdef class Renderer:
     cdef int _depth
     cdef readonly np.ndarray data
     cdef np.ndarray z_buffer
+    cdef DOUBLE_t[:,:] _z_buffer
     cdef DOUBLE_t focus
 
     def __init__(self, camera, int width, int height, z_buffering=True,
@@ -41,6 +42,7 @@ cdef class Renderer:
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT)
         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
         self.z_buffer.fill(float('inf'))
+        self._z_buffer = self.z_buffer
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self.focus = self.camera.focus
@@ -80,7 +82,7 @@ cdef class Renderer:
         cdef int data_x, data_y
 
         # Z バッファでテスト
-        if not self.z_buffering or z <= self.z_buffer[y][x]:
+        if not self.z_buffering or z <= self._z_buffer[y][x]:
             # 飽和
             if 1.0 < cl[0]:
                 cl[0] = 1.0
@@ -98,7 +100,7 @@ cdef class Renderer:
             self.data[data_y][data_x+0] = <UINT_t>(cl[0] * self._depth)
             self.data[data_y][data_x+1] = <UINT_t>(cl[1] * self._depth)
             self.data[data_y][data_x+2] = <UINT_t>(cl[2] * self._depth)
-            self.z_buffer[y][x] = z
+            self._z_buffer[y][x] = z
 
     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                  DOUBLE_t[:] c, DOUBLE_t[:] n):
