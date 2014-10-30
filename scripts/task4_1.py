@@ -53,9 +53,10 @@ def main(args):
     if len(shaders) == 0:
         shaders.append(RandomColorShader())
 
-    renderer = Renderer(camera=camera, shaders=shaders,
-                        width=width, height=height,
-                        shading_mode=ShadingMode.phong)
+    renderer = Renderer(width=width, height=height,
+                        shading_mode=ShadingMode.gouraud)
+    renderer.camera = camera
+    renderer.shaders = shaders
 
     renderer.draw_polygons(vrml.points, vrml.indexes)
 
