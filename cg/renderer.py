@@ -12,14 +12,14 @@ DOUBLE = np.float64
 
 
 class Renderer(object):
-    def __init__(self, camera, width, height, z_buffering=True, depth=8,
-                 shaders=tuple(), shading_mode=ShadingMode.flat):
+    def __init__(self, width, height, z_buffering=True, depth=8,
+                 shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
-        self.camera = camera
-        self.shaders = shaders
+        self.camera = None
+        self.shaders = tuple()
         self.depth = depth
         self.width = width
         self.height = height
