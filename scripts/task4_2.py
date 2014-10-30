@@ -18,7 +18,7 @@ from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
 
 
 # For line profiler
-#@profile
+# @profile
 def main(args):
     # VRML ファイルの読み込み
     vrml = Vrml()
@@ -53,9 +53,9 @@ def main(args):
     if len(shaders) == 0:
         shaders.append(RandomColorShader())
 
-    renderer = Renderer(camera=camera,
-                        width=width, height=height,
+    renderer = Renderer(width=width, height=height,
                         shading_mode=ShadingMode.phong)
+    renderer.camera = camera
     renderer.shaders = shaders
 
     renderer.draw_polygons(vrml.points, vrml.indexes)

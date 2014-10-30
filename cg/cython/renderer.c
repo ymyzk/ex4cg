@@ -754,7 +754,7 @@ typedef __pyx_t_5numpy_uint8_t __pyx_t_2cg_6cython_8renderer_UINT8_t;
  * ctypedef np.uint8_t UINT8_t
  * ctypedef np.uint64_t UINT64_t             # <<<<<<<<<<<<<<
  * 
- * cdef inline int int_max(int a, int b):
+ * 
  */
 typedef __pyx_t_5numpy_uint64_t __pyx_t_2cg_6cython_8renderer_UINT64_t;
 #if CYTHON_CCOMPLEX
@@ -821,12 +821,12 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "cg/cython/renderer.pyx":148
+/* "cg/cython/renderer.pyx":154
  * 
  * 
  * cdef class Renderer:             # <<<<<<<<<<<<<<
  *     cdef public object shading_mode
- *     cdef object camera, shaders,
+ *     cdef object camera, shaders
  */
 struct __pyx_obj_2cg_6cython_8renderer_Renderer {
   PyObject_HEAD
@@ -937,12 +937,12 @@ struct __pyx_memoryviewslice_obj {
 
 
 
-/* "cg/cython/renderer.pyx":148
+/* "cg/cython/renderer.pyx":154
  * 
  * 
  * cdef class Renderer:             # <<<<<<<<<<<<<<
  *     cdef public object shading_mode
- *     cdef object camera, shaders,
+ *     cdef object camera, shaders
  */
 
 struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer {
@@ -1107,6 +1107,10 @@ static void __Pyx_WriteUnraisable(const char *name, int clineno,
                                   int lineno, const char *filename,
                                   int full_traceback);
 
+#ifndef __PYX_FORCE_INIT_THREADS
+  #define __PYX_FORCE_INIT_THREADS 0
+#endif
+
 static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
 
 #if CYTHON_COMPILING_IN_CPYTHON
@@ -1192,10 +1196,6 @@ static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int 
 #define __Pyx_PyString_Equals __Pyx_PyUnicode_Equals
 #else
 #define __Pyx_PyString_Equals __Pyx_PyBytes_Equals
-#endif
-
-#ifndef __PYX_FORCE_INIT_THREADS
-  #define __PYX_FORCE_INIT_THREADS 0
 #endif
 
 #define UNARY_NEG_WOULD_OVERFLOW(x)            (((x) < 0) & ((unsigned long)(x) == 0-(unsigned long)(x)))
@@ -1624,9 +1624,11 @@ static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_id;
 static PyObject *__pyx_builtin_IndexError;
-static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyObject *__pyx_v_camera, int __pyx_v_width, int __pyx_v_height, PyObject *__pyx_v_z_buffering, int __pyx_v_depth, PyObject *__pyx_v_shading_mode); /* proto */
+static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, int __pyx_v_width, int __pyx_v_height, PyObject *__pyx_v_z_buffering, int __pyx_v_depth, PyObject *__pyx_v_shading_mode); /* proto */
 static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders___get__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self); /* proto */
 static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_6camera___get__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self); /* proto */
+static int __pyx_pf_2cg_6cython_8renderer_8Renderer_6camera_2__set__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_2_draw_polygons(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, __Pyx_memviewslice __pyx_v_points, __Pyx_memviewslice __pyx_v_indexes); /* proto */
 static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyArrayObject *__pyx_v_points, PyArrayObject *__pyx_v_indexes); /* proto */
 static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_12shading_mode___get__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self); /* proto */
@@ -1733,7 +1735,6 @@ static char __pyx_k_width[] = "width";
 static char __pyx_k_zeros[] = "zeros";
 static char __pyx_k_DOUBLE[] = "DOUBLE";
 static char __pyx_k_UINT64[] = "UINT64";
-static char __pyx_k_camera[] = "camera";
 static char __pyx_k_format[] = "format";
 static char __pyx_k_height[] = "height";
 static char __pyx_k_import[] = "__import__";
@@ -1845,7 +1846,6 @@ static PyObject *__pyx_n_s_allocate_buffer;
 static PyObject *__pyx_n_s_base;
 static PyObject *__pyx_n_s_c;
 static PyObject *__pyx_n_u_c;
-static PyObject *__pyx_n_s_camera;
 static PyObject *__pyx_n_s_cg_shader;
 static PyObject *__pyx_n_s_class;
 static PyObject *__pyx_kp_s_contiguous_and_direct;
@@ -1948,26 +1948,24 @@ static PyObject *__pyx_tuple__26;
 static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_tuple__28;
 
-/* "cg/cython/renderer.pyx":21
- * ctypedef np.uint64_t UINT64_t
+/* "cg/cython/renderer.pyx":22
  * 
- * cdef inline int int_max(int a, int b):             # <<<<<<<<<<<<<<
+ * 
+ * cdef inline int int_max(int a, int b) nogil:             # <<<<<<<<<<<<<<
  *     return a if a >= b else b
  * 
  */
 
 static CYTHON_INLINE int __pyx_f_2cg_6cython_8renderer_int_max(int __pyx_v_a, int __pyx_v_b) {
   int __pyx_r;
-  __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __Pyx_RefNannySetupContext("int_max", 0);
 
-  /* "cg/cython/renderer.pyx":22
+  /* "cg/cython/renderer.pyx":23
  * 
- * cdef inline int int_max(int a, int b):
+ * cdef inline int int_max(int a, int b) nogil:
  *     return a if a >= b else b             # <<<<<<<<<<<<<<
  * 
- * cdef inline int int_min(int a, int b): return a if a <= b else b
+ * 
  */
   if (((__pyx_v_a >= __pyx_v_b) != 0)) {
     __pyx_t_1 = __pyx_v_a;
@@ -1977,33 +1975,38 @@ static CYTHON_INLINE int __pyx_f_2cg_6cython_8renderer_int_max(int __pyx_v_a, in
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
-  /* "cg/cython/renderer.pyx":21
- * ctypedef np.uint64_t UINT64_t
+  /* "cg/cython/renderer.pyx":22
  * 
- * cdef inline int int_max(int a, int b):             # <<<<<<<<<<<<<<
+ * 
+ * cdef inline int int_max(int a, int b) nogil:             # <<<<<<<<<<<<<<
  *     return a if a >= b else b
  * 
  */
 
   /* function exit code */
   __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":24
- *     return a if a >= b else b
+/* "cg/cython/renderer.pyx":26
  * 
- * cdef inline int int_min(int a, int b): return a if a <= b else b             # <<<<<<<<<<<<<<
  * 
- * cdef inline void _unit_vector(DOUBLE_t[:] v) nogil:
+ * cdef inline int int_min(int a, int b) nogil:             # <<<<<<<<<<<<<<
+ *     return a if a <= b else b
+ * 
  */
 
 static CYTHON_INLINE int __pyx_f_2cg_6cython_8renderer_int_min(int __pyx_v_a, int __pyx_v_b) {
   int __pyx_r;
-  __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __Pyx_RefNannySetupContext("int_min", 0);
+
+  /* "cg/cython/renderer.pyx":27
+ * 
+ * cdef inline int int_min(int a, int b) nogil:
+ *     return a if a <= b else b             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
   if (((__pyx_v_a <= __pyx_v_b) != 0)) {
     __pyx_t_1 = __pyx_v_a;
   } else {
@@ -2012,14 +2015,21 @@ static CYTHON_INLINE int __pyx_f_2cg_6cython_8renderer_int_min(int __pyx_v_a, in
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
+  /* "cg/cython/renderer.pyx":26
+ * 
+ * 
+ * cdef inline int int_min(int a, int b) nogil:             # <<<<<<<<<<<<<<
+ *     return a if a <= b else b
+ * 
+ */
+
   /* function exit code */
   __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":26
- * cdef inline int int_min(int a, int b): return a if a <= b else b
+/* "cg/cython/renderer.pyx":30
+ * 
  * 
  * cdef inline void _unit_vector(DOUBLE_t[:] v) nogil:             # <<<<<<<<<<<<<<
  *     """"""
@@ -2035,7 +2045,7 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   Py_ssize_t __pyx_t_5;
   Py_ssize_t __pyx_t_6;
 
-  /* "cg/cython/renderer.pyx":29
+  /* "cg/cython/renderer.pyx":33
  *     """"""
  *     cdef DOUBLE_t norm
  *     norm = sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)             # <<<<<<<<<<<<<<
@@ -2050,7 +2060,7 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   if (__pyx_t_3 < 0) __pyx_t_3 += __pyx_v_v.shape[0];
   __pyx_v_norm = sqrt(((pow((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_1 * __pyx_v_v.strides[0]) ))), 2.0) + pow((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_2 * __pyx_v_v.strides[0]) ))), 2.0)) + pow((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_3 * __pyx_v_v.strides[0]) ))), 2.0)));
 
-  /* "cg/cython/renderer.pyx":30
+  /* "cg/cython/renderer.pyx":34
  *     cdef DOUBLE_t norm
  *     norm = sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)
  *     v[0] /= norm             # <<<<<<<<<<<<<<
@@ -2061,7 +2071,7 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   if (__pyx_t_4 < 0) __pyx_t_4 += __pyx_v_v.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_4 * __pyx_v_v.strides[0]) )) /= __pyx_v_norm;
 
-  /* "cg/cython/renderer.pyx":31
+  /* "cg/cython/renderer.pyx":35
  *     norm = sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)
  *     v[0] /= norm
  *     v[1] /= norm             # <<<<<<<<<<<<<<
@@ -2072,7 +2082,7 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_v_v.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_5 * __pyx_v_v.strides[0]) )) /= __pyx_v_norm;
 
-  /* "cg/cython/renderer.pyx":32
+  /* "cg/cython/renderer.pyx":36
  *     v[0] /= norm
  *     v[1] /= norm
  *     v[2] /= norm             # <<<<<<<<<<<<<<
@@ -2083,8 +2093,8 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   if (__pyx_t_6 < 0) __pyx_t_6 += __pyx_v_v.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_6 * __pyx_v_v.strides[0]) )) /= __pyx_v_norm;
 
-  /* "cg/cython/renderer.pyx":26
- * cdef inline int int_min(int a, int b): return a if a <= b else b
+  /* "cg/cython/renderer.pyx":30
+ * 
  * 
  * cdef inline void _unit_vector(DOUBLE_t[:] v) nogil:             # <<<<<<<<<<<<<<
  *     """"""
@@ -2094,7 +2104,7 @@ static CYTHON_INLINE void __pyx_f_2cg_6cython_8renderer__unit_vector(__Pyx_memvi
   /* function exit code */
 }
 
-/* "cg/cython/renderer.pyx":34
+/* "cg/cython/renderer.pyx":38
  *     v[2] /= norm
  * 
  * cdef inline DOUBLE_t _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2) nogil:             # <<<<<<<<<<<<<<
@@ -2112,7 +2122,7 @@ static CYTHON_INLINE __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_f_2cg_6cython_
   Py_ssize_t __pyx_t_5;
   Py_ssize_t __pyx_t_6;
 
-  /* "cg/cython/renderer.pyx":36
+  /* "cg/cython/renderer.pyx":40
  * cdef inline DOUBLE_t _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2) nogil:
  *     cdef DOUBLE_t dot
  *     dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]             # <<<<<<<<<<<<<<
@@ -2133,7 +2143,7 @@ static CYTHON_INLINE __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_f_2cg_6cython_
   if (__pyx_t_6 < 0) __pyx_t_6 += __pyx_v_v2.shape[0];
   __pyx_v_dot = ((((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v1.data + __pyx_t_1 * __pyx_v_v1.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v2.data + __pyx_t_2 * __pyx_v_v2.strides[0]) )))) + ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v1.data + __pyx_t_3 * __pyx_v_v1.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v2.data + __pyx_t_4 * __pyx_v_v2.strides[0]) ))))) + ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v1.data + __pyx_t_5 * __pyx_v_v1.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_v2.data + __pyx_t_6 * __pyx_v_v2.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":37
+  /* "cg/cython/renderer.pyx":41
  *     cdef DOUBLE_t dot
  *     dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
  *     return dot             # <<<<<<<<<<<<<<
@@ -2143,7 +2153,7 @@ static CYTHON_INLINE __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_f_2cg_6cython_
   __pyx_r = __pyx_v_dot;
   goto __pyx_L0;
 
-  /* "cg/cython/renderer.pyx":34
+  /* "cg/cython/renderer.pyx":38
  *     v[2] /= norm
  * 
  * cdef inline DOUBLE_t _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2) nogil:             # <<<<<<<<<<<<<<
@@ -2156,7 +2166,7 @@ static CYTHON_INLINE __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_f_2cg_6cython_
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":40
+/* "cg/cython/renderer.pyx":44
  * 
  * 
  * cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,             # <<<<<<<<<<<<<<
@@ -2203,7 +2213,7 @@ static void __pyx_f_2cg_6cython_8renderer_calc_polygon_normals(__Pyx_memviewslic
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-  /* "cg/cython/renderer.pyx":53
+  /* "cg/cython/renderer.pyx":57
  *     cdef int i, l
  * 
  *     l = polygons.shape[0]             # <<<<<<<<<<<<<<
@@ -2212,7 +2222,7 @@ static void __pyx_f_2cg_6cython_8renderer_calc_polygon_normals(__Pyx_memviewslic
  */
   __pyx_v_l = (__pyx_v_polygons.shape[0]);
 
-  /* "cg/cython/renderer.pyx":55
+  /* "cg/cython/renderer.pyx":59
  *     l = polygons.shape[0]
  * 
  *     for i in range(l):             # <<<<<<<<<<<<<<
@@ -2223,7 +2233,7 @@ static void __pyx_f_2cg_6cython_8renderer_calc_polygon_normals(__Pyx_memviewslic
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "cg/cython/renderer.pyx":56
+    /* "cg/cython/renderer.pyx":60
  * 
  *     for i in range(l):
  *         polygon = polygons[i]             # <<<<<<<<<<<<<<
@@ -2248,7 +2258,7 @@ static void __pyx_f_2cg_6cython_8renderer_calc_polygon_normals(__Pyx_memviewslic
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_3.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2266,7 +2276,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 0);
     __pyx_t_3.memview = NULL;
     __pyx_t_3.data = NULL;
 
-    /* "cg/cython/renderer.pyx":57
+    /* "cg/cython/renderer.pyx":61
  *     for i in range(l):
  *         polygon = polygons[i]
  *         a = polygon[0]             # <<<<<<<<<<<<<<
@@ -2291,7 +2301,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 0);
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 61; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_5.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2305,7 +2315,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_a, 0);
     __pyx_t_5.memview = NULL;
     __pyx_t_5.data = NULL;
 
-    /* "cg/cython/renderer.pyx":58
+    /* "cg/cython/renderer.pyx":62
  *         polygon = polygons[i]
  *         a = polygon[0]
  *         b = polygon[1]             # <<<<<<<<<<<<<<
@@ -2330,7 +2340,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_a, 0);
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 62; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_6.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2344,7 +2354,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_b, 0);
     __pyx_t_6.memview = NULL;
     __pyx_t_6.data = NULL;
 
-    /* "cg/cython/renderer.pyx":59
+    /* "cg/cython/renderer.pyx":63
  *         a = polygon[0]
  *         b = polygon[1]
  *         c = polygon[2]             # <<<<<<<<<<<<<<
@@ -2369,7 +2379,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_b, 0);
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_7.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2383,7 +2393,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     __pyx_t_7.memview = NULL;
     __pyx_t_7.data = NULL;
 
-    /* "cg/cython/renderer.pyx":60
+    /* "cg/cython/renderer.pyx":64
  *         b = polygon[1]
  *         c = polygon[2]
  *         ab[0] = b[0] - a[0]             # <<<<<<<<<<<<<<
@@ -2396,7 +2406,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_9 < 0) __pyx_t_9 += __pyx_v_a.shape[0];
     (__pyx_v_ab[0]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_8 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_9 * __pyx_v_a.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":61
+    /* "cg/cython/renderer.pyx":65
  *         c = polygon[2]
  *         ab[0] = b[0] - a[0]
  *         ab[1] = b[1] - a[1]             # <<<<<<<<<<<<<<
@@ -2409,7 +2419,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_a.shape[0];
     (__pyx_v_ab[1]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_10 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_11 * __pyx_v_a.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":62
+    /* "cg/cython/renderer.pyx":66
  *         ab[0] = b[0] - a[0]
  *         ab[1] = b[1] - a[1]
  *         ab[2] = b[2] - a[2]             # <<<<<<<<<<<<<<
@@ -2422,7 +2432,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_13 < 0) __pyx_t_13 += __pyx_v_a.shape[0];
     (__pyx_v_ab[2]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_12 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_13 * __pyx_v_a.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":63
+    /* "cg/cython/renderer.pyx":67
  *         ab[1] = b[1] - a[1]
  *         ab[2] = b[2] - a[2]
  *         bc[0] = c[0] - b[0]             # <<<<<<<<<<<<<<
@@ -2435,7 +2445,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_b.shape[0];
     (__pyx_v_bc[0]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_14 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_15 * __pyx_v_b.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":64
+    /* "cg/cython/renderer.pyx":68
  *         ab[2] = b[2] - a[2]
  *         bc[0] = c[0] - b[0]
  *         bc[1] = c[1] - b[1]             # <<<<<<<<<<<<<<
@@ -2448,7 +2458,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_v_b.shape[0];
     (__pyx_v_bc[1]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_16 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_17 * __pyx_v_b.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":65
+    /* "cg/cython/renderer.pyx":69
  *         bc[0] = c[0] - b[0]
  *         bc[1] = c[1] - b[1]
  *         bc[2] = c[2] - b[2]             # <<<<<<<<<<<<<<
@@ -2461,7 +2471,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
     if (__pyx_t_19 < 0) __pyx_t_19 += __pyx_v_b.shape[0];
     (__pyx_v_bc[2]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_18 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_19 * __pyx_v_b.strides[0]) ))));
 
-    /* "cg/cython/renderer.pyx":68
+    /* "cg/cython/renderer.pyx":72
  * 
  *         #  ()
  *         cr[0] = bc[1] * ab[2] - bc[2] * ab[1]             # <<<<<<<<<<<<<<
@@ -2470,7 +2480,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
  */
     (__pyx_v_cr[0]) = (((__pyx_v_bc[1]) * (__pyx_v_ab[2])) - ((__pyx_v_bc[2]) * (__pyx_v_ab[1])));
 
-    /* "cg/cython/renderer.pyx":69
+    /* "cg/cython/renderer.pyx":73
  *         #  ()
  *         cr[0] = bc[1] * ab[2] - bc[2] * ab[1]
  *         cr[1] = bc[2] * ab[0] - bc[0] * ab[2]             # <<<<<<<<<<<<<<
@@ -2479,7 +2489,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
  */
     (__pyx_v_cr[1]) = (((__pyx_v_bc[2]) * (__pyx_v_ab[0])) - ((__pyx_v_bc[0]) * (__pyx_v_ab[2])));
 
-    /* "cg/cython/renderer.pyx":70
+    /* "cg/cython/renderer.pyx":74
  *         cr[0] = bc[1] * ab[2] - bc[2] * ab[1]
  *         cr[1] = bc[2] * ab[0] - bc[0] * ab[2]
  *         cr[2] = bc[0] * ab[1] - bc[1] * ab[0]             # <<<<<<<<<<<<<<
@@ -2488,7 +2498,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
  */
     (__pyx_v_cr[2]) = (((__pyx_v_bc[0]) * (__pyx_v_ab[1])) - ((__pyx_v_bc[1]) * (__pyx_v_ab[0])));
 
-    /* "cg/cython/renderer.pyx":77
+    /* "cg/cython/renderer.pyx":81
  * 
  *         #  ()
  *         norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)             # <<<<<<<<<<<<<<
@@ -2497,7 +2507,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
  */
     __pyx_v_norm = sqrt(((pow((__pyx_v_cr[0]), 2.0) + pow((__pyx_v_cr[1]), 2.0)) + pow((__pyx_v_cr[2]), 2.0)));
 
-    /* "cg/cython/renderer.pyx":78
+    /* "cg/cython/renderer.pyx":82
  *         #  ()
  *         norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)
  *         polygon_normal = polygon_normals[i]             # <<<<<<<<<<<<<<
@@ -2522,7 +2532,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_c, 0);
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_20.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2536,7 +2546,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
     __pyx_t_20.memview = NULL;
     __pyx_t_20.data = NULL;
 
-    /* "cg/cython/renderer.pyx":79
+    /* "cg/cython/renderer.pyx":83
  *         norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)
  *         polygon_normal = polygon_normals[i]
  *         polygon_normal[0] = cr[0] / norm             # <<<<<<<<<<<<<<
@@ -2547,7 +2557,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
     if (__pyx_t_21 < 0) __pyx_t_21 += __pyx_v_polygon_normal.shape[0];
     *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_polygon_normal.data + __pyx_t_21 * __pyx_v_polygon_normal.strides[0]) )) = ((__pyx_v_cr[0]) / __pyx_v_norm);
 
-    /* "cg/cython/renderer.pyx":80
+    /* "cg/cython/renderer.pyx":84
  *         polygon_normal = polygon_normals[i]
  *         polygon_normal[0] = cr[0] / norm
  *         polygon_normal[1] = cr[1] / norm             # <<<<<<<<<<<<<<
@@ -2558,7 +2568,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
     if (__pyx_t_22 < 0) __pyx_t_22 += __pyx_v_polygon_normal.shape[0];
     *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_polygon_normal.data + __pyx_t_22 * __pyx_v_polygon_normal.strides[0]) )) = ((__pyx_v_cr[1]) / __pyx_v_norm);
 
-    /* "cg/cython/renderer.pyx":81
+    /* "cg/cython/renderer.pyx":85
  *         polygon_normal[0] = cr[0] / norm
  *         polygon_normal[1] = cr[1] / norm
  *         polygon_normal[2] = cr[2] / norm             # <<<<<<<<<<<<<<
@@ -2570,7 +2580,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
     *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_polygon_normal.data + __pyx_t_23 * __pyx_v_polygon_normal.strides[0]) )) = ((__pyx_v_cr[2]) / __pyx_v_norm);
   }
 
-  /* "cg/cython/renderer.pyx":40
+  /* "cg/cython/renderer.pyx":44
  * 
  * 
  * cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,             # <<<<<<<<<<<<<<
@@ -2595,12 +2605,12 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
   __PYX_XDEC_MEMVIEW(&__pyx_v_polygon_normal, 0);
 }
 
-/* "cg/cython/renderer.pyx":84
+/* "cg/cython/renderer.pyx":88
  * 
  * 
  * cdef void calc_vertex_normals(UINT64_t[:,:] indexes,             # <<<<<<<<<<<<<<
  *                               DOUBLE_t[:,:] polygon_normals,
- *                               DOUBLE_t[:,:] vertex_normals):
+ *                               DOUBLE_t[:,:] vertex_normals) nogil:
  */
 
 static void __pyx_f_2cg_6cython_8renderer_calc_vertex_normals(__Pyx_memviewslice __pyx_v_indexes, __Pyx_memviewslice __pyx_v_polygon_normals, __Pyx_memviewslice __pyx_v_vertex_normals) {
@@ -2669,139 +2679,187 @@ static void __pyx_f_2cg_6cython_8renderer_calc_vertex_normals(__Pyx_memviewslice
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("calc_vertex_normals", 0);
+  #ifdef WITH_THREAD
+  PyGILState_STATE __pyx_gilstate_save;
+  #endif
+  __Pyx_RefNannySetupContext("calc_vertex_normals", 1);
+  /*try:*/ {
 
-  /* "cg/cython/renderer.pyx":101
+    /* "cg/cython/renderer.pyx":105
  *     cdef int i, j, l
  * 
  *     l = vertex_normals.shape[0]             # <<<<<<<<<<<<<<
- *     vertexes = np.zeros((l, 3), dtype=DOUBLE)
- *     vertexes_n = np.zeros(l, dtype=UINT64)
- */
-  __pyx_v_l = (__pyx_v_vertex_normals.shape[0]);
-
-  /* "cg/cython/renderer.pyx":102
  * 
+ *     with gil:
+ */
+    __pyx_v_l = (__pyx_v_vertex_normals.shape[0]);
+
+    /* "cg/cython/renderer.pyx":107
  *     l = vertex_normals.shape[0]
- *     vertexes = np.zeros((l, 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
- *     vertexes_n = np.zeros(l, dtype=UINT64)
+ * 
+ *     with gil:             # <<<<<<<<<<<<<<
+ *         vertexes = np.zeros((l, 3), dtype=DOUBLE)
+ *         vertexes_n = np.zeros(l, dtype=UINT64)
+ */
+    {
+        #ifdef WITH_THREAD
+        PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+        #endif
+        /*try:*/ {
+
+          /* "cg/cython/renderer.pyx":108
+ * 
+ *     with gil:
+ *         vertexes = np.zeros((l, 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
+ *         vertexes_n = np.zeros(l, dtype=UINT64)
  * 
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_l); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_3);
-  __Pyx_GIVEREF(__pyx_int_3);
-  __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
-  __Pyx_GIVEREF(__pyx_t_3);
-  __pyx_t_3 = 0;
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_4);
-  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_v_vertexes = __pyx_t_5;
-  __pyx_t_5.memview = NULL;
-  __pyx_t_5.data = NULL;
+          __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_l); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_3);
+          PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+          __Pyx_GIVEREF(__pyx_t_1);
+          __Pyx_INCREF(__pyx_int_3);
+          PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_3);
+          __Pyx_GIVEREF(__pyx_int_3);
+          __pyx_t_1 = 0;
+          __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_1);
+          PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
+          __Pyx_GIVEREF(__pyx_t_3);
+          __pyx_t_3 = 0;
+          __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_3);
+          __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_4);
+          if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_4);
+          if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_v_vertexes = __pyx_t_5;
+          __pyx_t_5.memview = NULL;
+          __pyx_t_5.data = NULL;
 
-  /* "cg/cython/renderer.pyx":103
- *     l = vertex_normals.shape[0]
- *     vertexes = np.zeros((l, 3), dtype=DOUBLE)
- *     vertexes_n = np.zeros(l, dtype=UINT64)             # <<<<<<<<<<<<<<
+          /* "cg/cython/renderer.pyx":109
+ *     with gil:
+ *         vertexes = np.zeros((l, 3), dtype=DOUBLE)
+ *         vertexes_n = np.zeros(l, dtype=UINT64)             # <<<<<<<<<<<<<<
  * 
  *     #
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_l); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
-  __Pyx_GIVEREF(__pyx_t_4);
-  __pyx_t_4 = 0;
-  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_UINT64); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_UINT64_t(__pyx_t_2);
-  if (unlikely(!__pyx_t_6.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 103; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_vertexes_n = __pyx_t_6;
-  __pyx_t_6.memview = NULL;
-  __pyx_t_6.data = NULL;
+          __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_3);
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_l); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_1);
+          PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
+          __Pyx_GIVEREF(__pyx_t_4);
+          __pyx_t_4 = 0;
+          __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_UINT64); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_2);
+          if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_UINT64_t(__pyx_t_2);
+          if (unlikely(!__pyx_t_6.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L7_error;}
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __pyx_v_vertexes_n = __pyx_t_6;
+          __pyx_t_6.memview = NULL;
+          __pyx_t_6.data = NULL;
+        }
 
-  /* "cg/cython/renderer.pyx":106
+        /* "cg/cython/renderer.pyx":107
+ *     l = vertex_normals.shape[0]
+ * 
+ *     with gil:             # <<<<<<<<<<<<<<
+ *         vertexes = np.zeros((l, 3), dtype=DOUBLE)
+ *         vertexes_n = np.zeros(l, dtype=UINT64)
+ */
+        /*finally:*/ {
+          /*normal exit:*/{
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+            goto __pyx_L8;
+          }
+          __pyx_L7_error: {
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+            goto __pyx_L4_error;
+          }
+          __pyx_L8:;
+        }
+    }
+
+    /* "cg/cython/renderer.pyx":112
  * 
  *     #
  *     l = indexes.shape[0]             # <<<<<<<<<<<<<<
  *     for i in range(l):
  *         index = indexes[i]
  */
-  __pyx_v_l = (__pyx_v_indexes.shape[0]);
+    __pyx_v_l = (__pyx_v_indexes.shape[0]);
 
-  /* "cg/cython/renderer.pyx":107
+    /* "cg/cython/renderer.pyx":113
  *     #
  *     l = indexes.shape[0]
  *     for i in range(l):             # <<<<<<<<<<<<<<
  *         index = indexes[i]
  *         normal = polygon_normals[i]
  */
-  __pyx_t_7 = __pyx_v_l;
-  for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-    __pyx_v_i = __pyx_t_8;
+    __pyx_t_7 = __pyx_v_l;
+    for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+      __pyx_v_i = __pyx_t_8;
 
-    /* "cg/cython/renderer.pyx":108
+      /* "cg/cython/renderer.pyx":114
  *     l = indexes.shape[0]
  *     for i in range(l):
  *         index = indexes[i]             # <<<<<<<<<<<<<<
  *         normal = polygon_normals[i]
  * 
  */
-    __pyx_t_10 = -1;
-    __pyx_t_9.data = __pyx_v_indexes.data;
-    __pyx_t_9.memview = __pyx_v_indexes.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
-    {
+      __pyx_t_10 = -1;
+      __pyx_t_9.data = __pyx_v_indexes.data;
+      __pyx_t_9.memview = __pyx_v_indexes.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_i;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_indexes.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_indexes.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2810,31 +2868,37 @@ __pyx_t_9.shape[0] = __pyx_v_indexes.shape[1];
 __pyx_t_9.strides[0] = __pyx_v_indexes.strides[1];
     __pyx_t_9.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
-    __pyx_v_index = __pyx_t_9;
-    __pyx_t_9.memview = NULL;
-    __pyx_t_9.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_index, 0);
+      __pyx_v_index = __pyx_t_9;
+      __pyx_t_9.memview = NULL;
+      __pyx_t_9.data = NULL;
 
-    /* "cg/cython/renderer.pyx":109
+      /* "cg/cython/renderer.pyx":115
  *     for i in range(l):
  *         index = indexes[i]
  *         normal = polygon_normals[i]             # <<<<<<<<<<<<<<
  * 
  *         j = index[0]
  */
-    __pyx_t_10 = -1;
-    __pyx_t_11.data = __pyx_v_polygon_normals.data;
-    __pyx_t_11.memview = __pyx_v_polygon_normals.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_11, 0);
-    {
+      __pyx_t_10 = -1;
+      __pyx_t_11.data = __pyx_v_polygon_normals.data;
+      __pyx_t_11.memview = __pyx_v_polygon_normals.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_11, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_i;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_polygon_normals.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_polygon_normals.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 115; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_11.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2843,42 +2907,48 @@ __pyx_t_11.shape[0] = __pyx_v_polygon_normals.shape[1];
 __pyx_t_11.strides[0] = __pyx_v_polygon_normals.strides[1];
     __pyx_t_11.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_normal, 1);
-    __pyx_v_normal = __pyx_t_11;
-    __pyx_t_11.memview = NULL;
-    __pyx_t_11.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_normal, 0);
+      __pyx_v_normal = __pyx_t_11;
+      __pyx_t_11.memview = NULL;
+      __pyx_t_11.data = NULL;
 
-    /* "cg/cython/renderer.pyx":111
+      /* "cg/cython/renderer.pyx":117
  *         normal = polygon_normals[i]
  * 
  *         j = index[0]             # <<<<<<<<<<<<<<
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  */
-    __pyx_t_12 = 0;
-    if (__pyx_t_12 < 0) __pyx_t_12 += __pyx_v_index.shape[0];
-    __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_12 * __pyx_v_index.strides[0]) )));
+      __pyx_t_12 = 0;
+      if (__pyx_t_12 < 0) __pyx_t_12 += __pyx_v_index.shape[0];
+      __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_12 * __pyx_v_index.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":112
+      /* "cg/cython/renderer.pyx":118
  * 
  *         j = index[0]
  *         vertex = vertexes[j]             # <<<<<<<<<<<<<<
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  */
-    __pyx_t_10 = -1;
-    __pyx_t_13.data = __pyx_v_vertexes.data;
-    __pyx_t_13.memview = __pyx_v_vertexes.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_13, 0);
-    {
+      __pyx_t_10 = -1;
+      __pyx_t_13.data = __pyx_v_vertexes.data;
+      __pyx_t_13.memview = __pyx_v_vertexes.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_13, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_vertexes.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_vertexes.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 112; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 118; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_13.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2887,92 +2957,98 @@ __pyx_t_13.shape[0] = __pyx_v_vertexes.shape[1];
 __pyx_t_13.strides[0] = __pyx_v_vertexes.strides[1];
     __pyx_t_13.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 1);
-    __pyx_v_vertex = __pyx_t_13;
-    __pyx_t_13.memview = NULL;
-    __pyx_t_13.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 0);
+      __pyx_v_vertex = __pyx_t_13;
+      __pyx_t_13.memview = NULL;
+      __pyx_t_13.data = NULL;
 
-    /* "cg/cython/renderer.pyx":113
+      /* "cg/cython/renderer.pyx":119
  *         j = index[0]
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]             # <<<<<<<<<<<<<<
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  */
-    __pyx_t_14 = 0;
-    if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_v_normal.shape[0];
-    __pyx_t_15 = 0;
-    if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_15 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_14 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_14 = 0;
+      if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_v_normal.shape[0];
+      __pyx_t_15 = 0;
+      if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_15 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_14 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":114
+      /* "cg/cython/renderer.pyx":120
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]             # <<<<<<<<<<<<<<
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1
  */
-    __pyx_t_16 = 1;
-    if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_normal.shape[0];
-    __pyx_t_17 = 1;
-    if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_17 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_16 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_16 = 1;
+      if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_normal.shape[0];
+      __pyx_t_17 = 1;
+      if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_17 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_16 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":115
+      /* "cg/cython/renderer.pyx":121
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]             # <<<<<<<<<<<<<<
  *         vertexes_n[j] += 1
  * 
  */
-    __pyx_t_18 = 2;
-    if (__pyx_t_18 < 0) __pyx_t_18 += __pyx_v_normal.shape[0];
-    __pyx_t_19 = 2;
-    if (__pyx_t_19 < 0) __pyx_t_19 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_19 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_18 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_18 = 2;
+      if (__pyx_t_18 < 0) __pyx_t_18 += __pyx_v_normal.shape[0];
+      __pyx_t_19 = 2;
+      if (__pyx_t_19 < 0) __pyx_t_19 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_19 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_18 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":116
+      /* "cg/cython/renderer.pyx":122
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1             # <<<<<<<<<<<<<<
  * 
  *         j = index[1]
  */
-    __pyx_t_10 = __pyx_v_j;
-    if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_vertexes_n.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_10 * __pyx_v_vertexes_n.strides[0]) )) += 1;
+      __pyx_t_10 = __pyx_v_j;
+      if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_vertexes_n.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_10 * __pyx_v_vertexes_n.strides[0]) )) += 1;
 
-    /* "cg/cython/renderer.pyx":118
+      /* "cg/cython/renderer.pyx":124
  *         vertexes_n[j] += 1
  * 
  *         j = index[1]             # <<<<<<<<<<<<<<
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  */
-    __pyx_t_20 = 1;
-    if (__pyx_t_20 < 0) __pyx_t_20 += __pyx_v_index.shape[0];
-    __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_20 * __pyx_v_index.strides[0]) )));
+      __pyx_t_20 = 1;
+      if (__pyx_t_20 < 0) __pyx_t_20 += __pyx_v_index.shape[0];
+      __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_20 * __pyx_v_index.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":119
+      /* "cg/cython/renderer.pyx":125
  * 
  *         j = index[1]
  *         vertex = vertexes[j]             # <<<<<<<<<<<<<<
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  */
-    __pyx_t_22 = -1;
-    __pyx_t_21.data = __pyx_v_vertexes.data;
-    __pyx_t_21.memview = __pyx_v_vertexes.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_21, 0);
-    {
+      __pyx_t_22 = -1;
+      __pyx_t_21.data = __pyx_v_vertexes.data;
+      __pyx_t_21.memview = __pyx_v_vertexes.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_21, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_vertexes.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_vertexes.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 125; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_21.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -2981,92 +3057,98 @@ __pyx_t_21.shape[0] = __pyx_v_vertexes.shape[1];
 __pyx_t_21.strides[0] = __pyx_v_vertexes.strides[1];
     __pyx_t_21.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 1);
-    __pyx_v_vertex = __pyx_t_21;
-    __pyx_t_21.memview = NULL;
-    __pyx_t_21.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 0);
+      __pyx_v_vertex = __pyx_t_21;
+      __pyx_t_21.memview = NULL;
+      __pyx_t_21.data = NULL;
 
-    /* "cg/cython/renderer.pyx":120
+      /* "cg/cython/renderer.pyx":126
  *         j = index[1]
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]             # <<<<<<<<<<<<<<
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  */
-    __pyx_t_23 = 0;
-    if (__pyx_t_23 < 0) __pyx_t_23 += __pyx_v_normal.shape[0];
-    __pyx_t_24 = 0;
-    if (__pyx_t_24 < 0) __pyx_t_24 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_24 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_23 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_23 = 0;
+      if (__pyx_t_23 < 0) __pyx_t_23 += __pyx_v_normal.shape[0];
+      __pyx_t_24 = 0;
+      if (__pyx_t_24 < 0) __pyx_t_24 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_24 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_23 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":121
+      /* "cg/cython/renderer.pyx":127
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]             # <<<<<<<<<<<<<<
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1
  */
-    __pyx_t_25 = 1;
-    if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_normal.shape[0];
-    __pyx_t_26 = 1;
-    if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_26 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_25 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_25 = 1;
+      if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_normal.shape[0];
+      __pyx_t_26 = 1;
+      if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_26 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_25 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":122
+      /* "cg/cython/renderer.pyx":128
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]             # <<<<<<<<<<<<<<
  *         vertexes_n[j] += 1
  * 
  */
-    __pyx_t_27 = 2;
-    if (__pyx_t_27 < 0) __pyx_t_27 += __pyx_v_normal.shape[0];
-    __pyx_t_28 = 2;
-    if (__pyx_t_28 < 0) __pyx_t_28 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_28 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_27 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_27 = 2;
+      if (__pyx_t_27 < 0) __pyx_t_27 += __pyx_v_normal.shape[0];
+      __pyx_t_28 = 2;
+      if (__pyx_t_28 < 0) __pyx_t_28 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_28 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_27 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":123
+      /* "cg/cython/renderer.pyx":129
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1             # <<<<<<<<<<<<<<
  * 
  *         j = index[2]
  */
-    __pyx_t_22 = __pyx_v_j;
-    if (__pyx_t_22 < 0) __pyx_t_22 += __pyx_v_vertexes_n.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_22 * __pyx_v_vertexes_n.strides[0]) )) += 1;
+      __pyx_t_22 = __pyx_v_j;
+      if (__pyx_t_22 < 0) __pyx_t_22 += __pyx_v_vertexes_n.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_22 * __pyx_v_vertexes_n.strides[0]) )) += 1;
 
-    /* "cg/cython/renderer.pyx":125
+      /* "cg/cython/renderer.pyx":131
  *         vertexes_n[j] += 1
  * 
  *         j = index[2]             # <<<<<<<<<<<<<<
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  */
-    __pyx_t_29 = 2;
-    if (__pyx_t_29 < 0) __pyx_t_29 += __pyx_v_index.shape[0];
-    __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_29 * __pyx_v_index.strides[0]) )));
+      __pyx_t_29 = 2;
+      if (__pyx_t_29 < 0) __pyx_t_29 += __pyx_v_index.shape[0];
+      __pyx_v_j = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_index.data + __pyx_t_29 * __pyx_v_index.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":126
+      /* "cg/cython/renderer.pyx":132
  * 
  *         j = index[2]
  *         vertex = vertexes[j]             # <<<<<<<<<<<<<<
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  */
-    __pyx_t_31 = -1;
-    __pyx_t_30.data = __pyx_v_vertexes.data;
-    __pyx_t_30.memview = __pyx_v_vertexes.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_30, 0);
-    {
+      __pyx_t_31 = -1;
+      __pyx_t_30.data = __pyx_v_vertexes.data;
+      __pyx_t_30.memview = __pyx_v_vertexes.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_30, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_vertexes.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_vertexes.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 126; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_30.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -3075,102 +3157,108 @@ __pyx_t_30.shape[0] = __pyx_v_vertexes.shape[1];
 __pyx_t_30.strides[0] = __pyx_v_vertexes.strides[1];
     __pyx_t_30.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 1);
-    __pyx_v_vertex = __pyx_t_30;
-    __pyx_t_30.memview = NULL;
-    __pyx_t_30.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 0);
+      __pyx_v_vertex = __pyx_t_30;
+      __pyx_t_30.memview = NULL;
+      __pyx_t_30.data = NULL;
 
-    /* "cg/cython/renderer.pyx":127
+      /* "cg/cython/renderer.pyx":133
  *         j = index[2]
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]             # <<<<<<<<<<<<<<
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  */
-    __pyx_t_32 = 0;
-    if (__pyx_t_32 < 0) __pyx_t_32 += __pyx_v_normal.shape[0];
-    __pyx_t_33 = 0;
-    if (__pyx_t_33 < 0) __pyx_t_33 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_33 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_32 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_32 = 0;
+      if (__pyx_t_32 < 0) __pyx_t_32 += __pyx_v_normal.shape[0];
+      __pyx_t_33 = 0;
+      if (__pyx_t_33 < 0) __pyx_t_33 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_33 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_32 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":128
+      /* "cg/cython/renderer.pyx":134
  *         vertex = vertexes[j]
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]             # <<<<<<<<<<<<<<
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1
  */
-    __pyx_t_34 = 1;
-    if (__pyx_t_34 < 0) __pyx_t_34 += __pyx_v_normal.shape[0];
-    __pyx_t_35 = 1;
-    if (__pyx_t_35 < 0) __pyx_t_35 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_35 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_34 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_34 = 1;
+      if (__pyx_t_34 < 0) __pyx_t_34 += __pyx_v_normal.shape[0];
+      __pyx_t_35 = 1;
+      if (__pyx_t_35 < 0) __pyx_t_35 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_35 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_34 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":129
+      /* "cg/cython/renderer.pyx":135
  *         vertex[0] += normal[0]
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]             # <<<<<<<<<<<<<<
  *         vertexes_n[j] += 1
  * 
  */
-    __pyx_t_36 = 2;
-    if (__pyx_t_36 < 0) __pyx_t_36 += __pyx_v_normal.shape[0];
-    __pyx_t_37 = 2;
-    if (__pyx_t_37 < 0) __pyx_t_37 += __pyx_v_vertex.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_37 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_36 * __pyx_v_normal.strides[0]) )));
+      __pyx_t_36 = 2;
+      if (__pyx_t_36 < 0) __pyx_t_36 += __pyx_v_normal.shape[0];
+      __pyx_t_37 = 2;
+      if (__pyx_t_37 < 0) __pyx_t_37 += __pyx_v_vertex.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_37 * __pyx_v_vertex.strides[0]) )) += (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_normal.data + __pyx_t_36 * __pyx_v_normal.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":130
+      /* "cg/cython/renderer.pyx":136
  *         vertex[1] += normal[1]
  *         vertex[2] += normal[2]
  *         vertexes_n[j] += 1             # <<<<<<<<<<<<<<
  * 
  *     #
  */
-    __pyx_t_31 = __pyx_v_j;
-    if (__pyx_t_31 < 0) __pyx_t_31 += __pyx_v_vertexes_n.shape[0];
-    *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_31 * __pyx_v_vertexes_n.strides[0]) )) += 1;
-  }
+      __pyx_t_31 = __pyx_v_j;
+      if (__pyx_t_31 < 0) __pyx_t_31 += __pyx_v_vertexes_n.shape[0];
+      *((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_31 * __pyx_v_vertexes_n.strides[0]) )) += 1;
+    }
 
-  /* "cg/cython/renderer.pyx":133
+    /* "cg/cython/renderer.pyx":139
  * 
  *     #
  *     l = vertexes.shape[0]             # <<<<<<<<<<<<<<
  *     for i in range(l):
  *         vertex = vertexes[i]
  */
-  __pyx_v_l = (__pyx_v_vertexes.shape[0]);
+    __pyx_v_l = (__pyx_v_vertexes.shape[0]);
 
-  /* "cg/cython/renderer.pyx":134
+    /* "cg/cython/renderer.pyx":140
  *     #
  *     l = vertexes.shape[0]
  *     for i in range(l):             # <<<<<<<<<<<<<<
  *         vertex = vertexes[i]
  *         vertex_n = vertexes_n[i]
  */
-  __pyx_t_7 = __pyx_v_l;
-  for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-    __pyx_v_i = __pyx_t_8;
+    __pyx_t_7 = __pyx_v_l;
+    for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+      __pyx_v_i = __pyx_t_8;
 
-    /* "cg/cython/renderer.pyx":135
+      /* "cg/cython/renderer.pyx":141
  *     l = vertexes.shape[0]
  *     for i in range(l):
  *         vertex = vertexes[i]             # <<<<<<<<<<<<<<
  *         vertex_n = vertexes_n[i]
  *         vertex_normal = vertex_normals[i]
  */
-    __pyx_t_39 = -1;
-    __pyx_t_38.data = __pyx_v_vertexes.data;
-    __pyx_t_38.memview = __pyx_v_vertexes.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_38, 0);
-    {
+      __pyx_t_39 = -1;
+      __pyx_t_38.data = __pyx_v_vertexes.data;
+      __pyx_t_38.memview = __pyx_v_vertexes.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_38, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_i;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_vertexes.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_vertexes.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_38.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -3179,42 +3267,48 @@ __pyx_t_38.shape[0] = __pyx_v_vertexes.shape[1];
 __pyx_t_38.strides[0] = __pyx_v_vertexes.strides[1];
     __pyx_t_38.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 1);
-    __pyx_v_vertex = __pyx_t_38;
-    __pyx_t_38.memview = NULL;
-    __pyx_t_38.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 0);
+      __pyx_v_vertex = __pyx_t_38;
+      __pyx_t_38.memview = NULL;
+      __pyx_t_38.data = NULL;
 
-    /* "cg/cython/renderer.pyx":136
+      /* "cg/cython/renderer.pyx":142
  *     for i in range(l):
  *         vertex = vertexes[i]
  *         vertex_n = vertexes_n[i]             # <<<<<<<<<<<<<<
  *         vertex_normal = vertex_normals[i]
  *         if 0 < vertex_n:
  */
-    __pyx_t_39 = __pyx_v_i;
-    if (__pyx_t_39 < 0) __pyx_t_39 += __pyx_v_vertexes_n.shape[0];
-    __pyx_v_vertex_n = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_39 * __pyx_v_vertexes_n.strides[0]) )));
+      __pyx_t_39 = __pyx_v_i;
+      if (__pyx_t_39 < 0) __pyx_t_39 += __pyx_v_vertexes_n.shape[0];
+      __pyx_v_vertex_n = (*((__pyx_t_2cg_6cython_8renderer_UINT64_t *) ( /* dim=0 */ (__pyx_v_vertexes_n.data + __pyx_t_39 * __pyx_v_vertexes_n.strides[0]) )));
 
-    /* "cg/cython/renderer.pyx":137
+      /* "cg/cython/renderer.pyx":143
  *         vertex = vertexes[i]
  *         vertex_n = vertexes_n[i]
  *         vertex_normal = vertex_normals[i]             # <<<<<<<<<<<<<<
  *         if 0 < vertex_n:
  *             vertex_normal[0] = vertex[0] / vertex_n
  */
-    __pyx_t_41 = -1;
-    __pyx_t_40.data = __pyx_v_vertex_normals.data;
-    __pyx_t_40.memview = __pyx_v_vertex_normals.memview;
-    __PYX_INC_MEMVIEW(&__pyx_t_40, 0);
-    {
+      __pyx_t_41 = -1;
+      __pyx_t_40.data = __pyx_v_vertex_normals.data;
+      __pyx_t_40.memview = __pyx_v_vertex_normals.memview;
+      __PYX_INC_MEMVIEW(&__pyx_t_40, 0);
+      {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_i;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_vertex_normals.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_vertex_normals.strides[0];
     if (1 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L4_error;}
     }
         __pyx_t_40.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -3223,105 +3317,129 @@ __pyx_t_40.shape[0] = __pyx_v_vertex_normals.shape[1];
 __pyx_t_40.strides[0] = __pyx_v_vertex_normals.strides[1];
     __pyx_t_40.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_vertex_normal, 1);
-    __pyx_v_vertex_normal = __pyx_t_40;
-    __pyx_t_40.memview = NULL;
-    __pyx_t_40.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_vertex_normal, 0);
+      __pyx_v_vertex_normal = __pyx_t_40;
+      __pyx_t_40.memview = NULL;
+      __pyx_t_40.data = NULL;
 
-    /* "cg/cython/renderer.pyx":138
+      /* "cg/cython/renderer.pyx":144
  *         vertex_n = vertexes_n[i]
  *         vertex_normal = vertex_normals[i]
  *         if 0 < vertex_n:             # <<<<<<<<<<<<<<
  *             vertex_normal[0] = vertex[0] / vertex_n
  *             vertex_normal[1] = vertex[1] / vertex_n
  */
-    __pyx_t_42 = ((0 < __pyx_v_vertex_n) != 0);
-    if (__pyx_t_42) {
+      __pyx_t_42 = ((0 < __pyx_v_vertex_n) != 0);
+      if (__pyx_t_42) {
 
-      /* "cg/cython/renderer.pyx":139
+        /* "cg/cython/renderer.pyx":145
  *         vertex_normal = vertex_normals[i]
  *         if 0 < vertex_n:
  *             vertex_normal[0] = vertex[0] / vertex_n             # <<<<<<<<<<<<<<
  *             vertex_normal[1] = vertex[1] / vertex_n
  *             vertex_normal[2] = vertex[2] / vertex_n
  */
-      __pyx_t_43 = 0;
-      if (__pyx_t_43 < 0) __pyx_t_43 += __pyx_v_vertex.shape[0];
-      __pyx_t_44 = 0;
-      if (__pyx_t_44 < 0) __pyx_t_44 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_44 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_43 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
+        __pyx_t_43 = 0;
+        if (__pyx_t_43 < 0) __pyx_t_43 += __pyx_v_vertex.shape[0];
+        __pyx_t_44 = 0;
+        if (__pyx_t_44 < 0) __pyx_t_44 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_44 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_43 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
 
-      /* "cg/cython/renderer.pyx":140
+        /* "cg/cython/renderer.pyx":146
  *         if 0 < vertex_n:
  *             vertex_normal[0] = vertex[0] / vertex_n
  *             vertex_normal[1] = vertex[1] / vertex_n             # <<<<<<<<<<<<<<
  *             vertex_normal[2] = vertex[2] / vertex_n
  *         else:
  */
-      __pyx_t_45 = 1;
-      if (__pyx_t_45 < 0) __pyx_t_45 += __pyx_v_vertex.shape[0];
-      __pyx_t_46 = 1;
-      if (__pyx_t_46 < 0) __pyx_t_46 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_46 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_45 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
+        __pyx_t_45 = 1;
+        if (__pyx_t_45 < 0) __pyx_t_45 += __pyx_v_vertex.shape[0];
+        __pyx_t_46 = 1;
+        if (__pyx_t_46 < 0) __pyx_t_46 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_46 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_45 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
 
-      /* "cg/cython/renderer.pyx":141
+        /* "cg/cython/renderer.pyx":147
  *             vertex_normal[0] = vertex[0] / vertex_n
  *             vertex_normal[1] = vertex[1] / vertex_n
  *             vertex_normal[2] = vertex[2] / vertex_n             # <<<<<<<<<<<<<<
  *         else:
  *             vertex_normal[0] = 0.0
  */
-      __pyx_t_47 = 2;
-      if (__pyx_t_47 < 0) __pyx_t_47 += __pyx_v_vertex.shape[0];
-      __pyx_t_48 = 2;
-      if (__pyx_t_48 < 0) __pyx_t_48 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_48 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_47 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
-      goto __pyx_L7;
-    }
-    /*else*/ {
+        __pyx_t_47 = 2;
+        if (__pyx_t_47 < 0) __pyx_t_47 += __pyx_v_vertex.shape[0];
+        __pyx_t_48 = 2;
+        if (__pyx_t_48 < 0) __pyx_t_48 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_48 * __pyx_v_vertex_normal.strides[0]) )) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex.data + __pyx_t_47 * __pyx_v_vertex.strides[0]) ))) / __pyx_v_vertex_n);
+        goto __pyx_L13;
+      }
+      /*else*/ {
 
-      /* "cg/cython/renderer.pyx":143
+        /* "cg/cython/renderer.pyx":149
  *             vertex_normal[2] = vertex[2] / vertex_n
  *         else:
  *             vertex_normal[0] = 0.0             # <<<<<<<<<<<<<<
  *             vertex_normal[1] = 0.0
  *             vertex_normal[2] = 0.0
  */
-      __pyx_t_49 = 0;
-      if (__pyx_t_49 < 0) __pyx_t_49 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_49 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
+        __pyx_t_49 = 0;
+        if (__pyx_t_49 < 0) __pyx_t_49 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_49 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
 
-      /* "cg/cython/renderer.pyx":144
+        /* "cg/cython/renderer.pyx":150
  *         else:
  *             vertex_normal[0] = 0.0
  *             vertex_normal[1] = 0.0             # <<<<<<<<<<<<<<
  *             vertex_normal[2] = 0.0
  * 
  */
-      __pyx_t_50 = 1;
-      if (__pyx_t_50 < 0) __pyx_t_50 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_50 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
+        __pyx_t_50 = 1;
+        if (__pyx_t_50 < 0) __pyx_t_50 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_50 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
 
-      /* "cg/cython/renderer.pyx":145
+        /* "cg/cython/renderer.pyx":151
  *             vertex_normal[0] = 0.0
  *             vertex_normal[1] = 0.0
  *             vertex_normal[2] = 0.0             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      __pyx_t_51 = 2;
-      if (__pyx_t_51 < 0) __pyx_t_51 += __pyx_v_vertex_normal.shape[0];
-      *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_51 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
+        __pyx_t_51 = 2;
+        if (__pyx_t_51 < 0) __pyx_t_51 += __pyx_v_vertex_normal.shape[0];
+        *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_vertex_normal.data + __pyx_t_51 * __pyx_v_vertex_normal.strides[0]) )) = 0.0;
+      }
+      __pyx_L13:;
     }
-    __pyx_L7:;
   }
 
-  /* "cg/cython/renderer.pyx":84
+  /* "cg/cython/renderer.pyx":91
+ *                               DOUBLE_t[:,:] polygon_normals,
+ *                               DOUBLE_t[:,:] vertex_normals) nogil:
+ *     """             # <<<<<<<<<<<<<<
+ * 
+ *     ,
+ */
+  /*finally:*/ {
+    /*normal exit:*/{
+      #ifdef WITH_THREAD
+      __pyx_gilstate_save = PyGILState_Ensure();
+      #endif
+      goto __pyx_L5;
+    }
+    __pyx_L4_error: {
+      #ifdef WITH_THREAD
+      __pyx_gilstate_save = PyGILState_Ensure();
+      #endif
+      goto __pyx_L1_error;
+    }
+    __pyx_L5:;
+  }
+
+  /* "cg/cython/renderer.pyx":88
  * 
  * 
  * cdef void calc_vertex_normals(UINT64_t[:,:] indexes,             # <<<<<<<<<<<<<<
  *                               DOUBLE_t[:,:] polygon_normals,
- *                               DOUBLE_t[:,:] vertex_normals):
+ *                               DOUBLE_t[:,:] vertex_normals) nogil:
  */
 
   /* function exit code */
@@ -3331,42 +3449,43 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_vertex_normal, 1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_11, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_21, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_30, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_38, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_40, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_5, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_6, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_11, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_13, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_21, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_30, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_38, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_40, 0);
   __Pyx_WriteUnraisable("cg.cython.renderer.calc_vertex_normals", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
   __pyx_L0:;
-  __PYX_XDEC_MEMVIEW(&__pyx_v_vertexes, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_normal, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_vertex_normal, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_vertexes_n, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
-  __Pyx_RefNannyFinishContext();
+  __PYX_XDEC_MEMVIEW(&__pyx_v_vertexes, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_normal, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_vertex, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_vertex_normal, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_vertexes_n, 0);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_index, 0);
+  #ifdef WITH_THREAD
+  PyGILState_Release(__pyx_gilstate_save);
+  #endif
 }
 
-/* "cg/cython/renderer.pyx":173
+/* "cg/cython/renderer.pyx":179
  *     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
  * 
- *     def __init__(self, camera, int width, int height, z_buffering=True,             # <<<<<<<<<<<<<<
+ *     def __init__(self, int width, int height, z_buffering=True,             # <<<<<<<<<<<<<<
  *                  int depth=8, shading_mode=ShadingMode.flat):
  *         """
  */
 
 /* Python wrapper */
 static int __pyx_pw_2cg_6cython_8renderer_8Renderer_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_2cg_6cython_8renderer_8Renderer___init__[] = "\n        :param cg.camera.Camera camera: \343\202\253\343\203\241\343\203\251\n        :param bool z_buffering: Z \343\203\220\343\203\203\343\203\225\343\202\241\343\202\222\346\234\211\345\212\271\343\201\253\343\201\231\343\202\213\343\201\213\343\201\251\343\201\206\343\201\213\n        ";
+static char __pyx_doc_2cg_6cython_8renderer_8Renderer___init__[] = "\n        :param bool z_buffering: Z \343\203\220\343\203\203\343\203\225\343\202\241\343\202\222\346\234\211\345\212\271\343\201\253\343\201\231\343\202\213\343\201\213\343\201\251\343\201\206\343\201\213\n        ";
 #if CYTHON_COMPILING_IN_CPYTHON
 struct wrapperbase __pyx_wrapperbase_2cg_6cython_8renderer_8Renderer___init__;
 #endif
 static int __pyx_pw_2cg_6cython_8renderer_8Renderer_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_camera = 0;
   int __pyx_v_width;
   int __pyx_v_height;
   PyObject *__pyx_v_z_buffering = 0;
@@ -3379,15 +3498,14 @@ static int __pyx_pw_2cg_6cython_8renderer_8Renderer_1__init__(PyObject *__pyx_v_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_camera,&__pyx_n_s_width,&__pyx_n_s_height,&__pyx_n_s_z_buffering,&__pyx_n_s_depth,&__pyx_n_s_shading_mode,0};
-    PyObject* values[6] = {0,0,0,0,0,0};
-    values[3] = ((PyObject *)Py_True);
-    values[5] = __pyx_k_;
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_width,&__pyx_n_s_height,&__pyx_n_s_z_buffering,&__pyx_n_s_depth,&__pyx_n_s_shading_mode,0};
+    PyObject* values[5] = {0,0,0,0,0};
+    values[2] = ((PyObject *)Py_True);
+    values[4] = __pyx_k_;
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -3399,76 +3517,69 @@ static int __pyx_pw_2cg_6cython_8renderer_8Renderer_1__init__(PyObject *__pyx_v_
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_camera)) != 0)) kw_args--;
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_width)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_width)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_height)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 6, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 179; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_height)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 6, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (kw_args > 0) {
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_z_buffering);
+          if (value) { values[2] = value; kw_args--; }
         }
         case  3:
         if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_z_buffering);
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_depth);
           if (value) { values[3] = value; kw_args--; }
         }
         case  4:
         if (kw_args > 0) {
-          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_depth);
-          if (value) { values[4] = value; kw_args--; }
-        }
-        case  5:
-        if (kw_args > 0) {
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_shading_mode);
-          if (value) { values[5] = value; kw_args--; }
+          if (value) { values[4] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 179; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
         break;
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_camera = values[0];
-    __pyx_v_width = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_width == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_height = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_height == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_z_buffering = values[3];
-    if (values[4]) {
-      __pyx_v_depth = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_depth == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_width = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_width == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 179; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_height = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_height == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 179; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_z_buffering = values[2];
+    if (values[3]) {
+      __pyx_v_depth = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_depth == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
     } else {
       __pyx_v_depth = ((int)8);
     }
-    __pyx_v_shading_mode = values[5];
+    __pyx_v_shading_mode = values[4];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 179; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cg.cython.renderer.Renderer.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(((struct __pyx_obj_2cg_6cython_8renderer_Renderer *)__pyx_v_self), __pyx_v_camera, __pyx_v_width, __pyx_v_height, __pyx_v_z_buffering, __pyx_v_depth, __pyx_v_shading_mode);
+  __pyx_r = __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(((struct __pyx_obj_2cg_6cython_8renderer_Renderer *)__pyx_v_self), __pyx_v_width, __pyx_v_height, __pyx_v_z_buffering, __pyx_v_depth, __pyx_v_shading_mode);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyObject *__pyx_v_camera, int __pyx_v_width, int __pyx_v_height, PyObject *__pyx_v_z_buffering, int __pyx_v_depth, PyObject *__pyx_v_shading_mode) {
+static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, int __pyx_v_width, int __pyx_v_height, PyObject *__pyx_v_z_buffering, int __pyx_v_depth, PyObject *__pyx_v_shading_mode) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -3480,37 +3591,22 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   double __pyx_t_7;
   PyObject *__pyx_t_8 = NULL;
   __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_t_10;
-  __Pyx_memviewslice __pyx_t_11 = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cg/cython/renderer.pyx":179
+  /* "cg/cython/renderer.pyx":184
  *         :param bool z_buffering: Z
  *         """
- *         self.camera = camera             # <<<<<<<<<<<<<<
- *         self.depth = depth
- *         self.width = width
- */
-  __Pyx_INCREF(__pyx_v_camera);
-  __Pyx_GIVEREF(__pyx_v_camera);
-  __Pyx_GOTREF(__pyx_v_self->camera);
-  __Pyx_DECREF(__pyx_v_self->camera);
-  __pyx_v_self->camera = __pyx_v_camera;
-
-  /* "cg/cython/renderer.pyx":180
- *         """
- *         self.camera = camera
  *         self.depth = depth             # <<<<<<<<<<<<<<
  *         self.width = width
  *         self.height = height
  */
   __pyx_v_self->depth = __pyx_v_depth;
 
-  /* "cg/cython/renderer.pyx":181
- *         self.camera = camera
+  /* "cg/cython/renderer.pyx":185
+ *         """
  *         self.depth = depth
  *         self.width = width             # <<<<<<<<<<<<<<
  *         self.height = height
@@ -3518,7 +3614,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  */
   __pyx_v_self->width = __pyx_v_width;
 
-  /* "cg/cython/renderer.pyx":182
+  /* "cg/cython/renderer.pyx":186
  *         self.depth = depth
  *         self.width = width
  *         self.height = height             # <<<<<<<<<<<<<<
@@ -3527,17 +3623,17 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  */
   __pyx_v_self->height = __pyx_v_height;
 
-  /* "cg/cython/renderer.pyx":183
+  /* "cg/cython/renderer.pyx":187
  *         self.width = width
  *         self.height = height
  *         self.z_buffering = z_buffering             # <<<<<<<<<<<<<<
  *         self.shading_mode = shading_mode
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_z_buffering); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_z_buffering); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->z_buffering = __pyx_t_1;
 
-  /* "cg/cython/renderer.pyx":184
+  /* "cg/cython/renderer.pyx":188
  *         self.height = height
  *         self.z_buffering = z_buffering
  *         self.shading_mode = shading_mode             # <<<<<<<<<<<<<<
@@ -3550,23 +3646,23 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   __Pyx_DECREF(__pyx_v_self->shading_mode);
   __pyx_v_self->shading_mode = __pyx_v_shading_mode;
 
-  /* "cg/cython/renderer.pyx":186
+  /* "cg/cython/renderer.pyx":190
  *         self.shading_mode = shading_mode
  * 
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)             # <<<<<<<<<<<<<<
  *         self._data = self.data
  *         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_long((__pyx_v_self->width * 3)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyInt_From_long((__pyx_v_self->width * 3)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -3574,30 +3670,30 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   __Pyx_GIVEREF(__pyx_t_4);
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_5);
   __pyx_t_5 = 0;
-  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_UINT8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_UINT8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->data);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->data));
   __pyx_v_self->data = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "cg/cython/renderer.pyx":187
+  /* "cg/cython/renderer.pyx":191
  * 
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
  *         self._data = self.data             # <<<<<<<<<<<<<<
@@ -3605,29 +3701,29 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  *         self.z_buffer.fill(float('inf'))
  */
   __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_UINT8_t(((PyObject *)__pyx_v_self->data));
-  if (unlikely(!__pyx_t_6.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_6.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->_data, 0);
   __pyx_v_self->_data = __pyx_t_6;
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "cg/cython/renderer.pyx":188
+  /* "cg/cython/renderer.pyx":192
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
  *         self._data = self.data
  *         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *         self.z_buffer.fill(float('inf'))
  *         self._z_buffer = self.z_buffer
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->width); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->width); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -3635,40 +3731,40 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   __Pyx_GIVEREF(__pyx_t_4);
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->z_buffer);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->z_buffer));
   __pyx_v_self->z_buffer = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "cg/cython/renderer.pyx":189
+  /* "cg/cython/renderer.pyx":193
  *         self._data = self.data
  *         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
  *         self.z_buffer.fill(float('inf'))             # <<<<<<<<<<<<<<
  *         self._z_buffer = self.z_buffer
  *         self.half_width = self.width // 2
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->z_buffer), __pyx_n_s_fill); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->z_buffer), __pyx_n_s_fill); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_AsDouble(__pyx_n_u_inf); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_t_7); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __Pyx_PyObject_AsDouble(__pyx_n_u_inf); if (unlikely(__pyx_t_7 == ((double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_t_7); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -3681,24 +3777,24 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_2);
   } else {
-    __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_8);
     PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
     PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cg/cython/renderer.pyx":190
+  /* "cg/cython/renderer.pyx":194
  *         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
  *         self.z_buffer.fill(float('inf'))
  *         self._z_buffer = self.z_buffer             # <<<<<<<<<<<<<<
@@ -3706,73 +3802,43 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  *         self.half_height = self.height // 2
  */
   __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_v_self->z_buffer));
-  if (unlikely(!__pyx_t_9.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_9.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->_z_buffer, 0);
   __pyx_v_self->_z_buffer = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
 
-  /* "cg/cython/renderer.pyx":191
+  /* "cg/cython/renderer.pyx":195
  *         self.z_buffer.fill(float('inf'))
  *         self._z_buffer = self.z_buffer
  *         self.half_width = self.width // 2             # <<<<<<<<<<<<<<
  *         self.half_height = self.height // 2
- *         self.focus = self.camera.focus
+ *         self._depth = 2 ** depth - 1
  */
   __pyx_v_self->half_width = (__pyx_v_self->width / 2);
 
-  /* "cg/cython/renderer.pyx":192
+  /* "cg/cython/renderer.pyx":196
  *         self._z_buffer = self.z_buffer
  *         self.half_width = self.width // 2
  *         self.half_height = self.height // 2             # <<<<<<<<<<<<<<
- *         self.focus = self.camera.focus
- *         self.camera_position = self.camera.position
- */
-  __pyx_v_self->half_height = (__pyx_v_self->height / 2);
-
-  /* "cg/cython/renderer.pyx":193
- *         self.half_width = self.width // 2
- *         self.half_height = self.height // 2
- *         self.focus = self.camera.focus             # <<<<<<<<<<<<<<
- *         self.camera_position = self.camera.position
- *         self._depth = 2 ** depth - 1
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->camera, __pyx_n_s_focus); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_10 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_self->focus = __pyx_t_10;
-
-  /* "cg/cython/renderer.pyx":194
- *         self.half_height = self.height // 2
- *         self.focus = self.camera.focus
- *         self.camera_position = self.camera.position             # <<<<<<<<<<<<<<
  *         self._depth = 2 ** depth - 1
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->camera, __pyx_n_s_position); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_2);
-  if (unlikely(!__pyx_t_11.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __PYX_XDEC_MEMVIEW(&__pyx_v_self->camera_position, 0);
-  __pyx_v_self->camera_position = __pyx_t_11;
-  __pyx_t_11.memview = NULL;
-  __pyx_t_11.data = NULL;
+  __pyx_v_self->half_height = (__pyx_v_self->height / 2);
 
-  /* "cg/cython/renderer.pyx":195
- *         self.focus = self.camera.focus
- *         self.camera_position = self.camera.position
+  /* "cg/cython/renderer.pyx":197
+ *         self.half_width = self.width // 2
+ *         self.half_height = self.height // 2
  *         self._depth = 2 ** depth - 1             # <<<<<<<<<<<<<<
  * 
  *     property shaders:
  */
   __pyx_v_self->_depth = (__Pyx_pow_long(2, ((long)__pyx_v_depth)) - 1);
 
-  /* "cg/cython/renderer.pyx":173
+  /* "cg/cython/renderer.pyx":179
  *     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
  * 
- *     def __init__(self, camera, int width, int height, z_buffering=True,             # <<<<<<<<<<<<<<
+ *     def __init__(self, int width, int height, z_buffering=True,             # <<<<<<<<<<<<<<
  *                  int depth=8, shading_mode=ShadingMode.flat):
  *         """
  */
@@ -3788,7 +3854,6 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
   __Pyx_XDECREF(__pyx_t_8);
   __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_11, 1);
   __Pyx_AddTraceback("cg.cython.renderer.Renderer.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -3796,12 +3861,12 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":198
+/* "cg/cython/renderer.pyx":200
  * 
  *     property shaders:
  *         def __get__(self):             # <<<<<<<<<<<<<<
  *             return self.shaders
- *         def __set__(self, value):
+ * 
  */
 
 /* Python wrapper */
@@ -3822,24 +3887,24 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders___get__(struc
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cg/cython/renderer.pyx":199
+  /* "cg/cython/renderer.pyx":201
  *     property shaders:
  *         def __get__(self):
  *             return self.shaders             # <<<<<<<<<<<<<<
+ * 
  *         def __set__(self, value):
- *             self.shaders = value
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_self->shaders);
   __pyx_r = __pyx_v_self->shaders;
   goto __pyx_L0;
 
-  /* "cg/cython/renderer.pyx":198
+  /* "cg/cython/renderer.pyx":200
  * 
  *     property shaders:
  *         def __get__(self):             # <<<<<<<<<<<<<<
  *             return self.shaders
- *         def __set__(self, value):
+ * 
  */
 
   /* function exit code */
@@ -3849,9 +3914,9 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders___get__(struc
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":200
- *         def __get__(self):
+/* "cg/cython/renderer.pyx":203
  *             return self.shaders
+ * 
  *         def __set__(self, value):             # <<<<<<<<<<<<<<
  *             self.shaders = value
  * 
@@ -3887,8 +3952,8 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
 
-  /* "cg/cython/renderer.pyx":201
- *             return self.shaders
+  /* "cg/cython/renderer.pyx":204
+ * 
  *         def __set__(self, value):
  *             self.shaders = value             # <<<<<<<<<<<<<<
  * 
@@ -3900,7 +3965,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
   __Pyx_DECREF(__pyx_v_self->shaders);
   __pyx_v_self->shaders = __pyx_v_value;
 
-  /* "cg/cython/renderer.pyx":204
+  /* "cg/cython/renderer.pyx":207
  * 
  *             # Python
  *             for shader in self.shaders:             # <<<<<<<<<<<<<<
@@ -3911,25 +3976,25 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
     __pyx_t_1 = __pyx_v_self->shaders; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_self->shaders); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_self->shaders); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #endif
       }
     } else {
@@ -3938,7 +4003,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 204; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         break;
       }
@@ -3947,21 +4012,21 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
     __Pyx_XDECREF_SET(__pyx_v_shader, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "cg/cython/renderer.pyx":205
+    /* "cg/cython/renderer.pyx":208
  *             # Python
  *             for shader in self.shaders:
  *                 if isinstance(shader, AmbientShader):             # <<<<<<<<<<<<<<
  *                     self._is_ambient_shader_enabled = 1
  *                     self._ambient_shade[0] = shader.shade[0]
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_AmbientShader); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 205; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_AmbientShader); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_4); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 205; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_4); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_6 = (__pyx_t_5 != 0);
     if (__pyx_t_6) {
 
-      /* "cg/cython/renderer.pyx":206
+      /* "cg/cython/renderer.pyx":209
  *             for shader in self.shaders:
  *                 if isinstance(shader, AmbientShader):
  *                     self._is_ambient_shader_enabled = 1             # <<<<<<<<<<<<<<
@@ -3970,71 +4035,71 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
  */
       __pyx_v_self->_is_ambient_shader_enabled = 1;
 
-      /* "cg/cython/renderer.pyx":207
+      /* "cg/cython/renderer.pyx":210
  *                 if isinstance(shader, AmbientShader):
  *                     self._is_ambient_shader_enabled = 1
  *                     self._ambient_shade[0] = shader.shade[0]             # <<<<<<<<<<<<<<
  *                     self._ambient_shade[1] = shader.shade[1]
  *                     self._ambient_shade[2] = shader.shade[2]
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_ambient_shade[0]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":208
+      /* "cg/cython/renderer.pyx":211
  *                     self._is_ambient_shader_enabled = 1
  *                     self._ambient_shade[0] = shader.shade[0]
  *                     self._ambient_shade[1] = shader.shade[1]             # <<<<<<<<<<<<<<
  *                     self._ambient_shade[2] = shader.shade[2]
  *                 elif isinstance(shader, DiffuseShader):
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_ambient_shade[1]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":209
+      /* "cg/cython/renderer.pyx":212
  *                     self._ambient_shade[0] = shader.shade[0]
  *                     self._ambient_shade[1] = shader.shade[1]
  *                     self._ambient_shade[2] = shader.shade[2]             # <<<<<<<<<<<<<<
  *                 elif isinstance(shader, DiffuseShader):
  *                     self._is_diffuse_shader_enabled = 1
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_ambient_shade[2]) = __pyx_t_8;
       goto __pyx_L5;
     }
 
-    /* "cg/cython/renderer.pyx":210
+    /* "cg/cython/renderer.pyx":213
  *                     self._ambient_shade[1] = shader.shade[1]
  *                     self._ambient_shade[2] = shader.shade[2]
  *                 elif isinstance(shader, DiffuseShader):             # <<<<<<<<<<<<<<
  *                     self._is_diffuse_shader_enabled = 1
  *                     self._diffuse_direction[0] = shader.direction[0]
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_DiffuseShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_DiffuseShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_6 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_6 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_6 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_5 = (__pyx_t_6 != 0);
     if (__pyx_t_5) {
 
-      /* "cg/cython/renderer.pyx":211
+      /* "cg/cython/renderer.pyx":214
  *                     self._ambient_shade[2] = shader.shade[2]
  *                 elif isinstance(shader, DiffuseShader):
  *                     self._is_diffuse_shader_enabled = 1             # <<<<<<<<<<<<<<
@@ -4043,119 +4108,119 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
  */
       __pyx_v_self->_is_diffuse_shader_enabled = 1;
 
-      /* "cg/cython/renderer.pyx":212
+      /* "cg/cython/renderer.pyx":215
  *                 elif isinstance(shader, DiffuseShader):
  *                     self._is_diffuse_shader_enabled = 1
  *                     self._diffuse_direction[0] = shader.direction[0]             # <<<<<<<<<<<<<<
  *                     self._diffuse_direction[1] = shader.direction[1]
  *                     self._diffuse_direction[2] = shader.direction[2]
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_diffuse_direction[0]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":213
+      /* "cg/cython/renderer.pyx":216
  *                     self._is_diffuse_shader_enabled = 1
  *                     self._diffuse_direction[0] = shader.direction[0]
  *                     self._diffuse_direction[1] = shader.direction[1]             # <<<<<<<<<<<<<<
  *                     self._diffuse_direction[2] = shader.direction[2]
  *                     self._diffuse_pre_shade[0] = shader.pre_shade[0]
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_diffuse_direction[1]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":214
+      /* "cg/cython/renderer.pyx":217
  *                     self._diffuse_direction[0] = shader.direction[0]
  *                     self._diffuse_direction[1] = shader.direction[1]
  *                     self._diffuse_direction[2] = shader.direction[2]             # <<<<<<<<<<<<<<
  *                     self._diffuse_pre_shade[0] = shader.pre_shade[0]
  *                     self._diffuse_pre_shade[1] = shader.pre_shade[1]
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_diffuse_direction[2]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":215
+      /* "cg/cython/renderer.pyx":218
  *                     self._diffuse_direction[1] = shader.direction[1]
  *                     self._diffuse_direction[2] = shader.direction[2]
  *                     self._diffuse_pre_shade[0] = shader.pre_shade[0]             # <<<<<<<<<<<<<<
  *                     self._diffuse_pre_shade[1] = shader.pre_shade[1]
  *                     self._diffuse_pre_shade[2] = shader.pre_shade[2]
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_diffuse_pre_shade[0]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":216
+      /* "cg/cython/renderer.pyx":219
  *                     self._diffuse_direction[2] = shader.direction[2]
  *                     self._diffuse_pre_shade[0] = shader.pre_shade[0]
  *                     self._diffuse_pre_shade[1] = shader.pre_shade[1]             # <<<<<<<<<<<<<<
  *                     self._diffuse_pre_shade[2] = shader.pre_shade[2]
  *                 elif isinstance(shader, RandomColorShader):
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 219; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 219; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 219; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_diffuse_pre_shade[1]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":217
+      /* "cg/cython/renderer.pyx":220
  *                     self._diffuse_pre_shade[0] = shader.pre_shade[0]
  *                     self._diffuse_pre_shade[1] = shader.pre_shade[1]
  *                     self._diffuse_pre_shade[2] = shader.pre_shade[2]             # <<<<<<<<<<<<<<
  *                 elif isinstance(shader, RandomColorShader):
  *                     self._is_random_shader_enabled = 1
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_diffuse_pre_shade[2]) = __pyx_t_8;
       goto __pyx_L5;
     }
 
-    /* "cg/cython/renderer.pyx":218
+    /* "cg/cython/renderer.pyx":221
  *                     self._diffuse_pre_shade[1] = shader.pre_shade[1]
  *                     self._diffuse_pre_shade[2] = shader.pre_shade[2]
  *                 elif isinstance(shader, RandomColorShader):             # <<<<<<<<<<<<<<
  *                     self._is_random_shader_enabled = 1
  *                 elif isinstance(shader, SpecularShader):
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_RandomColorShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_RandomColorShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 221; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_5 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 221; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_6 = (__pyx_t_5 != 0);
     if (__pyx_t_6) {
 
-      /* "cg/cython/renderer.pyx":219
+      /* "cg/cython/renderer.pyx":222
  *                     self._diffuse_pre_shade[2] = shader.pre_shade[2]
  *                 elif isinstance(shader, RandomColorShader):
  *                     self._is_random_shader_enabled = 1             # <<<<<<<<<<<<<<
@@ -4166,21 +4231,21 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
       goto __pyx_L5;
     }
 
-    /* "cg/cython/renderer.pyx":220
+    /* "cg/cython/renderer.pyx":223
  *                 elif isinstance(shader, RandomColorShader):
  *                     self._is_random_shader_enabled = 1
  *                 elif isinstance(shader, SpecularShader):             # <<<<<<<<<<<<<<
  *                     self._is_specular_shader_enabled = 1
  *                     self._specular_direction[0] = shader.direction[0]
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_SpecularShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_SpecularShader); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_6 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_6 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyObject_IsInstance(__pyx_v_shader, __pyx_t_7); if (unlikely(__pyx_t_6 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_5 = (__pyx_t_6 != 0);
     if (__pyx_t_5) {
 
-      /* "cg/cython/renderer.pyx":221
+      /* "cg/cython/renderer.pyx":224
  *                     self._is_random_shader_enabled = 1
  *                 elif isinstance(shader, SpecularShader):
  *                     self._is_specular_shader_enabled = 1             # <<<<<<<<<<<<<<
@@ -4189,119 +4254,119 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
  */
       __pyx_v_self->_is_specular_shader_enabled = 1;
 
-      /* "cg/cython/renderer.pyx":222
+      /* "cg/cython/renderer.pyx":225
  *                 elif isinstance(shader, SpecularShader):
  *                     self._is_specular_shader_enabled = 1
  *                     self._specular_direction[0] = shader.direction[0]             # <<<<<<<<<<<<<<
  *                     self._specular_direction[1] = shader.direction[1]
  *                     self._specular_direction[2] = shader.direction[2]
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 222; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 222; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 222; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_specular_direction[0]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":223
+      /* "cg/cython/renderer.pyx":226
  *                     self._is_specular_shader_enabled = 1
  *                     self._specular_direction[0] = shader.direction[0]
  *                     self._specular_direction[1] = shader.direction[1]             # <<<<<<<<<<<<<<
  *                     self._specular_direction[2] = shader.direction[2]
  *                     self._specular_shininess = shader.shininess
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_specular_direction[1]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":224
+      /* "cg/cython/renderer.pyx":227
  *                     self._specular_direction[0] = shader.direction[0]
  *                     self._specular_direction[1] = shader.direction[1]
  *                     self._specular_direction[2] = shader.direction[2]             # <<<<<<<<<<<<<<
  *                     self._specular_shininess = shader.shininess
  *                     self._specular_pre_shade[0] = shader.pre_shade[0]
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 224; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_direction); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 224; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 224; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_specular_direction[2]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":225
+      /* "cg/cython/renderer.pyx":228
  *                     self._specular_direction[1] = shader.direction[1]
  *                     self._specular_direction[2] = shader.direction[2]
  *                     self._specular_shininess = shader.shininess             # <<<<<<<<<<<<<<
  *                     self._specular_pre_shade[0] = shader.pre_shade[0]
  *                     self._specular_pre_shade[1] = shader.pre_shade[1]
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shininess); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_shininess); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_self->_specular_shininess = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":226
+      /* "cg/cython/renderer.pyx":229
  *                     self._specular_direction[2] = shader.direction[2]
  *                     self._specular_shininess = shader.shininess
  *                     self._specular_pre_shade[0] = shader.pre_shade[0]             # <<<<<<<<<<<<<<
  *                     self._specular_pre_shade[1] = shader.pre_shade[1]
  *                     self._specular_pre_shade[2] = shader.pre_shade[2]
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 229; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 229; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 229; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_specular_pre_shade[0]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":227
+      /* "cg/cython/renderer.pyx":230
  *                     self._specular_shininess = shader.shininess
  *                     self._specular_pre_shade[0] = shader.pre_shade[0]
  *                     self._specular_pre_shade[1] = shader.pre_shade[1]             # <<<<<<<<<<<<<<
  *                     self._specular_pre_shade[2] = shader.pre_shade[2]
  * 
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       (__pyx_v_self->_specular_pre_shade[1]) = __pyx_t_8;
 
-      /* "cg/cython/renderer.pyx":228
+      /* "cg/cython/renderer.pyx":231
  *                     self._specular_pre_shade[0] = shader.pre_shade[0]
  *                     self._specular_pre_shade[1] = shader.pre_shade[1]
  *                     self._specular_pre_shade[2] = shader.pre_shade[2]             # <<<<<<<<<<<<<<
  * 
- *     cdef void _convert_point(self, DOUBLE_t[:] point):
+ *     property camera:
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_shader, __pyx_n_s_pre_shade); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 231; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_4, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 231; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_8 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 231; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       (__pyx_v_self->_specular_pre_shade[2]) = __pyx_t_8;
       goto __pyx_L5;
     }
     __pyx_L5:;
 
-    /* "cg/cython/renderer.pyx":204
+    /* "cg/cython/renderer.pyx":207
  * 
  *             # Python
  *             for shader in self.shaders:             # <<<<<<<<<<<<<<
@@ -4311,9 +4376,9 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cg/cython/renderer.pyx":200
- *         def __get__(self):
+  /* "cg/cython/renderer.pyx":203
  *             return self.shaders
+ * 
  *         def __set__(self, value):             # <<<<<<<<<<<<<<
  *             self.shaders = value
  * 
@@ -4334,8 +4399,157 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_7shaders_2__set__(struct __p
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":230
- *                     self._specular_pre_shade[2] = shader.pre_shade[2]
+/* "cg/cython/renderer.pyx":234
+ * 
+ *     property camera:
+ *         def __get__(self):             # <<<<<<<<<<<<<<
+ *             return self.camera
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_1__get__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_2cg_6cython_8renderer_8Renderer_6camera___get__(((struct __pyx_obj_2cg_6cython_8renderer_Renderer *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_6camera___get__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__", 0);
+
+  /* "cg/cython/renderer.pyx":235
+ *     property camera:
+ *         def __get__(self):
+ *             return self.camera             # <<<<<<<<<<<<<<
+ * 
+ *         def __set__(self, value):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_self->camera);
+  __pyx_r = __pyx_v_self->camera;
+  goto __pyx_L0;
+
+  /* "cg/cython/renderer.pyx":234
+ * 
+ *     property camera:
+ *         def __get__(self):             # <<<<<<<<<<<<<<
+ *             return self.camera
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cg/cython/renderer.pyx":237
+ *             return self.camera
+ * 
+ *         def __set__(self, value):             # <<<<<<<<<<<<<<
+ *             self.camera = value
+ * 
+ */
+
+/* Python wrapper */
+static int __pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_2cg_6cython_8renderer_8Renderer_6camera_2__set__(((struct __pyx_obj_2cg_6cython_8renderer_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_2cg_6cython_8renderer_8Renderer_6camera_2__set__(struct __pyx_obj_2cg_6cython_8renderer_Renderer *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __pyx_t_2cg_6cython_8renderer_DOUBLE_t __pyx_t_2;
+  __Pyx_memviewslice __pyx_t_3 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__set__", 0);
+
+  /* "cg/cython/renderer.pyx":238
+ * 
+ *         def __set__(self, value):
+ *             self.camera = value             # <<<<<<<<<<<<<<
+ * 
+ *             self.focus = self.camera.focus
+ */
+  __Pyx_INCREF(__pyx_v_value);
+  __Pyx_GIVEREF(__pyx_v_value);
+  __Pyx_GOTREF(__pyx_v_self->camera);
+  __Pyx_DECREF(__pyx_v_self->camera);
+  __pyx_v_self->camera = __pyx_v_value;
+
+  /* "cg/cython/renderer.pyx":240
+ *             self.camera = value
+ * 
+ *             self.focus = self.camera.focus             # <<<<<<<<<<<<<<
+ *             self.camera_position = self.camera.position
+ * 
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->camera, __pyx_n_s_focus); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 240; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 240; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_self->focus = __pyx_t_2;
+
+  /* "cg/cython/renderer.pyx":241
+ * 
+ *             self.focus = self.camera.focus
+ *             self.camera_position = self.camera.position             # <<<<<<<<<<<<<<
+ * 
+ *     cdef void _convert_point(self, DOUBLE_t[:] point):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->camera, __pyx_n_s_position); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 241; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_1);
+  if (unlikely(!__pyx_t_3.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 241; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __PYX_XDEC_MEMVIEW(&__pyx_v_self->camera_position, 0);
+  __pyx_v_self->camera_position = __pyx_t_3;
+  __pyx_t_3.memview = NULL;
+  __pyx_t_3.data = NULL;
+
+  /* "cg/cython/renderer.pyx":237
+ *             return self.camera
+ * 
+ *         def __set__(self, value):             # <<<<<<<<<<<<<<
+ *             self.camera = value
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
+  __Pyx_AddTraceback("cg.cython.renderer.Renderer.camera.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cg/cython/renderer.pyx":243
+ *             self.camera_position = self.camera.position
  * 
  *     cdef void _convert_point(self, DOUBLE_t[:] point):             # <<<<<<<<<<<<<<
  *         """
@@ -4352,7 +4566,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__convert_point(struct __pyx_
   Py_ssize_t __pyx_t_5;
   __Pyx_RefNannySetupContext("_convert_point", 0);
 
-  /* "cg/cython/renderer.pyx":236
+  /* "cg/cython/renderer.pyx":249
  *         """
  *         cdef DOUBLE_t z_ip
  *         z_ip = self.focus / point[2]             # <<<<<<<<<<<<<<
@@ -4363,7 +4577,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__convert_point(struct __pyx_
   if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_v_point.shape[0];
   __pyx_v_z_ip = (__pyx_v_self->focus / (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_1 * __pyx_v_point.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":237
+  /* "cg/cython/renderer.pyx":250
  *         cdef DOUBLE_t z_ip
  *         z_ip = self.focus / point[2]
  *         point[0] = z_ip * point[0]             # <<<<<<<<<<<<<<
@@ -4376,7 +4590,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__convert_point(struct __pyx_
   if (__pyx_t_3 < 0) __pyx_t_3 += __pyx_v_point.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_3 * __pyx_v_point.strides[0]) )) = (__pyx_v_z_ip * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_2 * __pyx_v_point.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":238
+  /* "cg/cython/renderer.pyx":251
  *         z_ip = self.focus / point[2]
  *         point[0] = z_ip * point[0]
  *         point[1] = z_ip * point[1]             # <<<<<<<<<<<<<<
@@ -4389,8 +4603,8 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__convert_point(struct __pyx_
   if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_v_point.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_5 * __pyx_v_point.strides[0]) )) = (__pyx_v_z_ip * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_4 * __pyx_v_point.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":230
- *                     self._specular_pre_shade[2] = shader.pre_shade[2]
+  /* "cg/cython/renderer.pyx":243
+ *             self.camera_position = self.camera.position
  * 
  *     cdef void _convert_point(self, DOUBLE_t[:] point):             # <<<<<<<<<<<<<<
  *         """
@@ -4401,7 +4615,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__convert_point(struct __pyx_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":240
+/* "cg/cython/renderer.pyx":253
  *         point[1] = z_ip * point[1]
  * 
  *     cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:             # <<<<<<<<<<<<<<
@@ -4414,7 +4628,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_ambient(struct __pyx_
   Py_ssize_t __pyx_t_2;
   Py_ssize_t __pyx_t_3;
 
-  /* "cg/cython/renderer.pyx":241
+  /* "cg/cython/renderer.pyx":254
  * 
  *     cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:
  *         cl[0] += self._ambient_shade[0]             # <<<<<<<<<<<<<<
@@ -4425,7 +4639,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_ambient(struct __pyx_
   if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_1 * __pyx_v_cl.strides[0]) )) += (__pyx_v_self->_ambient_shade[0]);
 
-  /* "cg/cython/renderer.pyx":242
+  /* "cg/cython/renderer.pyx":255
  *     cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:
  *         cl[0] += self._ambient_shade[0]
  *         cl[1] += self._ambient_shade[1]             # <<<<<<<<<<<<<<
@@ -4436,7 +4650,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_ambient(struct __pyx_
   if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_2 * __pyx_v_cl.strides[0]) )) += (__pyx_v_self->_ambient_shade[1]);
 
-  /* "cg/cython/renderer.pyx":243
+  /* "cg/cython/renderer.pyx":256
  *         cl[0] += self._ambient_shade[0]
  *         cl[1] += self._ambient_shade[1]
  *         cl[2] += self._ambient_shade[2]             # <<<<<<<<<<<<<<
@@ -4447,7 +4661,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_ambient(struct __pyx_
   if (__pyx_t_3 < 0) __pyx_t_3 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_3 * __pyx_v_cl.strides[0]) )) += (__pyx_v_self->_ambient_shade[2]);
 
-  /* "cg/cython/renderer.pyx":240
+  /* "cg/cython/renderer.pyx":253
  *         point[1] = z_ip * point[1]
  * 
  *     cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:             # <<<<<<<<<<<<<<
@@ -4458,7 +4672,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_ambient(struct __pyx_
   /* function exit code */
 }
 
-/* "cg/cython/renderer.pyx":245
+/* "cg/cython/renderer.pyx":258
  *         cl[2] += self._ambient_shade[2]
  * 
  *     cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -4483,7 +4697,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_shade_diffuse", 0);
 
-  /* "cg/cython/renderer.pyx":254
+  /* "cg/cython/renderer.pyx":267
  * 
  *         #
  *         cos = _dot_vectors(self._diffuse_direction, n)             # <<<<<<<<<<<<<<
@@ -4493,25 +4707,25 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   __pyx_t_1 = __pyx_v_self->_diffuse_direction;
   if (!__pyx_t_1) {
     PyErr_SetString(PyExc_ValueError,"Cannot create cython.array from NULL pointer");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 254; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_4 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_3 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_4 || !__pyx_t_3 || !PyBytes_AsString(__pyx_t_4))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 254; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_4 || !__pyx_t_3 || !PyBytes_AsString(__pyx_t_4))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_2 = __pyx_array_new(__pyx_t_3, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_4), (char *) "fortran", (char *) __pyx_t_1);
-  if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 254; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_2));
-  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 254; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_2)); __pyx_t_2 = 0;
   __pyx_v_cos = __pyx_f_2cg_6cython_8renderer__dot_vectors(__pyx_t_5, __pyx_v_n);
   __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
 
-  /* "cg/cython/renderer.pyx":257
+  /* "cg/cython/renderer.pyx":270
  * 
  *         # ,
  *         if 0.0 < cos:             # <<<<<<<<<<<<<<
@@ -4521,7 +4735,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   __pyx_t_6 = ((0.0 < __pyx_v_cos) != 0);
   if (__pyx_t_6) {
 
-    /* "cg/cython/renderer.pyx":258
+    /* "cg/cython/renderer.pyx":271
  *         # ,
  *         if 0.0 < cos:
  *             return             # <<<<<<<<<<<<<<
@@ -4531,7 +4745,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
     goto __pyx_L0;
   }
 
-  /* "cg/cython/renderer.pyx":260
+  /* "cg/cython/renderer.pyx":273
  *             return
  * 
  *         cl[0] += -cos * self._diffuse_pre_shade[0]             # <<<<<<<<<<<<<<
@@ -4542,7 +4756,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   if (__pyx_t_7 < 0) __pyx_t_7 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_7 * __pyx_v_cl.strides[0]) )) += ((-__pyx_v_cos) * (__pyx_v_self->_diffuse_pre_shade[0]));
 
-  /* "cg/cython/renderer.pyx":261
+  /* "cg/cython/renderer.pyx":274
  * 
  *         cl[0] += -cos * self._diffuse_pre_shade[0]
  *         cl[1] += -cos * self._diffuse_pre_shade[1]             # <<<<<<<<<<<<<<
@@ -4553,7 +4767,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   if (__pyx_t_8 < 0) __pyx_t_8 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_8 * __pyx_v_cl.strides[0]) )) += ((-__pyx_v_cos) * (__pyx_v_self->_diffuse_pre_shade[1]));
 
-  /* "cg/cython/renderer.pyx":262
+  /* "cg/cython/renderer.pyx":275
  *         cl[0] += -cos * self._diffuse_pre_shade[0]
  *         cl[1] += -cos * self._diffuse_pre_shade[1]
  *         cl[2] += -cos * self._diffuse_pre_shade[2]             # <<<<<<<<<<<<<<
@@ -4564,7 +4778,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   if (__pyx_t_9 < 0) __pyx_t_9 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_9 * __pyx_v_cl.strides[0]) )) += ((-__pyx_v_cos) * (__pyx_v_self->_diffuse_pre_shade[2]));
 
-  /* "cg/cython/renderer.pyx":245
+  /* "cg/cython/renderer.pyx":258
  *         cl[2] += self._ambient_shade[2]
  * 
  *     cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -4584,7 +4798,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_diffuse(struct __pyx_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":264
+/* "cg/cython/renderer.pyx":277
  *         cl[2] += -cos * self._diffuse_pre_shade[2]
  * 
  *     cdef void _shade_random(self, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -4606,14 +4820,14 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_random(CYTHON_UNUSED 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_shade_random", 0);
 
-  /* "cg/cython/renderer.pyx":266
+  /* "cg/cython/renderer.pyx":279
  *     cdef void _shade_random(self, DOUBLE_t[:] cl):
  *         """"""
  *         cl[0] += random()             # <<<<<<<<<<<<<<
  *         cl[1] += random()
  *         cl[2] += random()
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -4626,27 +4840,27 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_random(CYTHON_UNUSED 
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_5 = 0;
   if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_5 * __pyx_v_cl.strides[0]) )) += __pyx_t_4;
 
-  /* "cg/cython/renderer.pyx":267
+  /* "cg/cython/renderer.pyx":280
  *         """"""
  *         cl[0] += random()
  *         cl[1] += random()             # <<<<<<<<<<<<<<
  *         cl[2] += random()
  * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -4659,27 +4873,27 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_random(CYTHON_UNUSED 
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_6 = 1;
   if (__pyx_t_6 < 0) __pyx_t_6 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_6 * __pyx_v_cl.strides[0]) )) += __pyx_t_4;
 
-  /* "cg/cython/renderer.pyx":268
+  /* "cg/cython/renderer.pyx":281
  *         cl[0] += random()
  *         cl[1] += random()
  *         cl[2] += random()             # <<<<<<<<<<<<<<
  * 
  *     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_random); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -4692,20 +4906,20 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_random(CYTHON_UNUSED 
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_7 = 2;
   if (__pyx_t_7 < 0) __pyx_t_7 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_7 * __pyx_v_cl.strides[0]) )) += __pyx_t_4;
 
-  /* "cg/cython/renderer.pyx":264
+  /* "cg/cython/renderer.pyx":277
  *         cl[2] += -cos * self._diffuse_pre_shade[2]
  * 
  *     cdef void _shade_random(self, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -4724,7 +4938,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_random(CYTHON_UNUSED 
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":270
+/* "cg/cython/renderer.pyx":283
  *         cl[2] += random()
  * 
  *     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -4757,49 +4971,49 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_shade_specular", 0);
 
-  /* "cg/cython/renderer.pyx":284
+  /* "cg/cython/renderer.pyx":297
  * 
  *         #
  *         e[0] = self.camera_position[0] - a[0]             # <<<<<<<<<<<<<<
  *         e[1] = self.camera_position[1] - a[1]
  *         e[2] = self.camera_position[2] - a[2]
  */
-  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 284; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 297; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
   __pyx_t_1 = 0;
   if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_v_self->camera_position.shape[0];
   __pyx_t_2 = 0;
   if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_v_a.shape[0];
   (__pyx_v_e[0]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_self->camera_position.data + __pyx_t_1 * __pyx_v_self->camera_position.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_2 * __pyx_v_a.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":285
+  /* "cg/cython/renderer.pyx":298
  *         #
  *         e[0] = self.camera_position[0] - a[0]
  *         e[1] = self.camera_position[1] - a[1]             # <<<<<<<<<<<<<<
  *         e[2] = self.camera_position[2] - a[2]
  *         _unit_vector(e)
  */
-  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 285; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 298; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
   __pyx_t_3 = 1;
   if (__pyx_t_3 < 0) __pyx_t_3 += __pyx_v_self->camera_position.shape[0];
   __pyx_t_4 = 1;
   if (__pyx_t_4 < 0) __pyx_t_4 += __pyx_v_a.shape[0];
   (__pyx_v_e[1]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_self->camera_position.data + __pyx_t_3 * __pyx_v_self->camera_position.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_4 * __pyx_v_a.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":286
+  /* "cg/cython/renderer.pyx":299
  *         e[0] = self.camera_position[0] - a[0]
  *         e[1] = self.camera_position[1] - a[1]
  *         e[2] = self.camera_position[2] - a[2]             # <<<<<<<<<<<<<<
  *         _unit_vector(e)
  *         s[0] = e[0] - self._specular_direction[0]
  */
-  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  if (unlikely(!__pyx_v_self->camera_position.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 299; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
   __pyx_t_5 = 2;
   if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_v_self->camera_position.shape[0];
   __pyx_t_6 = 2;
   if (__pyx_t_6 < 0) __pyx_t_6 += __pyx_v_a.shape[0];
   (__pyx_v_e[2]) = ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_self->camera_position.data + __pyx_t_5 * __pyx_v_self->camera_position.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_6 * __pyx_v_a.strides[0]) ))));
 
-  /* "cg/cython/renderer.pyx":287
+  /* "cg/cython/renderer.pyx":300
  *         e[1] = self.camera_position[1] - a[1]
  *         e[2] = self.camera_position[2] - a[2]
  *         _unit_vector(e)             # <<<<<<<<<<<<<<
@@ -4808,21 +5022,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   __pyx_t_9 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_8 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_9 || !__pyx_t_8 || !PyBytes_AsString(__pyx_t_9))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 287; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_9 || !__pyx_t_8 || !PyBytes_AsString(__pyx_t_9))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 300; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_GOTREF(__pyx_t_8);
   __pyx_t_7 = __pyx_array_new(__pyx_t_8, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_9), (char *) "fortran", (char *) __pyx_v_e);
-  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 287; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 300; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_7));
-  if (unlikely(!__pyx_t_10.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 287; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_10.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 300; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_7)); __pyx_t_7 = 0;
   __pyx_f_2cg_6cython_8renderer__unit_vector(__pyx_t_10);
   __PYX_XDEC_MEMVIEW(&__pyx_t_10, 1);
 
-  /* "cg/cython/renderer.pyx":288
+  /* "cg/cython/renderer.pyx":301
  *         e[2] = self.camera_position[2] - a[2]
  *         _unit_vector(e)
  *         s[0] = e[0] - self._specular_direction[0]             # <<<<<<<<<<<<<<
@@ -4831,7 +5045,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   (__pyx_v_s[0]) = ((__pyx_v_e[0]) - (__pyx_v_self->_specular_direction[0]));
 
-  /* "cg/cython/renderer.pyx":289
+  /* "cg/cython/renderer.pyx":302
  *         _unit_vector(e)
  *         s[0] = e[0] - self._specular_direction[0]
  *         s[1] = e[1] - self._specular_direction[1]             # <<<<<<<<<<<<<<
@@ -4840,7 +5054,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   (__pyx_v_s[1]) = ((__pyx_v_e[1]) - (__pyx_v_self->_specular_direction[1]));
 
-  /* "cg/cython/renderer.pyx":290
+  /* "cg/cython/renderer.pyx":303
  *         s[0] = e[0] - self._specular_direction[0]
  *         s[1] = e[1] - self._specular_direction[1]
  *         s[2] = e[2] - self._specular_direction[2]             # <<<<<<<<<<<<<<
@@ -4849,7 +5063,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   (__pyx_v_s[2]) = ((__pyx_v_e[2]) - (__pyx_v_self->_specular_direction[2]));
 
-  /* "cg/cython/renderer.pyx":291
+  /* "cg/cython/renderer.pyx":304
  *         s[1] = e[1] - self._specular_direction[1]
  *         s[2] = e[2] - self._specular_direction[2]
  *         _unit_vector(s)             # <<<<<<<<<<<<<<
@@ -4858,21 +5072,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   __pyx_t_8 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_9 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_8 || !__pyx_t_9 || !PyBytes_AsString(__pyx_t_8))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 291; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_8 || !__pyx_t_9 || !PyBytes_AsString(__pyx_t_8))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 304; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_GOTREF(__pyx_t_9);
   __pyx_t_7 = __pyx_array_new(__pyx_t_9, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_8), (char *) "fortran", (char *) __pyx_v_s);
-  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 291; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 304; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_7));
-  if (unlikely(!__pyx_t_10.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 291; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_10.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 304; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_7)); __pyx_t_7 = 0;
   __pyx_f_2cg_6cython_8renderer__unit_vector(__pyx_t_10);
   __PYX_XDEC_MEMVIEW(&__pyx_t_10, 1);
 
-  /* "cg/cython/renderer.pyx":292
+  /* "cg/cython/renderer.pyx":305
  *         s[2] = e[2] - self._specular_direction[2]
  *         _unit_vector(s)
  *         sn = _dot_vectors(s, n)             # <<<<<<<<<<<<<<
@@ -4881,21 +5095,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   __pyx_t_9 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_8 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_9 || !__pyx_t_8 || !PyBytes_AsString(__pyx_t_9))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 292; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_9 || !__pyx_t_8 || !PyBytes_AsString(__pyx_t_9))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 305; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_GOTREF(__pyx_t_8);
   __pyx_t_7 = __pyx_array_new(__pyx_t_8, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_9), (char *) "fortran", (char *) __pyx_v_s);
-  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 292; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 305; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_7));
-  if (unlikely(!__pyx_t_11.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 292; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_11.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 305; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_7)); __pyx_t_7 = 0;
   __pyx_v_sn = __pyx_f_2cg_6cython_8renderer__dot_vectors(__pyx_t_11, __pyx_v_n);
   __PYX_XDEC_MEMVIEW(&__pyx_t_11, 1);
 
-  /* "cg/cython/renderer.pyx":294
+  /* "cg/cython/renderer.pyx":307
  *         sn = _dot_vectors(s, n)
  *         # ,
  *         if sn < 0.0:             # <<<<<<<<<<<<<<
@@ -4905,7 +5119,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   __pyx_t_12 = ((__pyx_v_sn < 0.0) != 0);
   if (__pyx_t_12) {
 
-    /* "cg/cython/renderer.pyx":295
+    /* "cg/cython/renderer.pyx":308
  *         # ,
  *         if sn < 0.0:
  *             return             # <<<<<<<<<<<<<<
@@ -4915,7 +5129,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
     goto __pyx_L0;
   }
 
-  /* "cg/cython/renderer.pyx":296
+  /* "cg/cython/renderer.pyx":309
  *         if sn < 0.0:
  *             return
  *         sn **= self._specular_shininess             # <<<<<<<<<<<<<<
@@ -4924,7 +5138,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
  */
   __pyx_v_sn = pow(__pyx_v_sn, __pyx_v_self->_specular_shininess);
 
-  /* "cg/cython/renderer.pyx":297
+  /* "cg/cython/renderer.pyx":310
  *             return
  *         sn **= self._specular_shininess
  *         cl[0] += sn * self._specular_pre_shade[0]             # <<<<<<<<<<<<<<
@@ -4935,7 +5149,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   if (__pyx_t_13 < 0) __pyx_t_13 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_13 * __pyx_v_cl.strides[0]) )) += (__pyx_v_sn * (__pyx_v_self->_specular_pre_shade[0]));
 
-  /* "cg/cython/renderer.pyx":298
+  /* "cg/cython/renderer.pyx":311
  *         sn **= self._specular_shininess
  *         cl[0] += sn * self._specular_pre_shade[0]
  *         cl[1] += sn * self._specular_pre_shade[1]             # <<<<<<<<<<<<<<
@@ -4946,7 +5160,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_14 * __pyx_v_cl.strides[0]) )) += (__pyx_v_sn * (__pyx_v_self->_specular_pre_shade[1]));
 
-  /* "cg/cython/renderer.pyx":299
+  /* "cg/cython/renderer.pyx":312
  *         cl[0] += sn * self._specular_pre_shade[0]
  *         cl[1] += sn * self._specular_pre_shade[1]
  *         cl[2] += sn * self._specular_pre_shade[2]             # <<<<<<<<<<<<<<
@@ -4957,7 +5171,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_cl.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_15 * __pyx_v_cl.strides[0]) )) += (__pyx_v_sn * (__pyx_v_self->_specular_pre_shade[2]));
 
-  /* "cg/cython/renderer.pyx":270
+  /* "cg/cython/renderer.pyx":283
  *         cl[2] += random()
  * 
  *     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -4978,7 +5192,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_specular(struct __pyx
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":301
+/* "cg/cython/renderer.pyx":314
  *         cl[2] += sn * self._specular_pre_shade[2]
  * 
  *     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -4994,7 +5208,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("_shade_vertex", 0);
 
-  /* "cg/cython/renderer.pyx":304
+  /* "cg/cython/renderer.pyx":317
  *                             DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] color):
  *         """"""
  *         color[0] = 0.0             # <<<<<<<<<<<<<<
@@ -5005,7 +5219,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_v_color.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_1 * __pyx_v_color.strides[0]) )) = 0.0;
 
-  /* "cg/cython/renderer.pyx":305
+  /* "cg/cython/renderer.pyx":318
  *         """"""
  *         color[0] = 0.0
  *         color[1] = 0.0             # <<<<<<<<<<<<<<
@@ -5016,7 +5230,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_v_color.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_2 * __pyx_v_color.strides[0]) )) = 0.0;
 
-  /* "cg/cython/renderer.pyx":306
+  /* "cg/cython/renderer.pyx":319
  *         color[0] = 0.0
  *         color[1] = 0.0
  *         color[2] = 0.0             # <<<<<<<<<<<<<<
@@ -5027,7 +5241,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   if (__pyx_t_3 < 0) __pyx_t_3 += __pyx_v_color.shape[0];
   *((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_color.data + __pyx_t_3 * __pyx_v_color.strides[0]) )) = 0.0;
 
-  /* "cg/cython/renderer.pyx":308
+  /* "cg/cython/renderer.pyx":321
  *         color[2] = 0.0
  * 
  *         if self._is_ambient_shader_enabled == 1:             # <<<<<<<<<<<<<<
@@ -5037,7 +5251,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   __pyx_t_4 = ((__pyx_v_self->_is_ambient_shader_enabled == 1) != 0);
   if (__pyx_t_4) {
 
-    /* "cg/cython/renderer.pyx":309
+    /* "cg/cython/renderer.pyx":322
  * 
  *         if self._is_ambient_shader_enabled == 1:
  *             self._shade_ambient(color)             # <<<<<<<<<<<<<<
@@ -5049,7 +5263,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   }
   __pyx_L3:;
 
-  /* "cg/cython/renderer.pyx":311
+  /* "cg/cython/renderer.pyx":324
  *             self._shade_ambient(color)
  * 
  *         if self._is_diffuse_shader_enabled == 1:             # <<<<<<<<<<<<<<
@@ -5059,7 +5273,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   __pyx_t_4 = ((__pyx_v_self->_is_diffuse_shader_enabled == 1) != 0);
   if (__pyx_t_4) {
 
-    /* "cg/cython/renderer.pyx":312
+    /* "cg/cython/renderer.pyx":325
  * 
  *         if self._is_diffuse_shader_enabled == 1:
  *             self._shade_diffuse(n, color)             # <<<<<<<<<<<<<<
@@ -5071,7 +5285,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   }
   __pyx_L4:;
 
-  /* "cg/cython/renderer.pyx":314
+  /* "cg/cython/renderer.pyx":327
  *             self._shade_diffuse(n, color)
  * 
  *         if self._is_random_shader_enabled == 1:             # <<<<<<<<<<<<<<
@@ -5081,7 +5295,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   __pyx_t_4 = ((__pyx_v_self->_is_random_shader_enabled == 1) != 0);
   if (__pyx_t_4) {
 
-    /* "cg/cython/renderer.pyx":315
+    /* "cg/cython/renderer.pyx":328
  * 
  *         if self._is_random_shader_enabled == 1:
  *             self._shade_random(color)             # <<<<<<<<<<<<<<
@@ -5093,7 +5307,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   }
   __pyx_L5:;
 
-  /* "cg/cython/renderer.pyx":317
+  /* "cg/cython/renderer.pyx":330
  *             self._shade_random(color)
  * 
  *         if self._is_specular_shader_enabled == 1:             # <<<<<<<<<<<<<<
@@ -5103,7 +5317,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   __pyx_t_4 = ((__pyx_v_self->_is_specular_shader_enabled == 1) != 0);
   if (__pyx_t_4) {
 
-    /* "cg/cython/renderer.pyx":318
+    /* "cg/cython/renderer.pyx":331
  * 
  *         if self._is_specular_shader_enabled == 1:
  *             self._shade_specular(a, b, c, n, color)             # <<<<<<<<<<<<<<
@@ -5115,7 +5329,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   }
   __pyx_L6:;
 
-  /* "cg/cython/renderer.pyx":301
+  /* "cg/cython/renderer.pyx":314
  *         cl[2] += sn * self._specular_pre_shade[2]
  * 
  *     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -5127,7 +5341,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__shade_vertex(struct __pyx_o
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":320
+/* "cg/cython/renderer.pyx":333
  *             self._shade_specular(a, b, c, n, color)
  * 
  *     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -5167,7 +5381,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_pixel(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_draw_pixel", 0);
 
-  /* "cg/cython/renderer.pyx":325
+  /* "cg/cython/renderer.pyx":338
  * 
  *         # Z
  *         if not self.z_buffering or z <= self._z_buffer[y][x]:             # <<<<<<<<<<<<<<
@@ -5180,7 +5394,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_pixel(struct __pyx_obj
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  if (unlikely(!__pyx_v_self->_z_buffer.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 325; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  if (unlikely(!__pyx_v_self->_z_buffer.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 338; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
   __pyx_t_3 = __pyx_v_self->_z_buffer;
   __PYX_INC_MEMVIEW(&__pyx_t_3, 1);
   __pyx_t_5 = -1;
@@ -5195,7 +5409,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_pixel(struct __pyx_obj
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 325; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 338; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_4.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -5213,7 +5427,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cg/cython/renderer.pyx":327
+    /* "cg/cython/renderer.pyx":340
  *         if not self.z_buffering or z <= self._z_buffer[y][x]:
  *             #
  *             if 1.0 < cl[0]:             # <<<<<<<<<<<<<<
@@ -5225,7 +5439,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     __pyx_t_1 = ((1.0 < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_6 * __pyx_v_cl.strides[0]) )))) != 0);
     if (__pyx_t_1) {
 
-      /* "cg/cython/renderer.pyx":328
+      /* "cg/cython/renderer.pyx":341
  *             #
  *             if 1.0 < cl[0]:
  *                 cl[0] = 1.0             # <<<<<<<<<<<<<<
@@ -5239,7 +5453,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     }
     __pyx_L6:;
 
-    /* "cg/cython/renderer.pyx":329
+    /* "cg/cython/renderer.pyx":342
  *             if 1.0 < cl[0]:
  *                 cl[0] = 1.0
  *             if 1.0 < cl[1]:             # <<<<<<<<<<<<<<
@@ -5251,7 +5465,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     __pyx_t_1 = ((1.0 < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_8 * __pyx_v_cl.strides[0]) )))) != 0);
     if (__pyx_t_1) {
 
-      /* "cg/cython/renderer.pyx":330
+      /* "cg/cython/renderer.pyx":343
  *                 cl[0] = 1.0
  *             if 1.0 < cl[1]:
  *                 cl[1] = 1.0             # <<<<<<<<<<<<<<
@@ -5265,7 +5479,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     }
     __pyx_L7:;
 
-    /* "cg/cython/renderer.pyx":331
+    /* "cg/cython/renderer.pyx":344
  *             if 1.0 < cl[1]:
  *                 cl[1] = 1.0
  *             if 1.0 < cl[2]:             # <<<<<<<<<<<<<<
@@ -5277,7 +5491,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     __pyx_t_1 = ((1.0 < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_10 * __pyx_v_cl.strides[0]) )))) != 0);
     if (__pyx_t_1) {
 
-      /* "cg/cython/renderer.pyx":332
+      /* "cg/cython/renderer.pyx":345
  *                 cl[1] = 1.0
  *             if 1.0 < cl[2]:
  *                 cl[2] = 1.0             # <<<<<<<<<<<<<<
@@ -5291,7 +5505,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
     }
     __pyx_L8:;
 
-    /* "cg/cython/renderer.pyx":338
+    /* "cg/cython/renderer.pyx":351
  *             # NOTE:  X
  *             # data_x = 3 * (self.half_width + x) #
  *             data_x = 3 * (self.half_width - x - 1)             # <<<<<<<<<<<<<<
@@ -5300,7 +5514,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
  */
     __pyx_v_data_x = (3 * ((__pyx_v_self->half_width - __pyx_v_x) - 1));
 
-    /* "cg/cython/renderer.pyx":339
+    /* "cg/cython/renderer.pyx":352
  *             # data_x = 3 * (self.half_width + x) #
  *             data_x = 3 * (self.half_width - x - 1)
  *             data_y = self.half_height - y             # <<<<<<<<<<<<<<
@@ -5309,7 +5523,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
  */
     __pyx_v_data_y = (__pyx_v_self->half_height - __pyx_v_y);
 
-    /* "cg/cython/renderer.pyx":340
+    /* "cg/cython/renderer.pyx":353
  *             data_x = 3 * (self.half_width - x - 1)
  *             data_y = self.half_height - y
  *             self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)             # <<<<<<<<<<<<<<
@@ -5318,7 +5532,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
  */
     __pyx_t_12 = 0;
     if (__pyx_t_12 < 0) __pyx_t_12 += __pyx_v_cl.shape[0];
-    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 340; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
     __pyx_t_13 = __pyx_v_self->_data;
     __PYX_INC_MEMVIEW(&__pyx_t_13, 1);
     __pyx_t_15 = -1;
@@ -5333,7 +5547,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 340; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_14.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -5348,7 +5562,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
     *((__pyx_t_2cg_6cython_8renderer_UINT8_t *) ( /* dim=0 */ (__pyx_t_14.data + __pyx_t_16 * __pyx_t_14.strides[0]) )) = ((__pyx_t_2cg_6cython_8renderer_UINT8_t)((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_12 * __pyx_v_cl.strides[0]) ))) * __pyx_v_self->_depth));
     __PYX_XDEC_MEMVIEW(&__pyx_t_14, 1);
 
-    /* "cg/cython/renderer.pyx":341
+    /* "cg/cython/renderer.pyx":354
  *             data_y = self.half_height - y
  *             self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
  *             self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)             # <<<<<<<<<<<<<<
@@ -5357,7 +5571,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
  */
     __pyx_t_17 = 1;
     if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_v_cl.shape[0];
-    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 341; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
     __pyx_t_13 = __pyx_v_self->_data;
     __PYX_INC_MEMVIEW(&__pyx_t_13, 1);
     __pyx_t_15 = -1;
@@ -5372,7 +5586,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 341; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_18.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -5387,7 +5601,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
     *((__pyx_t_2cg_6cython_8renderer_UINT8_t *) ( /* dim=0 */ (__pyx_t_18.data + __pyx_t_19 * __pyx_t_18.strides[0]) )) = ((__pyx_t_2cg_6cython_8renderer_UINT8_t)((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_17 * __pyx_v_cl.strides[0]) ))) * __pyx_v_self->_depth));
     __PYX_XDEC_MEMVIEW(&__pyx_t_18, 1);
 
-    /* "cg/cython/renderer.pyx":342
+    /* "cg/cython/renderer.pyx":355
  *             self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
  *             self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
  *             self._data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)             # <<<<<<<<<<<<<<
@@ -5396,7 +5610,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
  */
     __pyx_t_20 = 2;
     if (__pyx_t_20 < 0) __pyx_t_20 += __pyx_v_cl.shape[0];
-    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 342; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+    if (unlikely(!__pyx_v_self->_data.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 355; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
     __pyx_t_13 = __pyx_v_self->_data;
     __PYX_INC_MEMVIEW(&__pyx_t_13, 1);
     __pyx_t_15 = -1;
@@ -5411,7 +5625,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 342; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 355; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_21.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -5426,14 +5640,14 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
     *((__pyx_t_2cg_6cython_8renderer_UINT8_t *) ( /* dim=0 */ (__pyx_t_21.data + __pyx_t_22 * __pyx_t_21.strides[0]) )) = ((__pyx_t_2cg_6cython_8renderer_UINT8_t)((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cl.data + __pyx_t_20 * __pyx_v_cl.strides[0]) ))) * __pyx_v_self->_depth));
     __PYX_XDEC_MEMVIEW(&__pyx_t_21, 1);
 
-    /* "cg/cython/renderer.pyx":343
+    /* "cg/cython/renderer.pyx":356
  *             self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
  *             self._data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)
  *             self._z_buffer[y][x] = z             # <<<<<<<<<<<<<<
  * 
  *     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
  */
-    if (unlikely(!__pyx_v_self->_z_buffer.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 343; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+    if (unlikely(!__pyx_v_self->_z_buffer.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 356; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
     __pyx_t_3 = __pyx_v_self->_z_buffer;
     __PYX_INC_MEMVIEW(&__pyx_t_3, 1);
     __pyx_t_15 = -1;
@@ -5448,7 +5662,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 343; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 356; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_23.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -5466,7 +5680,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
   }
   __pyx_L3:;
 
-  /* "cg/cython/renderer.pyx":320
+  /* "cg/cython/renderer.pyx":333
  *             self._shade_specular(a, b, c, n, color)
  * 
  *     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):             # <<<<<<<<<<<<<<
@@ -5489,7 +5703,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_t_3, 1);
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":345
+/* "cg/cython/renderer.pyx":358
  *             self._z_buffer[y][x] = z
  * 
  *     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -5585,7 +5799,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   __PYX_INC_MEMVIEW(&__pyx_v_b, 1);
   __PYX_INC_MEMVIEW(&__pyx_v_c, 1);
 
-  /* "cg/cython/renderer.pyx":354
+  /* "cg/cython/renderer.pyx":367
  * 
  *         # 3
  *         self._convert_point(a)             # <<<<<<<<<<<<<<
@@ -5594,7 +5808,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_a);
 
-  /* "cg/cython/renderer.pyx":355
+  /* "cg/cython/renderer.pyx":368
  *         # 3
  *         self._convert_point(a)
  *         self._convert_point(b)             # <<<<<<<<<<<<<<
@@ -5603,7 +5817,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_b);
 
-  /* "cg/cython/renderer.pyx":356
+  /* "cg/cython/renderer.pyx":369
  *         self._convert_point(a)
  *         self._convert_point(b)
  *         self._convert_point(c)             # <<<<<<<<<<<<<<
@@ -5612,7 +5826,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_c);
 
-  /* "cg/cython/renderer.pyx":359
+  /* "cg/cython/renderer.pyx":372
  * 
  *         # 3 y
  *         if a[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -5626,7 +5840,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_2 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":360
+    /* "cg/cython/renderer.pyx":373
  *         # 3 y
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:             # <<<<<<<<<<<<<<
@@ -5640,7 +5854,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_4 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_5 * __pyx_v_a.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":361
+      /* "cg/cython/renderer.pyx":374
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -5666,7 +5880,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   }
   /*else*/ {
 
-    /* "cg/cython/renderer.pyx":363
+    /* "cg/cython/renderer.pyx":376
  *                 a, c = c, a
  *         else:
  *             if b[1] < c[1]:             # <<<<<<<<<<<<<<
@@ -5680,7 +5894,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_8 * __pyx_v_b.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_9 * __pyx_v_c.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":364
+      /* "cg/cython/renderer.pyx":377
  *         else:
  *             if b[1] < c[1]:
  *                 a, b = b, a             # <<<<<<<<<<<<<<
@@ -5703,7 +5917,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":366
+      /* "cg/cython/renderer.pyx":379
  *                 a, b = b, a
  *             else:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -5727,7 +5941,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   }
   __pyx_L3:;
 
-  /* "cg/cython/renderer.pyx":367
+  /* "cg/cython/renderer.pyx":380
  *             else:
  *                 a, c = c, a
  *         if c[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -5741,7 +5955,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_11 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_12 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":368
+    /* "cg/cython/renderer.pyx":381
  *                 a, c = c, a
  *         if c[1] < b[1]:
  *             b, c = c, b             # <<<<<<<<<<<<<<
@@ -5764,7 +5978,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   }
   __pyx_L6:;
 
-  /* "cg/cython/renderer.pyx":371
+  /* "cg/cython/renderer.pyx":384
  * 
  *         # 3 y
  *         if a[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -5778,7 +5992,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_13 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_14 * __pyx_v_c.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":372
+    /* "cg/cython/renderer.pyx":385
  *         # 3 y
  *         if a[1] == c[1]:
  *             return             # <<<<<<<<<<<<<<
@@ -5788,7 +6002,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     goto __pyx_L0;
   }
 
-  /* "cg/cython/renderer.pyx":375
+  /* "cg/cython/renderer.pyx":388
  * 
  *         # 1
  *         self._shade_vertex(a, b, c, n, color)             # <<<<<<<<<<<<<<
@@ -5797,21 +6011,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
   __pyx_t_17 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_16 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_17 || !__pyx_t_16 || !PyBytes_AsString(__pyx_t_17))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 375; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_17 || !__pyx_t_16 || !PyBytes_AsString(__pyx_t_17))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 388; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_GOTREF(__pyx_t_16);
   __pyx_t_15 = __pyx_array_new(__pyx_t_16, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_17), (char *) "fortran", (char *) __pyx_v_color);
-  if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 375; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 388; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_t_18 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_15));
-  if (unlikely(!__pyx_t_18.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 375; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_18.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 388; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_v_n, __pyx_t_18);
   __PYX_XDEC_MEMVIEW(&__pyx_t_18, 1);
 
-  /* "cg/cython/renderer.pyx":378
+  /* "cg/cython/renderer.pyx":391
  * 
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])             # <<<<<<<<<<<<<<
@@ -5828,7 +6042,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   if (__pyx_t_22 < 0) __pyx_t_22 += __pyx_v_a.shape[0];
   __pyx_v_r = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_19 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_20 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_21 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_22 * __pyx_v_a.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":379
+  /* "cg/cython/renderer.pyx":392
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]             # <<<<<<<<<<<<<<
@@ -5841,7 +6055,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   if (__pyx_t_24 < 0) __pyx_t_24 += __pyx_v_c.shape[0];
   (__pyx_v_d[0]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_23 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_24 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":380
+  /* "cg/cython/renderer.pyx":393
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]             # <<<<<<<<<<<<<<
@@ -5854,7 +6068,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_c.shape[0];
   (__pyx_v_d[1]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_25 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_26 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":381
+  /* "cg/cython/renderer.pyx":394
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])             # <<<<<<<<<<<<<<
@@ -5871,7 +6085,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   if (__pyx_t_30 < 0) __pyx_t_30 += __pyx_v_c.shape[0];
   (__pyx_v_d[2]) = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_27 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_28 * __pyx_v_c.strides[0]) )))) / ((__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_29 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_30 * __pyx_v_c.strides[0]) ))))));
 
-  /* "cg/cython/renderer.pyx":384
+  /* "cg/cython/renderer.pyx":397
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):             # <<<<<<<<<<<<<<
@@ -5882,7 +6096,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   if (__pyx_t_31 < 0) __pyx_t_31 += __pyx_v_c.shape[0];
   __pyx_t_32 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_31 * __pyx_v_c.strides[0]) ))))), __pyx_v_self->half_height) + 1);
 
-  /* "cg/cython/renderer.pyx":383
+  /* "cg/cython/renderer.pyx":396
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),             # <<<<<<<<<<<<<<
@@ -5894,7 +6108,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   for (__pyx_t_34 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_33 * __pyx_v_a.strides[0]) ))))), (1 - __pyx_v_self->half_height)); __pyx_t_34 < __pyx_t_32; __pyx_t_34+=1) {
     __pyx_v_y = __pyx_t_34;
 
-    /* "cg/cython/renderer.pyx":386
+    /* "cg/cython/renderer.pyx":399
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):
  *             # x :
  *             if y <= b[1]:             # <<<<<<<<<<<<<<
@@ -5906,7 +6120,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_t_3 = ((__pyx_v_y <= (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_35 * __pyx_v_b.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":388
+      /* "cg/cython/renderer.pyx":401
  *             if y <= b[1]:
  *                 # a -> bd
  *                 if a[1] == b[1]:             # <<<<<<<<<<<<<<
@@ -5920,7 +6134,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_36 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_37 * __pyx_v_b.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":389
+        /* "cg/cython/renderer.pyx":402
  *                 # a -> bd
  *                 if a[1] == b[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -5930,7 +6144,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":390
+      /* "cg/cython/renderer.pyx":403
  *                 if a[1] == b[1]:
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])             # <<<<<<<<<<<<<<
@@ -5945,7 +6159,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_40 < 0) __pyx_t_40 += __pyx_v_a.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_38 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_39 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_40 * __pyx_v_a.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":391
+      /* "cg/cython/renderer.pyx":404
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -5958,7 +6172,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_42 < 0) __pyx_t_42 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_41 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_42 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":392
+      /* "cg/cython/renderer.pyx":405
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -5969,7 +6183,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_43 < 0) __pyx_t_43 += __pyx_v_a.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_43 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":393
+      /* "cg/cython/renderer.pyx":406
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -5986,7 +6200,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_47 < 0) __pyx_t_47 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_44 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_45 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_46 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_47 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":394
+      /* "cg/cython/renderer.pyx":407
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
  *                 qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -6002,7 +6216,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":397
+      /* "cg/cython/renderer.pyx":410
  *             else:
  *                 # bd -> c
  *                 if b[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -6016,7 +6230,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_50 * __pyx_v_b.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_51 * __pyx_v_c.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":398
+        /* "cg/cython/renderer.pyx":411
  *                 # bd -> c
  *                 if b[1] == c[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -6026,7 +6240,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":399
+      /* "cg/cython/renderer.pyx":412
  *                 if b[1] == c[1]:
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])             # <<<<<<<<<<<<<<
@@ -6041,7 +6255,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_54 < 0) __pyx_t_54 += __pyx_v_c.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_52 * __pyx_v_c.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_53 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_54 * __pyx_v_c.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":400
+      /* "cg/cython/renderer.pyx":413
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -6054,7 +6268,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_56 < 0) __pyx_t_56 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_55 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_56 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":401
+      /* "cg/cython/renderer.pyx":414
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -6065,7 +6279,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_57 < 0) __pyx_t_57 += __pyx_v_c.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_57 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":402
+      /* "cg/cython/renderer.pyx":415
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -6082,7 +6296,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       if (__pyx_t_61 < 0) __pyx_t_61 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_58 * __pyx_v_c.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_59 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_60 * __pyx_v_c.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_61 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":403
+      /* "cg/cython/renderer.pyx":416
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -6097,7 +6311,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     }
     __pyx_L10:;
 
-    /* "cg/cython/renderer.pyx":405
+    /* "cg/cython/renderer.pyx":418
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
  *             # x
  *             if px == qx:             # <<<<<<<<<<<<<<
@@ -6107,7 +6321,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_t_3 = ((__pyx_v_px == __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":407
+      /* "cg/cython/renderer.pyx":420
  *             if px == qx:
  *                 # x
  *                 self._draw_pixel(<int>px, y, pz, color)             # <<<<<<<<<<<<<<
@@ -6116,21 +6330,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
       __pyx_t_16 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_17 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_16 || !__pyx_t_17 || !PyBytes_AsString(__pyx_t_16))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 407; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_16 || !__pyx_t_17 || !PyBytes_AsString(__pyx_t_16))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 420; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_GOTREF(__pyx_t_17);
       __pyx_t_15 = __pyx_array_new(__pyx_t_17, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_16), (char *) "fortran", (char *) __pyx_v_color);
-      if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 407; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 420; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_t_64 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_15));
-      if (unlikely(!__pyx_t_64.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 407; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_64.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 420; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
       ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, ((int)__pyx_v_px), __pyx_v_y, __pyx_v_pz, __pyx_t_64);
       __PYX_XDEC_MEMVIEW(&__pyx_t_64, 1);
 
-      /* "cg/cython/renderer.pyx":408
+      /* "cg/cython/renderer.pyx":421
  *                 # x
  *                 self._draw_pixel(<int>px, y, pz, color)
  *                 continue             # <<<<<<<<<<<<<<
@@ -6140,7 +6354,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
       goto __pyx_L8_continue;
     }
 
-    /* "cg/cython/renderer.pyx":409
+    /* "cg/cython/renderer.pyx":422
  *                 self._draw_pixel(<int>px, y, pz, color)
  *                 continue
  *             elif px > qx:             # <<<<<<<<<<<<<<
@@ -6150,7 +6364,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_t_3 = ((__pyx_v_px > __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":411
+      /* "cg/cython/renderer.pyx":424
  *             elif px > qx:
  *                 # x
  *                 px, qx = qx, px             # <<<<<<<<<<<<<<
@@ -6165,7 +6379,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     }
     __pyx_L13:;
 
-    /* "cg/cython/renderer.pyx":413
+    /* "cg/cython/renderer.pyx":426
  *                 px, qx = qx, px
  *             for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                            int_min(<int>floor(qx), self.half_width) + 1):             # <<<<<<<<<<<<<<
@@ -6174,7 +6388,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
     __pyx_t_67 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor(__pyx_v_qx)), __pyx_v_self->half_width) + 1);
 
-    /* "cg/cython/renderer.pyx":412
+    /* "cg/cython/renderer.pyx":425
  *                 # x
  *                 px, qx = qx, px
  *             for x in range(int_max(<int>ceil(px), 1 - self.half_width),             # <<<<<<<<<<<<<<
@@ -6184,7 +6398,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     for (__pyx_t_68 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil(__pyx_v_px)), (1 - __pyx_v_self->half_width)); __pyx_t_68 < __pyx_t_67; __pyx_t_68+=1) {
       __pyx_v_x = __pyx_t_68;
 
-      /* "cg/cython/renderer.pyx":414
+      /* "cg/cython/renderer.pyx":427
  *             for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                            int_min(<int>floor(qx), self.half_width) + 1):
  *                 r = (x - px) / (qx - px)             # <<<<<<<<<<<<<<
@@ -6193,7 +6407,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
       __pyx_v_r = ((__pyx_v_x - __pyx_v_px) / (__pyx_v_qx - __pyx_v_px));
 
-      /* "cg/cython/renderer.pyx":415
+      /* "cg/cython/renderer.pyx":428
  *                            int_min(<int>floor(qx), self.half_width) + 1):
  *                 r = (x - px) / (qx - px)
  *                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)             # <<<<<<<<<<<<<<
@@ -6202,16 +6416,16 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
  */
       __pyx_t_17 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_16 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_17 || !__pyx_t_16 || !PyBytes_AsString(__pyx_t_17))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_17 || !__pyx_t_16 || !PyBytes_AsString(__pyx_t_17))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 428; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_GOTREF(__pyx_t_16);
       __pyx_t_15 = __pyx_array_new(__pyx_t_16, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_17), (char *) "fortran", (char *) __pyx_v_color);
-      if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 428; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __pyx_t_64 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_15));
-      if (unlikely(!__pyx_t_64.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_64.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 428; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
       ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, __pyx_v_x, __pyx_v_y, ((__pyx_v_pz * __pyx_v_qz) / ((__pyx_v_r * __pyx_v_qz) + ((1.0 - __pyx_v_r) * __pyx_v_pz))), __pyx_t_64);
       __PYX_XDEC_MEMVIEW(&__pyx_t_64, 1);
@@ -6219,7 +6433,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
     __pyx_L8_continue:;
   }
 
-  /* "cg/cython/renderer.pyx":345
+  /* "cg/cython/renderer.pyx":358
  *             self._z_buffer[y][x] = z
  * 
  *     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -6246,7 +6460,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat(struct __
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":417
+/* "cg/cython/renderer.pyx":430
  *                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)
  * 
  *     cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -6360,7 +6574,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   __PYX_INC_MEMVIEW(&__pyx_v_bn, 1);
   __PYX_INC_MEMVIEW(&__pyx_v_cn, 1);
 
-  /* "cg/cython/renderer.pyx":427
+  /* "cg/cython/renderer.pyx":440
  * 
  *         # 3
  *         self._convert_point(a)             # <<<<<<<<<<<<<<
@@ -6369,7 +6583,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_a);
 
-  /* "cg/cython/renderer.pyx":428
+  /* "cg/cython/renderer.pyx":441
  *         # 3
  *         self._convert_point(a)
  *         self._convert_point(b)             # <<<<<<<<<<<<<<
@@ -6378,7 +6592,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_b);
 
-  /* "cg/cython/renderer.pyx":429
+  /* "cg/cython/renderer.pyx":442
  *         self._convert_point(a)
  *         self._convert_point(b)
  *         self._convert_point(c)             # <<<<<<<<<<<<<<
@@ -6387,7 +6601,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_c);
 
-  /* "cg/cython/renderer.pyx":432
+  /* "cg/cython/renderer.pyx":445
  * 
  *         # 3 y
  *         if a[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -6401,7 +6615,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_2 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":433
+    /* "cg/cython/renderer.pyx":446
  *         # 3 y
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:             # <<<<<<<<<<<<<<
@@ -6415,7 +6629,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_4 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_5 * __pyx_v_a.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":434
+      /* "cg/cython/renderer.pyx":447
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -6435,7 +6649,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":435
+      /* "cg/cython/renderer.pyx":448
  *             if c[1] < a[1]:
  *                 a, c = c, a
  *                 an, cn = cn, an             # <<<<<<<<<<<<<<
@@ -6461,7 +6675,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   }
   /*else*/ {
 
-    /* "cg/cython/renderer.pyx":437
+    /* "cg/cython/renderer.pyx":450
  *                 an, cn = cn, an
  *         else:
  *             if b[1] < c[1]:             # <<<<<<<<<<<<<<
@@ -6475,7 +6689,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_10 * __pyx_v_b.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_11 * __pyx_v_c.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":438
+      /* "cg/cython/renderer.pyx":451
  *         else:
  *             if b[1] < c[1]:
  *                 a, b = b, a             # <<<<<<<<<<<<<<
@@ -6495,7 +6709,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":439
+      /* "cg/cython/renderer.pyx":452
  *             if b[1] < c[1]:
  *                 a, b = b, a
  *                 an, bn = bn, an             # <<<<<<<<<<<<<<
@@ -6518,7 +6732,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":441
+      /* "cg/cython/renderer.pyx":454
  *                 an, bn = bn, an
  *             else:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -6538,7 +6752,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":442
+      /* "cg/cython/renderer.pyx":455
  *             else:
  *                 a, c = c, a
  *                 an, cn = cn, an             # <<<<<<<<<<<<<<
@@ -6562,7 +6776,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   }
   __pyx_L3:;
 
-  /* "cg/cython/renderer.pyx":443
+  /* "cg/cython/renderer.pyx":456
  *                 a, c = c, a
  *                 an, cn = cn, an
  *         if c[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -6576,7 +6790,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_14 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_15 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":444
+    /* "cg/cython/renderer.pyx":457
  *                 an, cn = cn, an
  *         if c[1] < b[1]:
  *             b, c = c, b             # <<<<<<<<<<<<<<
@@ -6596,7 +6810,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_12.memview = NULL;
     __pyx_t_12.data = NULL;
 
-    /* "cg/cython/renderer.pyx":445
+    /* "cg/cython/renderer.pyx":458
  *         if c[1] < b[1]:
  *             b, c = c, b
  *             bn, cn = cn, bn             # <<<<<<<<<<<<<<
@@ -6619,7 +6833,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   }
   __pyx_L6:;
 
-  /* "cg/cython/renderer.pyx":448
+  /* "cg/cython/renderer.pyx":461
  * 
  *         # 3 y
  *         if a[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -6633,7 +6847,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_16 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_17 * __pyx_v_c.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":449
+    /* "cg/cython/renderer.pyx":462
  *         # 3 y
  *         if a[1] == c[1]:
  *             return             # <<<<<<<<<<<<<<
@@ -6643,7 +6857,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     goto __pyx_L0;
   }
 
-  /* "cg/cython/renderer.pyx":452
+  /* "cg/cython/renderer.pyx":465
  * 
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])             # <<<<<<<<<<<<<<
@@ -6660,7 +6874,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_21 < 0) __pyx_t_21 += __pyx_v_a.shape[0];
   __pyx_v_r = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_18 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_19 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_20 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_21 * __pyx_v_a.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":453
+  /* "cg/cython/renderer.pyx":466
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]             # <<<<<<<<<<<<<<
@@ -6673,7 +6887,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_23 < 0) __pyx_t_23 += __pyx_v_c.shape[0];
   (__pyx_v_d[0]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_22 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_23 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":454
+  /* "cg/cython/renderer.pyx":467
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]             # <<<<<<<<<<<<<<
@@ -6686,7 +6900,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_c.shape[0];
   (__pyx_v_d[1]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_24 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_25 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":455
+  /* "cg/cython/renderer.pyx":468
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])             # <<<<<<<<<<<<<<
@@ -6703,7 +6917,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_29 < 0) __pyx_t_29 += __pyx_v_c.shape[0];
   (__pyx_v_d[2]) = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_26 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_27 * __pyx_v_c.strides[0]) )))) / ((__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_28 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_29 * __pyx_v_c.strides[0]) ))))));
 
-  /* "cg/cython/renderer.pyx":456
+  /* "cg/cython/renderer.pyx":469
  *         d[1] = (1 - r) * a[1] + r * c[1]
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
  *         dn[0] = (1 - r) * an[0] + r * cn[0]             # <<<<<<<<<<<<<<
@@ -6716,7 +6930,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_31 < 0) __pyx_t_31 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[0]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_30 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_31 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":457
+  /* "cg/cython/renderer.pyx":470
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
  *         dn[0] = (1 - r) * an[0] + r * cn[0]
  *         dn[1] = (1 - r) * an[1] + r * cn[1]             # <<<<<<<<<<<<<<
@@ -6729,7 +6943,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_33 < 0) __pyx_t_33 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[1]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_32 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_33 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":458
+  /* "cg/cython/renderer.pyx":471
  *         dn[0] = (1 - r) * an[0] + r * cn[0]
  *         dn[1] = (1 - r) * an[1] + r * cn[1]
  *         dn[2] = (1 - r) * an[2] + r * cn[2]             # <<<<<<<<<<<<<<
@@ -6742,7 +6956,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_35 < 0) __pyx_t_35 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[2]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_34 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_35 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":461
+  /* "cg/cython/renderer.pyx":474
  * 
  *         #
  *         self._shade_vertex(a, b, c, an, ac)             # <<<<<<<<<<<<<<
@@ -6751,21 +6965,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   __pyx_t_38 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_37 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 461; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 474; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_38);
   __Pyx_GOTREF(__pyx_t_37);
   __pyx_t_36 = __pyx_array_new(__pyx_t_37, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_38), (char *) "fortran", (char *) __pyx_v_ac);
-  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 461; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 474; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_36);
   __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
   __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
   __pyx_t_39 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 461; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 474; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_v_an, __pyx_t_39);
   __PYX_XDEC_MEMVIEW(&__pyx_t_39, 1);
 
-  /* "cg/cython/renderer.pyx":462
+  /* "cg/cython/renderer.pyx":475
  *         #
  *         self._shade_vertex(a, b, c, an, ac)
  *         self._shade_vertex(a, b, c, bn, bc)             # <<<<<<<<<<<<<<
@@ -6774,21 +6988,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   __pyx_t_37 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_38 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 462; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 475; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_37);
   __Pyx_GOTREF(__pyx_t_38);
   __pyx_t_36 = __pyx_array_new(__pyx_t_38, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_37), (char *) "fortran", (char *) __pyx_v_bc);
-  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 462; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 475; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_36);
   __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
   __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
   __pyx_t_39 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 462; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 475; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_v_bn, __pyx_t_39);
   __PYX_XDEC_MEMVIEW(&__pyx_t_39, 1);
 
-  /* "cg/cython/renderer.pyx":463
+  /* "cg/cython/renderer.pyx":476
  *         self._shade_vertex(a, b, c, an, ac)
  *         self._shade_vertex(a, b, c, bn, bc)
  *         self._shade_vertex(a, b, c, cn, cc)             # <<<<<<<<<<<<<<
@@ -6797,21 +7011,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   __pyx_t_38 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_37 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 463; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 476; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_38);
   __Pyx_GOTREF(__pyx_t_37);
   __pyx_t_36 = __pyx_array_new(__pyx_t_37, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_38), (char *) "fortran", (char *) __pyx_v_cc);
-  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 463; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 476; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_36);
   __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
   __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
   __pyx_t_39 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 463; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 476; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_v_cn, __pyx_t_39);
   __PYX_XDEC_MEMVIEW(&__pyx_t_39, 1);
 
-  /* "cg/cython/renderer.pyx":464
+  /* "cg/cython/renderer.pyx":477
  *         self._shade_vertex(a, b, c, bn, bc)
  *         self._shade_vertex(a, b, c, cn, cc)
  *         self._shade_vertex(a, b, c, dn, dc)             # <<<<<<<<<<<<<<
@@ -6820,35 +7034,35 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
   __pyx_t_37 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_38 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_37);
   __Pyx_GOTREF(__pyx_t_38);
   __pyx_t_36 = __pyx_array_new(__pyx_t_38, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_37), (char *) "fortran", (char *) __pyx_v_dn);
-  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_36);
   __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
   __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
   __pyx_t_40 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-  if (unlikely(!__pyx_t_40.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_40.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
   __pyx_t_38 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
   __pyx_t_37 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_38);
   __Pyx_GOTREF(__pyx_t_37);
   __pyx_t_36 = __pyx_array_new(__pyx_t_37, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_38), (char *) "fortran", (char *) __pyx_v_dc);
-  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_36);
   __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
   __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
   __pyx_t_39 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_39.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 477; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_t_40, __pyx_t_39);
   __PYX_XDEC_MEMVIEW(&__pyx_t_40, 1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_39, 1);
 
-  /* "cg/cython/renderer.pyx":467
+  /* "cg/cython/renderer.pyx":480
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):             # <<<<<<<<<<<<<<
@@ -6859,7 +7073,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   if (__pyx_t_41 < 0) __pyx_t_41 += __pyx_v_c.shape[0];
   __pyx_t_42 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_41 * __pyx_v_c.strides[0]) ))))), __pyx_v_self->half_height) + 1);
 
-  /* "cg/cython/renderer.pyx":466
+  /* "cg/cython/renderer.pyx":479
  *         self._shade_vertex(a, b, c, dn, dc)
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),             # <<<<<<<<<<<<<<
@@ -6871,7 +7085,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   for (__pyx_t_44 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_43 * __pyx_v_a.strides[0]) ))))), (1 - __pyx_v_self->half_height)); __pyx_t_44 < __pyx_t_42; __pyx_t_44+=1) {
     __pyx_v_y = __pyx_t_44;
 
-    /* "cg/cython/renderer.pyx":469
+    /* "cg/cython/renderer.pyx":482
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):
  *             # x :
  *             if y <= b[1]:             # <<<<<<<<<<<<<<
@@ -6883,7 +7097,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_3 = ((__pyx_v_y <= (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_45 * __pyx_v_b.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":471
+      /* "cg/cython/renderer.pyx":484
  *             if y <= b[1]:
  *                 # a -> bd
  *                 if a[1] == b[1]:             # <<<<<<<<<<<<<<
@@ -6897,7 +7111,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_46 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_47 * __pyx_v_b.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":472
+        /* "cg/cython/renderer.pyx":485
  *                 # a -> bd
  *                 if a[1] == b[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -6907,7 +7121,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":473
+      /* "cg/cython/renderer.pyx":486
  *                 if a[1] == b[1]:
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])             # <<<<<<<<<<<<<<
@@ -6922,7 +7136,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_50 < 0) __pyx_t_50 += __pyx_v_a.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_48 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_49 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_50 * __pyx_v_a.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":474
+      /* "cg/cython/renderer.pyx":487
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -6935,7 +7149,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_52 < 0) __pyx_t_52 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_51 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_52 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":475
+      /* "cg/cython/renderer.pyx":488
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -6946,7 +7160,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_53 < 0) __pyx_t_53 += __pyx_v_a.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_53 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":476
+      /* "cg/cython/renderer.pyx":489
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pc[0] = ((1 - s) * ac[0] + s * bc[0])             # <<<<<<<<<<<<<<
@@ -6955,7 +7169,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[0]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[0])) + (__pyx_v_s * (__pyx_v_bc[0])));
 
-      /* "cg/cython/renderer.pyx":477
+      /* "cg/cython/renderer.pyx":490
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pc[0] = ((1 - s) * ac[0] + s * bc[0])
  *                 pc[1] = ((1 - s) * ac[1] + s * bc[1])             # <<<<<<<<<<<<<<
@@ -6964,7 +7178,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[1]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[1])) + (__pyx_v_s * (__pyx_v_bc[1])));
 
-      /* "cg/cython/renderer.pyx":478
+      /* "cg/cython/renderer.pyx":491
  *                 pc[0] = ((1 - s) * ac[0] + s * bc[0])
  *                 pc[1] = ((1 - s) * ac[1] + s * bc[1])
  *                 pc[2] = ((1 - s) * ac[2] + s * bc[2])             # <<<<<<<<<<<<<<
@@ -6973,7 +7187,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[2]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[2])) + (__pyx_v_s * (__pyx_v_bc[2])));
 
-      /* "cg/cython/renderer.pyx":479
+      /* "cg/cython/renderer.pyx":492
  *                 pc[1] = ((1 - s) * ac[1] + s * bc[1])
  *                 pc[2] = ((1 - s) * ac[2] + s * bc[2])
  *                 qc[0] = ((1 - s) * ac[0] + s * dc[0])             # <<<<<<<<<<<<<<
@@ -6982,7 +7196,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[0]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[0])) + (__pyx_v_s * (__pyx_v_dc[0])));
 
-      /* "cg/cython/renderer.pyx":480
+      /* "cg/cython/renderer.pyx":493
  *                 pc[2] = ((1 - s) * ac[2] + s * bc[2])
  *                 qc[0] = ((1 - s) * ac[0] + s * dc[0])
  *                 qc[1] = ((1 - s) * ac[1] + s * dc[1])             # <<<<<<<<<<<<<<
@@ -6991,7 +7205,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[1]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[1])) + (__pyx_v_s * (__pyx_v_dc[1])));
 
-      /* "cg/cython/renderer.pyx":481
+      /* "cg/cython/renderer.pyx":494
  *                 qc[0] = ((1 - s) * ac[0] + s * dc[0])
  *                 qc[1] = ((1 - s) * ac[1] + s * dc[1])
  *                 qc[2] = ((1 - s) * ac[2] + s * dc[2])             # <<<<<<<<<<<<<<
@@ -7000,7 +7214,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[2]) = (((1.0 - __pyx_v_s) * (__pyx_v_ac[2])) + (__pyx_v_s * (__pyx_v_dc[2])));
 
-      /* "cg/cython/renderer.pyx":482
+      /* "cg/cython/renderer.pyx":495
  *                 qc[1] = ((1 - s) * ac[1] + s * dc[1])
  *                 qc[2] = ((1 - s) * ac[2] + s * dc[2])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -7017,7 +7231,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_57 < 0) __pyx_t_57 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_54 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_55 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_56 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_57 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":483
+      /* "cg/cython/renderer.pyx":496
  *                 qc[2] = ((1 - s) * ac[2] + s * dc[2])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
  *                 qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -7033,7 +7247,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":486
+      /* "cg/cython/renderer.pyx":499
  *             else:
  *                 # bd -> c
  *                 if b[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -7047,7 +7261,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_60 * __pyx_v_b.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_61 * __pyx_v_c.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":487
+        /* "cg/cython/renderer.pyx":500
  *                 # bd -> c
  *                 if b[1] == c[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -7057,7 +7271,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":488
+      /* "cg/cython/renderer.pyx":501
  *                 if b[1] == c[1]:
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])             # <<<<<<<<<<<<<<
@@ -7072,7 +7286,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_64 < 0) __pyx_t_64 += __pyx_v_c.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_62 * __pyx_v_c.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_63 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_64 * __pyx_v_c.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":489
+      /* "cg/cython/renderer.pyx":502
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -7085,7 +7299,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_66 < 0) __pyx_t_66 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_65 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_66 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":490
+      /* "cg/cython/renderer.pyx":503
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -7096,7 +7310,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_67 < 0) __pyx_t_67 += __pyx_v_c.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_67 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":491
+      /* "cg/cython/renderer.pyx":504
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pc[0] = ((1 - s) * cc[0] + s * bc[0])             # <<<<<<<<<<<<<<
@@ -7105,7 +7319,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[0]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[0])) + (__pyx_v_s * (__pyx_v_bc[0])));
 
-      /* "cg/cython/renderer.pyx":492
+      /* "cg/cython/renderer.pyx":505
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pc[0] = ((1 - s) * cc[0] + s * bc[0])
  *                 pc[1] = ((1 - s) * cc[1] + s * bc[1])             # <<<<<<<<<<<<<<
@@ -7114,7 +7328,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[1]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[1])) + (__pyx_v_s * (__pyx_v_bc[1])));
 
-      /* "cg/cython/renderer.pyx":493
+      /* "cg/cython/renderer.pyx":506
  *                 pc[0] = ((1 - s) * cc[0] + s * bc[0])
  *                 pc[1] = ((1 - s) * cc[1] + s * bc[1])
  *                 pc[2] = ((1 - s) * cc[2] + s * bc[2])             # <<<<<<<<<<<<<<
@@ -7123,7 +7337,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_pc[2]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[2])) + (__pyx_v_s * (__pyx_v_bc[2])));
 
-      /* "cg/cython/renderer.pyx":494
+      /* "cg/cython/renderer.pyx":507
  *                 pc[1] = ((1 - s) * cc[1] + s * bc[1])
  *                 pc[2] = ((1 - s) * cc[2] + s * bc[2])
  *                 qc[0] = ((1 - s) * cc[0] + s * dc[0])             # <<<<<<<<<<<<<<
@@ -7132,7 +7346,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[0]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[0])) + (__pyx_v_s * (__pyx_v_dc[0])));
 
-      /* "cg/cython/renderer.pyx":495
+      /* "cg/cython/renderer.pyx":508
  *                 pc[2] = ((1 - s) * cc[2] + s * bc[2])
  *                 qc[0] = ((1 - s) * cc[0] + s * dc[0])
  *                 qc[1] = ((1 - s) * cc[1] + s * dc[1])             # <<<<<<<<<<<<<<
@@ -7141,7 +7355,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[1]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[1])) + (__pyx_v_s * (__pyx_v_dc[1])));
 
-      /* "cg/cython/renderer.pyx":496
+      /* "cg/cython/renderer.pyx":509
  *                 qc[0] = ((1 - s) * cc[0] + s * dc[0])
  *                 qc[1] = ((1 - s) * cc[1] + s * dc[1])
  *                 qc[2] = ((1 - s) * cc[2] + s * dc[2])             # <<<<<<<<<<<<<<
@@ -7150,7 +7364,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       (__pyx_v_qc[2]) = (((1.0 - __pyx_v_s) * (__pyx_v_cc[2])) + (__pyx_v_s * (__pyx_v_dc[2])));
 
-      /* "cg/cython/renderer.pyx":497
+      /* "cg/cython/renderer.pyx":510
  *                 qc[1] = ((1 - s) * cc[1] + s * dc[1])
  *                 qc[2] = ((1 - s) * cc[2] + s * dc[2])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -7167,7 +7381,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       if (__pyx_t_71 < 0) __pyx_t_71 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_68 * __pyx_v_c.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_69 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_70 * __pyx_v_c.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_71 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":498
+      /* "cg/cython/renderer.pyx":511
  *                 qc[2] = ((1 - s) * cc[2] + s * dc[2])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -7182,7 +7396,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     }
     __pyx_L10:;
 
-    /* "cg/cython/renderer.pyx":500
+    /* "cg/cython/renderer.pyx":513
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
  *             # x
  *             if px == qx:             # <<<<<<<<<<<<<<
@@ -7192,7 +7406,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_3 = ((__pyx_v_px == __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":502
+      /* "cg/cython/renderer.pyx":515
  *             if px == qx:
  *                 # x
  *                 self._draw_pixel(<int>px, y, pz, pc)             # <<<<<<<<<<<<<<
@@ -7201,21 +7415,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       __pyx_t_37 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_38 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 502; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 515; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_37);
       __Pyx_GOTREF(__pyx_t_38);
       __pyx_t_36 = __pyx_array_new(__pyx_t_38, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_37), (char *) "fortran", (char *) __pyx_v_pc);
-      if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 502; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 515; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_36);
       __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
       __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
       __pyx_t_74 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-      if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 502; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 515; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
       ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, ((int)__pyx_v_px), __pyx_v_y, __pyx_v_pz, __pyx_t_74);
       __PYX_XDEC_MEMVIEW(&__pyx_t_74, 1);
 
-      /* "cg/cython/renderer.pyx":503
+      /* "cg/cython/renderer.pyx":516
  *                 # x
  *                 self._draw_pixel(<int>px, y, pz, pc)
  *                 continue             # <<<<<<<<<<<<<<
@@ -7225,7 +7439,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       goto __pyx_L8_continue;
     }
 
-    /* "cg/cython/renderer.pyx":504
+    /* "cg/cython/renderer.pyx":517
  *                 self._draw_pixel(<int>px, y, pz, pc)
  *                 continue
  *             elif px < qx:             # <<<<<<<<<<<<<<
@@ -7235,7 +7449,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_t_3 = ((__pyx_v_px < __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":506
+      /* "cg/cython/renderer.pyx":519
  *             elif px < qx:
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                                int_min(<int>floor(qx), self.half_width) + 1):             # <<<<<<<<<<<<<<
@@ -7244,7 +7458,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       __pyx_t_75 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor(__pyx_v_qx)), __pyx_v_self->half_width) + 1);
 
-      /* "cg/cython/renderer.pyx":505
+      /* "cg/cython/renderer.pyx":518
  *                 continue
  *             elif px < qx:
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),             # <<<<<<<<<<<<<<
@@ -7254,7 +7468,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       for (__pyx_t_76 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil(__pyx_v_px)), (1 - __pyx_v_self->half_width)); __pyx_t_76 < __pyx_t_75; __pyx_t_76+=1) {
         __pyx_v_x = __pyx_t_76;
 
-        /* "cg/cython/renderer.pyx":507
+        /* "cg/cython/renderer.pyx":520
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                                int_min(<int>floor(qx), self.half_width) + 1):
  *                     r = (x - px) / (qx - px)             # <<<<<<<<<<<<<<
@@ -7263,7 +7477,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         __pyx_v_r = ((__pyx_v_x - __pyx_v_px) / (__pyx_v_qx - __pyx_v_px));
 
-        /* "cg/cython/renderer.pyx":508
+        /* "cg/cython/renderer.pyx":521
  *                                int_min(<int>floor(qx), self.half_width) + 1):
  *                     r = (x - px) / (qx - px)
  *                     rc[0] = ((1 - r) * pc[0] + r * qc[0])             # <<<<<<<<<<<<<<
@@ -7272,7 +7486,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[0]) = (((1.0 - __pyx_v_r) * (__pyx_v_pc[0])) + (__pyx_v_r * (__pyx_v_qc[0])));
 
-        /* "cg/cython/renderer.pyx":509
+        /* "cg/cython/renderer.pyx":522
  *                     r = (x - px) / (qx - px)
  *                     rc[0] = ((1 - r) * pc[0] + r * qc[0])
  *                     rc[1] = ((1 - r) * pc[1] + r * qc[1])             # <<<<<<<<<<<<<<
@@ -7281,7 +7495,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[1]) = (((1.0 - __pyx_v_r) * (__pyx_v_pc[1])) + (__pyx_v_r * (__pyx_v_qc[1])));
 
-        /* "cg/cython/renderer.pyx":510
+        /* "cg/cython/renderer.pyx":523
  *                     rc[0] = ((1 - r) * pc[0] + r * qc[0])
  *                     rc[1] = ((1 - r) * pc[1] + r * qc[1])
  *                     rc[2] = ((1 - r) * pc[2] + r * qc[2])             # <<<<<<<<<<<<<<
@@ -7290,7 +7504,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[2]) = (((1.0 - __pyx_v_r) * (__pyx_v_pc[2])) + (__pyx_v_r * (__pyx_v_qc[2])));
 
-        /* "cg/cython/renderer.pyx":511
+        /* "cg/cython/renderer.pyx":524
  *                     rc[1] = ((1 - r) * pc[1] + r * qc[1])
  *                     rc[2] = ((1 - r) * pc[2] + r * qc[2])
  *                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)             # <<<<<<<<<<<<<<
@@ -7299,16 +7513,16 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         __pyx_t_38 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_37 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 511; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_38 || !__pyx_t_37 || !PyBytes_AsString(__pyx_t_38))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 524; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_38);
         __Pyx_GOTREF(__pyx_t_37);
         __pyx_t_36 = __pyx_array_new(__pyx_t_37, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_38), (char *) "fortran", (char *) __pyx_v_rc);
-        if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 511; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 524; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_36);
         __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
         __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
         __pyx_t_74 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-        if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 511; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 524; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, __pyx_v_x, __pyx_v_y, ((__pyx_v_pz * __pyx_v_qz) / ((__pyx_v_r * __pyx_v_qz) + ((1.0 - __pyx_v_r) * __pyx_v_pz))), __pyx_t_74);
         __PYX_XDEC_MEMVIEW(&__pyx_t_74, 1);
@@ -7317,7 +7531,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":514
+      /* "cg/cython/renderer.pyx":527
  *             else:
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
  *                                int_min(<int>floor(px), self.half_width) + 1):             # <<<<<<<<<<<<<<
@@ -7326,7 +7540,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
       __pyx_t_75 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor(__pyx_v_px)), __pyx_v_self->half_width) + 1);
 
-      /* "cg/cython/renderer.pyx":513
+      /* "cg/cython/renderer.pyx":526
  *                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
  *             else:
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),             # <<<<<<<<<<<<<<
@@ -7336,7 +7550,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
       for (__pyx_t_76 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil(__pyx_v_qx)), (1 - __pyx_v_self->half_width)); __pyx_t_76 < __pyx_t_75; __pyx_t_76+=1) {
         __pyx_v_x = __pyx_t_76;
 
-        /* "cg/cython/renderer.pyx":515
+        /* "cg/cython/renderer.pyx":528
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
  *                                int_min(<int>floor(px), self.half_width) + 1):
  *                     r = (x - qx) / (px - qx)             # <<<<<<<<<<<<<<
@@ -7345,7 +7559,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         __pyx_v_r = ((__pyx_v_x - __pyx_v_qx) / (__pyx_v_px - __pyx_v_qx));
 
-        /* "cg/cython/renderer.pyx":516
+        /* "cg/cython/renderer.pyx":529
  *                                int_min(<int>floor(px), self.half_width) + 1):
  *                     r = (x - qx) / (px - qx)
  *                     rc[0] = ((1 - r) * qc[0] + r * pc[0])             # <<<<<<<<<<<<<<
@@ -7354,7 +7568,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[0]) = (((1.0 - __pyx_v_r) * (__pyx_v_qc[0])) + (__pyx_v_r * (__pyx_v_pc[0])));
 
-        /* "cg/cython/renderer.pyx":517
+        /* "cg/cython/renderer.pyx":530
  *                     r = (x - qx) / (px - qx)
  *                     rc[0] = ((1 - r) * qc[0] + r * pc[0])
  *                     rc[1] = ((1 - r) * qc[1] + r * pc[1])             # <<<<<<<<<<<<<<
@@ -7363,7 +7577,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[1]) = (((1.0 - __pyx_v_r) * (__pyx_v_qc[1])) + (__pyx_v_r * (__pyx_v_pc[1])));
 
-        /* "cg/cython/renderer.pyx":518
+        /* "cg/cython/renderer.pyx":531
  *                     rc[0] = ((1 - r) * qc[0] + r * pc[0])
  *                     rc[1] = ((1 - r) * qc[1] + r * pc[1])
  *                     rc[2] = ((1 - r) * qc[2] + r * pc[2])             # <<<<<<<<<<<<<<
@@ -7372,7 +7586,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         (__pyx_v_rc[2]) = (((1.0 - __pyx_v_r) * (__pyx_v_qc[2])) + (__pyx_v_r * (__pyx_v_pc[2])));
 
-        /* "cg/cython/renderer.pyx":519
+        /* "cg/cython/renderer.pyx":532
  *                     rc[1] = ((1 - r) * qc[1] + r * pc[1])
  *                     rc[2] = ((1 - r) * qc[2] + r * pc[2])
  *                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)             # <<<<<<<<<<<<<<
@@ -7381,16 +7595,16 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
  */
         __pyx_t_37 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_38 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_37 || !__pyx_t_38 || !PyBytes_AsString(__pyx_t_37))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_37);
         __Pyx_GOTREF(__pyx_t_38);
         __pyx_t_36 = __pyx_array_new(__pyx_t_38, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_37), (char *) "fortran", (char *) __pyx_v_rc);
-        if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_36)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_36);
         __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
         __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
         __pyx_t_74 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_36));
-        if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_74.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_36)); __pyx_t_36 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, __pyx_v_x, __pyx_v_y, ((__pyx_v_pz * __pyx_v_qz) / ((__pyx_v_r * __pyx_v_qz) + ((1.0 - __pyx_v_r) * __pyx_v_pz))), __pyx_t_74);
         __PYX_XDEC_MEMVIEW(&__pyx_t_74, 1);
@@ -7400,7 +7614,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
     __pyx_L8_continue:;
   }
 
-  /* "cg/cython/renderer.pyx":417
+  /* "cg/cython/renderer.pyx":430
  *                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)
  * 
  *     cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -7434,7 +7648,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud(struct
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":521
+/* "cg/cython/renderer.pyx":534
  *                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
  * 
  *     cdef void _draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -7564,7 +7778,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   __PYX_INC_MEMVIEW(&__pyx_v_bn, 1);
   __PYX_INC_MEMVIEW(&__pyx_v_cn, 1);
 
-  /* "cg/cython/renderer.pyx":531
+  /* "cg/cython/renderer.pyx":544
  * 
  *         # 3
  *         self._convert_point(a)             # <<<<<<<<<<<<<<
@@ -7573,7 +7787,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_a);
 
-  /* "cg/cython/renderer.pyx":532
+  /* "cg/cython/renderer.pyx":545
  *         # 3
  *         self._convert_point(a)
  *         self._convert_point(b)             # <<<<<<<<<<<<<<
@@ -7582,7 +7796,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_b);
 
-  /* "cg/cython/renderer.pyx":533
+  /* "cg/cython/renderer.pyx":546
  *         self._convert_point(a)
  *         self._convert_point(b)
  *         self._convert_point(c)             # <<<<<<<<<<<<<<
@@ -7591,7 +7805,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
   ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_convert_point(__pyx_v_self, __pyx_v_c);
 
-  /* "cg/cython/renderer.pyx":536
+  /* "cg/cython/renderer.pyx":549
  * 
  *         # 3 y
  *         if a[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -7605,7 +7819,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_2 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":537
+    /* "cg/cython/renderer.pyx":550
  *         # 3 y
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:             # <<<<<<<<<<<<<<
@@ -7619,7 +7833,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_4 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_5 * __pyx_v_a.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":538
+      /* "cg/cython/renderer.pyx":551
  *         if a[1] < b[1]:
  *             if c[1] < a[1]:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -7639,7 +7853,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":539
+      /* "cg/cython/renderer.pyx":552
  *             if c[1] < a[1]:
  *                 a, c = c, a
  *                 an, cn = cn, an             # <<<<<<<<<<<<<<
@@ -7665,7 +7879,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   }
   /*else*/ {
 
-    /* "cg/cython/renderer.pyx":541
+    /* "cg/cython/renderer.pyx":554
  *                 an, cn = cn, an
  *         else:
  *             if b[1] < c[1]:             # <<<<<<<<<<<<<<
@@ -7679,7 +7893,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_10 * __pyx_v_b.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_11 * __pyx_v_c.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":542
+      /* "cg/cython/renderer.pyx":555
  *         else:
  *             if b[1] < c[1]:
  *                 a, b = b, a             # <<<<<<<<<<<<<<
@@ -7699,7 +7913,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":543
+      /* "cg/cython/renderer.pyx":556
  *             if b[1] < c[1]:
  *                 a, b = b, a
  *                 an, bn = bn, an             # <<<<<<<<<<<<<<
@@ -7722,7 +7936,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":545
+      /* "cg/cython/renderer.pyx":558
  *                 an, bn = bn, an
  *             else:
  *                 a, c = c, a             # <<<<<<<<<<<<<<
@@ -7742,7 +7956,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "cg/cython/renderer.pyx":546
+      /* "cg/cython/renderer.pyx":559
  *             else:
  *                 a, c = c, a
  *                 an, cn = cn, an             # <<<<<<<<<<<<<<
@@ -7766,7 +7980,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   }
   __pyx_L3:;
 
-  /* "cg/cython/renderer.pyx":547
+  /* "cg/cython/renderer.pyx":560
  *                 a, c = c, a
  *                 an, cn = cn, an
  *         if c[1] < b[1]:             # <<<<<<<<<<<<<<
@@ -7780,7 +7994,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_14 * __pyx_v_c.strides[0]) ))) < (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_15 * __pyx_v_b.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":548
+    /* "cg/cython/renderer.pyx":561
  *                 an, cn = cn, an
  *         if c[1] < b[1]:
  *             b, c = c, b             # <<<<<<<<<<<<<<
@@ -7800,7 +8014,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_12.memview = NULL;
     __pyx_t_12.data = NULL;
 
-    /* "cg/cython/renderer.pyx":549
+    /* "cg/cython/renderer.pyx":562
  *         if c[1] < b[1]:
  *             b, c = c, b
  *             bn, cn = cn, bn             # <<<<<<<<<<<<<<
@@ -7823,7 +8037,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   }
   __pyx_L6:;
 
-  /* "cg/cython/renderer.pyx":552
+  /* "cg/cython/renderer.pyx":565
  * 
  *         # 3 y
  *         if a[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -7837,7 +8051,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_16 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_17 * __pyx_v_c.strides[0]) )))) != 0);
   if (__pyx_t_3) {
 
-    /* "cg/cython/renderer.pyx":553
+    /* "cg/cython/renderer.pyx":566
  *         # 3 y
  *         if a[1] == c[1]:
  *             return             # <<<<<<<<<<<<<<
@@ -7847,7 +8061,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     goto __pyx_L0;
   }
 
-  /* "cg/cython/renderer.pyx":556
+  /* "cg/cython/renderer.pyx":569
  * 
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])             # <<<<<<<<<<<<<<
@@ -7864,7 +8078,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_21 < 0) __pyx_t_21 += __pyx_v_a.shape[0];
   __pyx_v_r = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_18 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_19 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_20 * __pyx_v_c.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_21 * __pyx_v_a.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":557
+  /* "cg/cython/renderer.pyx":570
  *         # d
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]             # <<<<<<<<<<<<<<
@@ -7877,7 +8091,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_23 < 0) __pyx_t_23 += __pyx_v_c.shape[0];
   (__pyx_v_d[0]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_22 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_23 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":558
+  /* "cg/cython/renderer.pyx":571
  *         r = (b[1] - a[1]) / (c[1] - a[1])
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]             # <<<<<<<<<<<<<<
@@ -7890,7 +8104,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_c.shape[0];
   (__pyx_v_d[1]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_24 * __pyx_v_a.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_25 * __pyx_v_c.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":559
+  /* "cg/cython/renderer.pyx":572
  *         d[0] = (1 - r) * a[0] + r * c[0]
  *         d[1] = (1 - r) * a[1] + r * c[1]
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])             # <<<<<<<<<<<<<<
@@ -7907,7 +8121,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_29 < 0) __pyx_t_29 += __pyx_v_c.shape[0];
   (__pyx_v_d[2]) = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_26 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_27 * __pyx_v_c.strides[0]) )))) / ((__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_28 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_29 * __pyx_v_c.strides[0]) ))))));
 
-  /* "cg/cython/renderer.pyx":560
+  /* "cg/cython/renderer.pyx":573
  *         d[1] = (1 - r) * a[1] + r * c[1]
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
  *         dn[0] = (1 - r) * an[0] + r * cn[0]             # <<<<<<<<<<<<<<
@@ -7920,7 +8134,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_31 < 0) __pyx_t_31 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[0]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_30 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_31 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":561
+  /* "cg/cython/renderer.pyx":574
  *         d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
  *         dn[0] = (1 - r) * an[0] + r * cn[0]
  *         dn[1] = (1 - r) * an[1] + r * cn[1]             # <<<<<<<<<<<<<<
@@ -7933,7 +8147,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_33 < 0) __pyx_t_33 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[1]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_32 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_33 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":562
+  /* "cg/cython/renderer.pyx":575
  *         dn[0] = (1 - r) * an[0] + r * cn[0]
  *         dn[1] = (1 - r) * an[1] + r * cn[1]
  *         dn[2] = (1 - r) * an[2] + r * cn[2]             # <<<<<<<<<<<<<<
@@ -7946,7 +8160,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_35 < 0) __pyx_t_35 += __pyx_v_cn.shape[0];
   (__pyx_v_dn[2]) = (((1.0 - __pyx_v_r) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_34 * __pyx_v_an.strides[0]) )))) + (__pyx_v_r * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_35 * __pyx_v_cn.strides[0]) )))));
 
-  /* "cg/cython/renderer.pyx":565
+  /* "cg/cython/renderer.pyx":578
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):             # <<<<<<<<<<<<<<
@@ -7957,7 +8171,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   if (__pyx_t_36 < 0) __pyx_t_36 += __pyx_v_c.shape[0];
   __pyx_t_37 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_36 * __pyx_v_c.strides[0]) ))))), __pyx_v_self->half_height) + 1);
 
-  /* "cg/cython/renderer.pyx":564
+  /* "cg/cython/renderer.pyx":577
  *         dn[2] = (1 - r) * an[2] + r * cn[2]
  * 
  *         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),             # <<<<<<<<<<<<<<
@@ -7969,7 +8183,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   for (__pyx_t_39 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_38 * __pyx_v_a.strides[0]) ))))), (1 - __pyx_v_self->half_height)); __pyx_t_39 < __pyx_t_37; __pyx_t_39+=1) {
     __pyx_v_y = __pyx_t_39;
 
-    /* "cg/cython/renderer.pyx":567
+    /* "cg/cython/renderer.pyx":580
  *                        int_min(<int>floor(c[1]), self.half_height) + 1):
  *             # x :
  *             if y <= b[1]:             # <<<<<<<<<<<<<<
@@ -7981,7 +8195,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_3 = ((__pyx_v_y <= (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_40 * __pyx_v_b.strides[0]) )))) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":569
+      /* "cg/cython/renderer.pyx":582
  *             if y <= b[1]:
  *                 # a -> bd
  *                 if a[1] == b[1]:             # <<<<<<<<<<<<<<
@@ -7995,7 +8209,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_41 * __pyx_v_a.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_42 * __pyx_v_b.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":570
+        /* "cg/cython/renderer.pyx":583
  *                 # a -> bd
  *                 if a[1] == b[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -8005,7 +8219,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":571
+      /* "cg/cython/renderer.pyx":584
  *                 if a[1] == b[1]:
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])             # <<<<<<<<<<<<<<
@@ -8020,7 +8234,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_45 < 0) __pyx_t_45 += __pyx_v_a.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_43 * __pyx_v_a.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_44 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_45 * __pyx_v_a.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":572
+      /* "cg/cython/renderer.pyx":585
  *                     continue
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -8033,7 +8247,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_47 < 0) __pyx_t_47 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_46 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_47 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":573
+      /* "cg/cython/renderer.pyx":586
  *                 s = (y - a[1]) / (b[1] - a[1])
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -8044,7 +8258,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_48 < 0) __pyx_t_48 += __pyx_v_a.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_48 * __pyx_v_a.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":574
+      /* "cg/cython/renderer.pyx":587
  *                 px = ((1 - s) * a[0] + s * b[0])
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pn[0] = ((1 - s) * an[0] + s * bn[0])             # <<<<<<<<<<<<<<
@@ -8057,7 +8271,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_50 < 0) __pyx_t_50 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[0]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_49 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_50 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":575
+      /* "cg/cython/renderer.pyx":588
  *                 qx = ((1 - s) * a[0] + s * d[0])
  *                 pn[0] = ((1 - s) * an[0] + s * bn[0])
  *                 pn[1] = ((1 - s) * an[1] + s * bn[1])             # <<<<<<<<<<<<<<
@@ -8070,7 +8284,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_52 < 0) __pyx_t_52 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[1]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_51 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_52 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":576
+      /* "cg/cython/renderer.pyx":589
  *                 pn[0] = ((1 - s) * an[0] + s * bn[0])
  *                 pn[1] = ((1 - s) * an[1] + s * bn[1])
  *                 pn[2] = ((1 - s) * an[2] + s * bn[2])             # <<<<<<<<<<<<<<
@@ -8083,7 +8297,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_54 < 0) __pyx_t_54 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[2]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_53 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_54 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":577
+      /* "cg/cython/renderer.pyx":590
  *                 pn[1] = ((1 - s) * an[1] + s * bn[1])
  *                 pn[2] = ((1 - s) * an[2] + s * bn[2])
  *                 qn[0] = ((1 - s) * an[0] + s * dn[0])             # <<<<<<<<<<<<<<
@@ -8094,7 +8308,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_55 < 0) __pyx_t_55 += __pyx_v_an.shape[0];
       (__pyx_v_qn[0]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_55 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[0])));
 
-      /* "cg/cython/renderer.pyx":578
+      /* "cg/cython/renderer.pyx":591
  *                 pn[2] = ((1 - s) * an[2] + s * bn[2])
  *                 qn[0] = ((1 - s) * an[0] + s * dn[0])
  *                 qn[1] = ((1 - s) * an[1] + s * dn[1])             # <<<<<<<<<<<<<<
@@ -8105,7 +8319,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_56 < 0) __pyx_t_56 += __pyx_v_an.shape[0];
       (__pyx_v_qn[1]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_56 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[1])));
 
-      /* "cg/cython/renderer.pyx":579
+      /* "cg/cython/renderer.pyx":592
  *                 qn[0] = ((1 - s) * an[0] + s * dn[0])
  *                 qn[1] = ((1 - s) * an[1] + s * dn[1])
  *                 qn[2] = ((1 - s) * an[2] + s * dn[2])             # <<<<<<<<<<<<<<
@@ -8116,7 +8330,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_57 < 0) __pyx_t_57 += __pyx_v_an.shape[0];
       (__pyx_v_qn[2]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_an.data + __pyx_t_57 * __pyx_v_an.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[2])));
 
-      /* "cg/cython/renderer.pyx":580
+      /* "cg/cython/renderer.pyx":593
  *                 qn[1] = ((1 - s) * an[1] + s * dn[1])
  *                 qn[2] = ((1 - s) * an[2] + s * dn[2])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -8133,7 +8347,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_61 < 0) __pyx_t_61 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_58 * __pyx_v_a.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_59 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_60 * __pyx_v_a.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_61 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":581
+      /* "cg/cython/renderer.pyx":594
  *                 qn[2] = ((1 - s) * an[2] + s * dn[2])
  *                 pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
  *                 qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -8149,7 +8363,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":584
+      /* "cg/cython/renderer.pyx":597
  *             else:
  *                 # bd -> c
  *                 if b[1] == c[1]:             # <<<<<<<<<<<<<<
@@ -8163,7 +8377,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       __pyx_t_3 = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_64 * __pyx_v_b.strides[0]) ))) == (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_65 * __pyx_v_c.strides[0]) )))) != 0);
       if (__pyx_t_3) {
 
-        /* "cg/cython/renderer.pyx":585
+        /* "cg/cython/renderer.pyx":598
  *                 # bd -> c
  *                 if b[1] == c[1]:
  *                     continue             # <<<<<<<<<<<<<<
@@ -8173,7 +8387,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
         goto __pyx_L8_continue;
       }
 
-      /* "cg/cython/renderer.pyx":586
+      /* "cg/cython/renderer.pyx":599
  *                 if b[1] == c[1]:
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])             # <<<<<<<<<<<<<<
@@ -8188,7 +8402,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_68 < 0) __pyx_t_68 += __pyx_v_c.shape[0];
       __pyx_v_s = ((__pyx_v_y - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_66 * __pyx_v_c.strides[0]) )))) / ((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_67 * __pyx_v_b.strides[0]) ))) - (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_68 * __pyx_v_c.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":587
+      /* "cg/cython/renderer.pyx":600
  *                     continue
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])             # <<<<<<<<<<<<<<
@@ -8201,7 +8415,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_70 < 0) __pyx_t_70 += __pyx_v_b.shape[0];
       __pyx_v_px = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_69 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_70 * __pyx_v_b.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":588
+      /* "cg/cython/renderer.pyx":601
  *                 s = (y - c[1]) / (b[1] - c[1])
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])             # <<<<<<<<<<<<<<
@@ -8212,7 +8426,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_71 < 0) __pyx_t_71 += __pyx_v_c.shape[0];
       __pyx_v_qx = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_71 * __pyx_v_c.strides[0]) )))) + (__pyx_v_s * (__pyx_v_d[0])));
 
-      /* "cg/cython/renderer.pyx":589
+      /* "cg/cython/renderer.pyx":602
  *                 px = ((1 - s) * c[0] + s * b[0])
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pn[0] = ((1 - s) * cn[0] + s * bn[0])             # <<<<<<<<<<<<<<
@@ -8225,7 +8439,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_73 < 0) __pyx_t_73 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[0]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_72 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_73 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":590
+      /* "cg/cython/renderer.pyx":603
  *                 qx = ((1 - s) * c[0] + s * d[0])
  *                 pn[0] = ((1 - s) * cn[0] + s * bn[0])
  *                 pn[1] = ((1 - s) * cn[1] + s * bn[1])             # <<<<<<<<<<<<<<
@@ -8238,7 +8452,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_75 < 0) __pyx_t_75 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[1]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_74 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_75 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":591
+      /* "cg/cython/renderer.pyx":604
  *                 pn[0] = ((1 - s) * cn[0] + s * bn[0])
  *                 pn[1] = ((1 - s) * cn[1] + s * bn[1])
  *                 pn[2] = ((1 - s) * cn[2] + s * bn[2])             # <<<<<<<<<<<<<<
@@ -8251,7 +8465,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_77 < 0) __pyx_t_77 += __pyx_v_bn.shape[0];
       (__pyx_v_pn[2]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_76 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_bn.data + __pyx_t_77 * __pyx_v_bn.strides[0]) )))));
 
-      /* "cg/cython/renderer.pyx":592
+      /* "cg/cython/renderer.pyx":605
  *                 pn[1] = ((1 - s) * cn[1] + s * bn[1])
  *                 pn[2] = ((1 - s) * cn[2] + s * bn[2])
  *                 qn[0] = ((1 - s) * cn[0] + s * dn[0])             # <<<<<<<<<<<<<<
@@ -8262,7 +8476,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_78 < 0) __pyx_t_78 += __pyx_v_cn.shape[0];
       (__pyx_v_qn[0]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_78 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[0])));
 
-      /* "cg/cython/renderer.pyx":593
+      /* "cg/cython/renderer.pyx":606
  *                 pn[2] = ((1 - s) * cn[2] + s * bn[2])
  *                 qn[0] = ((1 - s) * cn[0] + s * dn[0])
  *                 qn[1] = ((1 - s) * cn[1] + s * dn[1])             # <<<<<<<<<<<<<<
@@ -8273,7 +8487,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_79 < 0) __pyx_t_79 += __pyx_v_cn.shape[0];
       (__pyx_v_qn[1]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_79 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[1])));
 
-      /* "cg/cython/renderer.pyx":594
+      /* "cg/cython/renderer.pyx":607
  *                 qn[0] = ((1 - s) * cn[0] + s * dn[0])
  *                 qn[1] = ((1 - s) * cn[1] + s * dn[1])
  *                 qn[2] = ((1 - s) * cn[2] + s * dn[2])             # <<<<<<<<<<<<<<
@@ -8284,7 +8498,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_80 < 0) __pyx_t_80 += __pyx_v_cn.shape[0];
       (__pyx_v_qn[2]) = (((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_cn.data + __pyx_t_80 * __pyx_v_cn.strides[0]) )))) + (__pyx_v_s * (__pyx_v_dn[2])));
 
-      /* "cg/cython/renderer.pyx":595
+      /* "cg/cython/renderer.pyx":608
  *                 qn[1] = ((1 - s) * cn[1] + s * dn[1])
  *                 qn[2] = ((1 - s) * cn[2] + s * dn[2])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])             # <<<<<<<<<<<<<<
@@ -8301,7 +8515,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       if (__pyx_t_84 < 0) __pyx_t_84 += __pyx_v_b.shape[0];
       __pyx_v_pz = (((*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_81 * __pyx_v_c.strides[0]) ))) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_82 * __pyx_v_b.strides[0]) )))) / ((__pyx_v_s * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_c.data + __pyx_t_83 * __pyx_v_c.strides[0]) )))) + ((1.0 - __pyx_v_s) * (*((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *) ( /* dim=0 */ (__pyx_v_b.data + __pyx_t_84 * __pyx_v_b.strides[0]) ))))));
 
-      /* "cg/cython/renderer.pyx":596
+      /* "cg/cython/renderer.pyx":609
  *                 qn[2] = ((1 - s) * cn[2] + s * dn[2])
  *                 pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])             # <<<<<<<<<<<<<<
@@ -8316,7 +8530,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     }
     __pyx_L10:;
 
-    /* "cg/cython/renderer.pyx":598
+    /* "cg/cython/renderer.pyx":611
  *                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
  *             # x
  *             if px == qx:             # <<<<<<<<<<<<<<
@@ -8326,7 +8540,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_3 = ((__pyx_v_px == __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":600
+      /* "cg/cython/renderer.pyx":613
  *             if px == qx:
  *                 # x
  *                 self._shade_vertex(a, b, c, pn, color)             # <<<<<<<<<<<<<<
@@ -8335,35 +8549,35 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
       __pyx_t_89 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_88 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_89);
       __Pyx_GOTREF(__pyx_t_88);
       __pyx_t_87 = __pyx_array_new(__pyx_t_88, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_89), (char *) "fortran", (char *) __pyx_v_pn);
-      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_87);
       __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
       __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
       __pyx_t_90 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-      if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
       __pyx_t_88 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_89 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_88);
       __Pyx_GOTREF(__pyx_t_89);
       __pyx_t_87 = __pyx_array_new(__pyx_t_89, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_88), (char *) "fortran", (char *) __pyx_v_color);
-      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_87);
       __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
       __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
       __pyx_t_91 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-      if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 613; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
       ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_t_90, __pyx_t_91);
       __PYX_XDEC_MEMVIEW(&__pyx_t_90, 1);
       __PYX_XDEC_MEMVIEW(&__pyx_t_91, 1);
 
-      /* "cg/cython/renderer.pyx":601
+      /* "cg/cython/renderer.pyx":614
  *                 # x
  *                 self._shade_vertex(a, b, c, pn, color)
  *                 self._draw_pixel(<int>px, y, pz, color)             # <<<<<<<<<<<<<<
@@ -8372,21 +8586,21 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
       __pyx_t_89 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
       __pyx_t_88 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-      if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 601; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 614; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_89);
       __Pyx_GOTREF(__pyx_t_88);
       __pyx_t_87 = __pyx_array_new(__pyx_t_88, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_89), (char *) "fortran", (char *) __pyx_v_color);
-      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 601; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 614; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_87);
       __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
       __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
       __pyx_t_92 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-      if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 601; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 614; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
       ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, ((int)__pyx_v_px), __pyx_v_y, __pyx_v_pz, __pyx_t_92);
       __PYX_XDEC_MEMVIEW(&__pyx_t_92, 1);
 
-      /* "cg/cython/renderer.pyx":602
+      /* "cg/cython/renderer.pyx":615
  *                 self._shade_vertex(a, b, c, pn, color)
  *                 self._draw_pixel(<int>px, y, pz, color)
  *                 continue             # <<<<<<<<<<<<<<
@@ -8396,7 +8610,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       goto __pyx_L8_continue;
     }
 
-    /* "cg/cython/renderer.pyx":603
+    /* "cg/cython/renderer.pyx":616
  *                 self._draw_pixel(<int>px, y, pz, color)
  *                 continue
  *             elif px < qx:             # <<<<<<<<<<<<<<
@@ -8406,7 +8620,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_t_3 = ((__pyx_v_px < __pyx_v_qx) != 0);
     if (__pyx_t_3) {
 
-      /* "cg/cython/renderer.pyx":605
+      /* "cg/cython/renderer.pyx":618
  *             elif px < qx:
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                                int_min(<int>floor(qx), self.half_width) + 1):             # <<<<<<<<<<<<<<
@@ -8415,7 +8629,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
       __pyx_t_93 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor(__pyx_v_qx)), __pyx_v_self->half_width) + 1);
 
-      /* "cg/cython/renderer.pyx":604
+      /* "cg/cython/renderer.pyx":617
  *                 continue
  *             elif px < qx:
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),             # <<<<<<<<<<<<<<
@@ -8425,7 +8639,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       for (__pyx_t_94 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil(__pyx_v_px)), (1 - __pyx_v_self->half_width)); __pyx_t_94 < __pyx_t_93; __pyx_t_94+=1) {
         __pyx_v_x = __pyx_t_94;
 
-        /* "cg/cython/renderer.pyx":606
+        /* "cg/cython/renderer.pyx":619
  *                 for x in range(int_max(<int>ceil(px), 1 - self.half_width),
  *                                int_min(<int>floor(qx), self.half_width) + 1):
  *                     r = (x - px) / (qx - px)             # <<<<<<<<<<<<<<
@@ -8434,7 +8648,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_v_r = ((__pyx_v_x - __pyx_v_px) / (__pyx_v_qx - __pyx_v_px));
 
-        /* "cg/cython/renderer.pyx":607
+        /* "cg/cython/renderer.pyx":620
  *                                int_min(<int>floor(qx), self.half_width) + 1):
  *                     r = (x - px) / (qx - px)
  *                     rn[0] = ((1 - r) * pn[0] + r * qn[0])             # <<<<<<<<<<<<<<
@@ -8443,7 +8657,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[0]) = (((1.0 - __pyx_v_r) * (__pyx_v_pn[0])) + (__pyx_v_r * (__pyx_v_qn[0])));
 
-        /* "cg/cython/renderer.pyx":608
+        /* "cg/cython/renderer.pyx":621
  *                     r = (x - px) / (qx - px)
  *                     rn[0] = ((1 - r) * pn[0] + r * qn[0])
  *                     rn[1] = ((1 - r) * pn[1] + r * qn[1])             # <<<<<<<<<<<<<<
@@ -8452,7 +8666,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[1]) = (((1.0 - __pyx_v_r) * (__pyx_v_pn[1])) + (__pyx_v_r * (__pyx_v_qn[1])));
 
-        /* "cg/cython/renderer.pyx":609
+        /* "cg/cython/renderer.pyx":622
  *                     rn[0] = ((1 - r) * pn[0] + r * qn[0])
  *                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
  *                     rn[2] = ((1 - r) * pn[2] + r * qn[2])             # <<<<<<<<<<<<<<
@@ -8461,7 +8675,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[2]) = (((1.0 - __pyx_v_r) * (__pyx_v_pn[2])) + (__pyx_v_r * (__pyx_v_qn[2])));
 
-        /* "cg/cython/renderer.pyx":610
+        /* "cg/cython/renderer.pyx":623
  *                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
  *                     rn[2] = ((1 - r) * pn[2] + r * qn[2])
  *                     z = pz * qz / (r * qz + (1 - r) * pz)             # <<<<<<<<<<<<<<
@@ -8470,7 +8684,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_v_z = ((__pyx_v_pz * __pyx_v_qz) / ((__pyx_v_r * __pyx_v_qz) + ((1.0 - __pyx_v_r) * __pyx_v_pz)));
 
-        /* "cg/cython/renderer.pyx":611
+        /* "cg/cython/renderer.pyx":624
  *                     rn[2] = ((1 - r) * pn[2] + r * qn[2])
  *                     z = pz * qz / (r * qz + (1 - r) * pz)
  *                     self._shade_vertex(a, b, c, rn, color)             # <<<<<<<<<<<<<<
@@ -8479,35 +8693,35 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_t_88 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_89 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_88);
         __Pyx_GOTREF(__pyx_t_89);
         __pyx_t_87 = __pyx_array_new(__pyx_t_89, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_88), (char *) "fortran", (char *) __pyx_v_rn);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __pyx_t_90 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         __pyx_t_89 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_88 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_89);
         __Pyx_GOTREF(__pyx_t_88);
         __pyx_t_87 = __pyx_array_new(__pyx_t_88, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_89), (char *) "fortran", (char *) __pyx_v_color);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __pyx_t_91 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_t_90, __pyx_t_91);
         __PYX_XDEC_MEMVIEW(&__pyx_t_90, 1);
         __PYX_XDEC_MEMVIEW(&__pyx_t_91, 1);
 
-        /* "cg/cython/renderer.pyx":612
+        /* "cg/cython/renderer.pyx":625
  *                     z = pz * qz / (r * qz + (1 - r) * pz)
  *                     self._shade_vertex(a, b, c, rn, color)
  *                     self._draw_pixel(x, y, z, color)             # <<<<<<<<<<<<<<
@@ -8516,16 +8730,16 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_t_88 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_89 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 625; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_88);
         __Pyx_GOTREF(__pyx_t_89);
         __pyx_t_87 = __pyx_array_new(__pyx_t_89, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_88), (char *) "fortran", (char *) __pyx_v_color);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 625; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __pyx_t_92 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 625; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, __pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_t_92);
         __PYX_XDEC_MEMVIEW(&__pyx_t_92, 1);
@@ -8534,7 +8748,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     }
     /*else*/ {
 
-      /* "cg/cython/renderer.pyx":615
+      /* "cg/cython/renderer.pyx":628
  *             else:
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
  *                                int_min(<int>floor(px), self.half_width) + 1):             # <<<<<<<<<<<<<<
@@ -8543,7 +8757,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
       __pyx_t_93 = (__pyx_f_2cg_6cython_8renderer_int_min(((int)floor(__pyx_v_px)), __pyx_v_self->half_width) + 1);
 
-      /* "cg/cython/renderer.pyx":614
+      /* "cg/cython/renderer.pyx":627
  *                     self._draw_pixel(x, y, z, color)
  *             else:
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),             # <<<<<<<<<<<<<<
@@ -8553,7 +8767,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
       for (__pyx_t_94 = __pyx_f_2cg_6cython_8renderer_int_max(((int)ceil(__pyx_v_qx)), (1 - __pyx_v_self->half_width)); __pyx_t_94 < __pyx_t_93; __pyx_t_94+=1) {
         __pyx_v_x = __pyx_t_94;
 
-        /* "cg/cython/renderer.pyx":616
+        /* "cg/cython/renderer.pyx":629
  *                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
  *                                int_min(<int>floor(px), self.half_width) + 1):
  *                     r = (x - qx) / (px - qx)             # <<<<<<<<<<<<<<
@@ -8562,7 +8776,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_v_r = ((__pyx_v_x - __pyx_v_qx) / (__pyx_v_px - __pyx_v_qx));
 
-        /* "cg/cython/renderer.pyx":617
+        /* "cg/cython/renderer.pyx":630
  *                                int_min(<int>floor(px), self.half_width) + 1):
  *                     r = (x - qx) / (px - qx)
  *                     rn[0] = ((1 - r) * qn[0] + r * pn[0])             # <<<<<<<<<<<<<<
@@ -8571,7 +8785,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[0]) = (((1.0 - __pyx_v_r) * (__pyx_v_qn[0])) + (__pyx_v_r * (__pyx_v_pn[0])));
 
-        /* "cg/cython/renderer.pyx":618
+        /* "cg/cython/renderer.pyx":631
  *                     r = (x - qx) / (px - qx)
  *                     rn[0] = ((1 - r) * qn[0] + r * pn[0])
  *                     rn[1] = ((1 - r) * qn[1] + r * pn[1])             # <<<<<<<<<<<<<<
@@ -8580,7 +8794,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[1]) = (((1.0 - __pyx_v_r) * (__pyx_v_qn[1])) + (__pyx_v_r * (__pyx_v_pn[1])));
 
-        /* "cg/cython/renderer.pyx":619
+        /* "cg/cython/renderer.pyx":632
  *                     rn[0] = ((1 - r) * qn[0] + r * pn[0])
  *                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
  *                     rn[2] = ((1 - r) * qn[2] + r * pn[2])             # <<<<<<<<<<<<<<
@@ -8589,7 +8803,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         (__pyx_v_rn[2]) = (((1.0 - __pyx_v_r) * (__pyx_v_qn[2])) + (__pyx_v_r * (__pyx_v_pn[2])));
 
-        /* "cg/cython/renderer.pyx":620
+        /* "cg/cython/renderer.pyx":633
  *                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
  *                     rn[2] = ((1 - r) * qn[2] + r * pn[2])
  *                     z = pz * qz / (r * qz + (1 - r) * pz)             # <<<<<<<<<<<<<<
@@ -8598,7 +8812,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_v_z = ((__pyx_v_pz * __pyx_v_qz) / ((__pyx_v_r * __pyx_v_qz) + ((1.0 - __pyx_v_r) * __pyx_v_pz)));
 
-        /* "cg/cython/renderer.pyx":621
+        /* "cg/cython/renderer.pyx":634
  *                     rn[2] = ((1 - r) * qn[2] + r * pn[2])
  *                     z = pz * qz / (r * qz + (1 - r) * pz)
  *                     self._shade_vertex(a, b, c, rn, color)             # <<<<<<<<<<<<<<
@@ -8607,35 +8821,35 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_t_89 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_88 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_89);
         __Pyx_GOTREF(__pyx_t_88);
         __pyx_t_87 = __pyx_array_new(__pyx_t_88, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_89), (char *) "fortran", (char *) __pyx_v_rn);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __pyx_t_90 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_90.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         __pyx_t_88 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_89 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_88 || !__pyx_t_89 || !PyBytes_AsString(__pyx_t_88))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_88);
         __Pyx_GOTREF(__pyx_t_89);
         __pyx_t_87 = __pyx_array_new(__pyx_t_89, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_88), (char *) "fortran", (char *) __pyx_v_color);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __pyx_t_91 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 621; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_91.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_shade_vertex(__pyx_v_self, __pyx_v_a, __pyx_v_b, __pyx_v_c, __pyx_t_90, __pyx_t_91);
         __PYX_XDEC_MEMVIEW(&__pyx_t_90, 1);
         __PYX_XDEC_MEMVIEW(&__pyx_t_91, 1);
 
-        /* "cg/cython/renderer.pyx":622
+        /* "cg/cython/renderer.pyx":635
  *                     z = pz * qz / (r * qz + (1 - r) * pz)
  *                     self._shade_vertex(a, b, c, rn, color)
  *                     self._draw_pixel(x, y, z, color)             # <<<<<<<<<<<<<<
@@ -8644,16 +8858,16 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
  */
         __pyx_t_89 = __pyx_format_from_typeinfo(&__Pyx_TypeInfo_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t);
         __pyx_t_88 = Py_BuildValue((char*) "("  __PYX_BUILD_PY_SSIZE_T  ")", ((Py_ssize_t)3));
-        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 622; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_89 || !__pyx_t_88 || !PyBytes_AsString(__pyx_t_89))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_89);
         __Pyx_GOTREF(__pyx_t_88);
         __pyx_t_87 = __pyx_array_new(__pyx_t_88, sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t), PyBytes_AS_STRING(__pyx_t_89), (char *) "fortran", (char *) __pyx_v_color);
-        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 622; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_87)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_87);
         __Pyx_DECREF(__pyx_t_88); __pyx_t_88 = 0;
         __Pyx_DECREF(__pyx_t_89); __pyx_t_89 = 0;
         __pyx_t_92 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(((PyObject *)__pyx_t_87));
-        if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 622; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(!__pyx_t_92.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(((PyObject *)__pyx_t_87)); __pyx_t_87 = 0;
         ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_pixel(__pyx_v_self, __pyx_v_x, __pyx_v_y, __pyx_v_z, __pyx_t_92);
         __PYX_XDEC_MEMVIEW(&__pyx_t_92, 1);
@@ -8663,7 +8877,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
     __pyx_L8_continue:;
   }
 
-  /* "cg/cython/renderer.pyx":521
+  /* "cg/cython/renderer.pyx":534
  *                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
  * 
  *     cdef void _draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,             # <<<<<<<<<<<<<<
@@ -8697,7 +8911,7 @@ static void __pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong(struct _
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cg/cython/renderer.pyx":624
+/* "cg/cython/renderer.pyx":637
  *                     self._draw_pixel(x, y, z, color)
  * 
  *     def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):             # <<<<<<<<<<<<<<
@@ -8736,11 +8950,11 @@ static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_3_draw_polygons(PyObje
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_indexes)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_draw_polygons", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("_draw_polygons", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_draw_polygons") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_draw_polygons") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -8748,12 +8962,12 @@ static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_3_draw_polygons(PyObje
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_points = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(values[0]); if (unlikely(!__pyx_v_points.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_UINT64_t(values[1]); if (unlikely(!__pyx_v_indexes.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_points = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(values[0]); if (unlikely(!__pyx_v_points.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_UINT64_t(values[1]); if (unlikely(!__pyx_v_indexes.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_draw_polygons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 624; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("_draw_polygons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cg.cython.renderer.Renderer._draw_polygons", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8829,21 +9043,21 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_2_draw_polygons(struct
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_draw_polygons", 0);
 
-  /* "cg/cython/renderer.pyx":631
+  /* "cg/cython/renderer.pyx":644
  * 
  *         #
  *         polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *         for i in range(indexes.shape[0]):
  *             polygon = polygons[i]
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_indexes.shape[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_indexes.shape[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -8854,30 +9068,30 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_2_draw_polygons(struct
   PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dsdsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_4);
-  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_polygons = __pyx_t_5;
   __pyx_t_5.memview = NULL;
   __pyx_t_5.data = NULL;
 
-  /* "cg/cython/renderer.pyx":632
+  /* "cg/cython/renderer.pyx":645
  *         #
  *         polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)
  *         for i in range(indexes.shape[0]):             # <<<<<<<<<<<<<<
@@ -8888,7 +9102,7 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_2_draw_polygons(struct
   for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "cg/cython/renderer.pyx":633
+    /* "cg/cython/renderer.pyx":646
  *         polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)
  *         for i in range(indexes.shape[0]):
  *             polygon = polygons[i]             # <<<<<<<<<<<<<<
@@ -8907,7 +9121,7 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_2_draw_polygons(struct
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 633; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 646; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_8.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -8925,7 +9139,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "cg/cython/renderer.pyx":634
+    /* "cg/cython/renderer.pyx":647
  *         for i in range(indexes.shape[0]):
  *             polygon = polygons[i]
  *             index = indexes[i]             # <<<<<<<<<<<<<<
@@ -8944,7 +9158,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 634; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 647; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_10.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -8958,7 +9172,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "cg/cython/renderer.pyx":635
+    /* "cg/cython/renderer.pyx":648
  *             polygon = polygons[i]
  *             index = indexes[i]
  *             polygon[0] = points[index[0]]             # <<<<<<<<<<<<<<
@@ -8979,7 +9193,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 648; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_12.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9000,7 +9214,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 648; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_13.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9009,11 +9223,11 @@ __pyx_t_13.shape[0] = __pyx_v_polygon.shape[1];
 __pyx_t_13.strides[0] = __pyx_v_polygon.strides[1];
     __pyx_t_13.suboffsets[0] = -1;
 
-if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_12, __pyx_t_13, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 635; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_12, __pyx_t_13, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 648; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __PYX_XDEC_MEMVIEW(&__pyx_t_13, 1);
     __PYX_XDEC_MEMVIEW(&__pyx_t_12, 1);
 
-    /* "cg/cython/renderer.pyx":636
+    /* "cg/cython/renderer.pyx":649
  *             index = indexes[i]
  *             polygon[0] = points[index[0]]
  *             polygon[1] = points[index[1]]             # <<<<<<<<<<<<<<
@@ -9034,7 +9248,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_12, __pyx_t_13, 1, 1, 0) < 0
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 636; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 649; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_15.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9055,7 +9269,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 636; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 649; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_16.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9064,11 +9278,11 @@ __pyx_t_16.shape[0] = __pyx_v_polygon.shape[1];
 __pyx_t_16.strides[0] = __pyx_v_polygon.strides[1];
     __pyx_t_16.suboffsets[0] = -1;
 
-if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_15, __pyx_t_16, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 636; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_15, __pyx_t_16, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 649; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __PYX_XDEC_MEMVIEW(&__pyx_t_16, 1);
     __PYX_XDEC_MEMVIEW(&__pyx_t_15, 1);
 
-    /* "cg/cython/renderer.pyx":637
+    /* "cg/cython/renderer.pyx":650
  *             polygon[0] = points[index[0]]
  *             polygon[1] = points[index[1]]
  *             polygon[2] = points[index[2]]             # <<<<<<<<<<<<<<
@@ -9089,7 +9303,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_15, __pyx_t_16, 1, 1, 0) < 0
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_18.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9110,7 +9324,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_19.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9119,26 +9333,26 @@ __pyx_t_19.shape[0] = __pyx_v_polygon.shape[1];
 __pyx_t_19.strides[0] = __pyx_v_polygon.strides[1];
     __pyx_t_19.suboffsets[0] = -1;
 
-if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __PYX_XDEC_MEMVIEW(&__pyx_t_19, 1);
     __PYX_XDEC_MEMVIEW(&__pyx_t_18, 1);
   }
 
-  /* "cg/cython/renderer.pyx":640
+  /* "cg/cython/renderer.pyx":653
  * 
  *         #
  *         polygon_normals = np.empty((indexes.shape[0], 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *         calc_polygon_normals(polygons, polygon_normals)
  * 
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyInt_FromSsize_t((__pyx_v_indexes.shape[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyInt_FromSsize_t((__pyx_v_indexes.shape[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_4);
@@ -9146,30 +9360,30 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_20 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_2);
-  if (unlikely(!__pyx_t_20.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_20.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 653; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_polygon_normals = __pyx_t_20;
   __pyx_t_20.memview = NULL;
   __pyx_t_20.data = NULL;
 
-  /* "cg/cython/renderer.pyx":641
+  /* "cg/cython/renderer.pyx":654
  *         #
  *         polygon_normals = np.empty((indexes.shape[0], 3), dtype=DOUBLE)
  *         calc_polygon_normals(polygons, polygon_normals)             # <<<<<<<<<<<<<<
@@ -9178,16 +9392,16 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
  */
   __pyx_f_2cg_6cython_8renderer_calc_polygon_normals(__pyx_v_polygons, __pyx_v_polygon_normals);
 
-  /* "cg/cython/renderer.pyx":643
+  /* "cg/cython/renderer.pyx":656
  *         calc_polygon_normals(polygons, polygon_normals)
  * 
  *         if self.shading_mode is ShadingMode.flat:             # <<<<<<<<<<<<<<
  *             for i in range(polygons.shape[0]):
  *                 polygon = polygons[i]
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 656; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_flat); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_flat); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 656; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_21 = (__pyx_v_self->shading_mode == __pyx_t_1);
@@ -9195,7 +9409,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
   __pyx_t_22 = (__pyx_t_21 != 0);
   if (__pyx_t_22) {
 
-    /* "cg/cython/renderer.pyx":644
+    /* "cg/cython/renderer.pyx":657
  * 
  *         if self.shading_mode is ShadingMode.flat:
  *             for i in range(polygons.shape[0]):             # <<<<<<<<<<<<<<
@@ -9206,7 +9420,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_v_i = __pyx_t_7;
 
-      /* "cg/cython/renderer.pyx":645
+      /* "cg/cython/renderer.pyx":658
  *         if self.shading_mode is ShadingMode.flat:
  *             for i in range(polygons.shape[0]):
  *                 polygon = polygons[i]             # <<<<<<<<<<<<<<
@@ -9225,7 +9439,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 645; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 658; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_23.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9243,7 +9457,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
       __pyx_t_23.memview = NULL;
       __pyx_t_23.data = NULL;
 
-      /* "cg/cython/renderer.pyx":646
+      /* "cg/cython/renderer.pyx":659
  *             for i in range(polygons.shape[0]):
  *                 polygon = polygons[i]
  *                 self._draw_polygon_flat(polygon[0], polygon[1],             # <<<<<<<<<<<<<<
@@ -9262,7 +9476,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 646; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 659; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_24.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9283,7 +9497,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 646; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 659; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_25.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9294,7 +9508,7 @@ __pyx_t_25.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_9 = -1;
 
-      /* "cg/cython/renderer.pyx":647
+      /* "cg/cython/renderer.pyx":660
  *                 polygon = polygons[i]
  *                 self._draw_polygon_flat(polygon[0], polygon[1],
  *                                         polygon[2], polygon_normals[i])             # <<<<<<<<<<<<<<
@@ -9312,7 +9526,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 647; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 660; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_26.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9333,7 +9547,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 647; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 660; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_27.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9344,7 +9558,7 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
 
 ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_polygon_flat(__pyx_v_self, __pyx_t_24, __pyx_t_25, __pyx_t_26, __pyx_t_27);
 
-      /* "cg/cython/renderer.pyx":646
+      /* "cg/cython/renderer.pyx":659
  *             for i in range(polygons.shape[0]):
  *                 polygon = polygons[i]
  *                 self._draw_polygon_flat(polygon[0], polygon[1],             # <<<<<<<<<<<<<<
@@ -9360,21 +9574,21 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
   }
   /*else*/ {
 
-    /* "cg/cython/renderer.pyx":650
+    /* "cg/cython/renderer.pyx":663
  *         else:
  *             #
  *             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)
  * 
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_points.shape[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = PyInt_FromSsize_t((__pyx_v_points.shape[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_1);
@@ -9382,30 +9596,30 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_3);
     __Pyx_GIVEREF(__pyx_int_3);
     __pyx_t_1 = 0;
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DOUBLE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_20 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_DOUBLE_t(__pyx_t_3);
-    if (unlikely(!__pyx_t_20.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(!__pyx_t_20.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_vertex_normals = __pyx_t_20;
     __pyx_t_20.memview = NULL;
     __pyx_t_20.data = NULL;
 
-    /* "cg/cython/renderer.pyx":651
+    /* "cg/cython/renderer.pyx":664
  *             #
  *             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
  *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)             # <<<<<<<<<<<<<<
@@ -9414,16 +9628,16 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
  */
     __pyx_f_2cg_6cython_8renderer_calc_vertex_normals(__pyx_v_indexes, __pyx_v_polygon_normals, __pyx_v_vertex_normals);
 
-    /* "cg/cython/renderer.pyx":654
+    /* "cg/cython/renderer.pyx":667
  * 
  *             #
  *             if self.shading_mode is ShadingMode.gouraud:             # <<<<<<<<<<<<<<
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 654; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 667; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_gouraud); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 654; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_gouraud); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 667; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_22 = (__pyx_v_self->shading_mode == __pyx_t_4);
@@ -9431,7 +9645,7 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
     __pyx_t_21 = (__pyx_t_22 != 0);
     if (__pyx_t_21) {
 
-      /* "cg/cython/renderer.pyx":655
+      /* "cg/cython/renderer.pyx":668
  *             #
  *             if self.shading_mode is ShadingMode.gouraud:
  *                 for i in range(polygons.shape[0]):             # <<<<<<<<<<<<<<
@@ -9442,7 +9656,7 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
         __pyx_v_i = __pyx_t_7;
 
-        /* "cg/cython/renderer.pyx":656
+        /* "cg/cython/renderer.pyx":669
  *             if self.shading_mode is ShadingMode.gouraud:
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]             # <<<<<<<<<<<<<<
@@ -9461,7 +9675,7 @@ __pyx_t_27.strides[0] = __pyx_v_polygon_normals.strides[1];
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 656; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 669; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_28.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9479,7 +9693,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_t_28.memview = NULL;
         __pyx_t_28.data = NULL;
 
-        /* "cg/cython/renderer.pyx":657
+        /* "cg/cython/renderer.pyx":670
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]
  *                     index = indexes[i]             # <<<<<<<<<<<<<<
@@ -9498,7 +9712,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 657; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 670; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_29.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9512,7 +9726,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
         __pyx_t_29.memview = NULL;
         __pyx_t_29.data = NULL;
 
-        /* "cg/cython/renderer.pyx":658
+        /* "cg/cython/renderer.pyx":671
  *                     polygon = polygons[i]
  *                     index = indexes[i]
  *                     self._draw_polygon_gouraud(polygon[0],             # <<<<<<<<<<<<<<
@@ -9531,7 +9745,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 658; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 671; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_30.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9542,7 +9756,7 @@ __pyx_t_30.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_9 = -1;
 
-        /* "cg/cython/renderer.pyx":659
+        /* "cg/cython/renderer.pyx":672
  *                     index = indexes[i]
  *                     self._draw_polygon_gouraud(polygon[0],
  *                                                polygon[1],             # <<<<<<<<<<<<<<
@@ -9560,7 +9774,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 659; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 672; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_31.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9571,7 +9785,7 @@ __pyx_t_31.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_9 = -1;
 
-        /* "cg/cython/renderer.pyx":660
+        /* "cg/cython/renderer.pyx":673
  *                     self._draw_polygon_gouraud(polygon[0],
  *                                                polygon[1],
  *                                                polygon[2],             # <<<<<<<<<<<<<<
@@ -9589,7 +9803,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 660; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 673; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_32.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9600,7 +9814,7 @@ __pyx_t_32.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_33 = 0;
 
-        /* "cg/cython/renderer.pyx":661
+        /* "cg/cython/renderer.pyx":674
  *                                                polygon[1],
  *                                                polygon[2],
  *                                                vertex_normals[index[0]],             # <<<<<<<<<<<<<<
@@ -9620,7 +9834,7 @@ __pyx_t_33 = 0;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 661; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 674; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_34.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9631,7 +9845,7 @@ __pyx_t_34.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 __pyx_t_35 = 1;
 
-        /* "cg/cython/renderer.pyx":662
+        /* "cg/cython/renderer.pyx":675
  *                                                polygon[2],
  *                                                vertex_normals[index[0]],
  *                                                vertex_normals[index[1]],             # <<<<<<<<<<<<<<
@@ -9651,7 +9865,7 @@ __pyx_t_35 = 1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 662; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_36.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9662,7 +9876,7 @@ __pyx_t_36.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 __pyx_t_37 = 2;
 
-        /* "cg/cython/renderer.pyx":663
+        /* "cg/cython/renderer.pyx":676
  *                                                vertex_normals[index[0]],
  *                                                vertex_normals[index[1]],
  *                                                vertex_normals[index[2]])             # <<<<<<<<<<<<<<
@@ -9682,7 +9896,7 @@ __pyx_t_37 = 2;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 663; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 676; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_38.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9693,7 +9907,7 @@ __pyx_t_38.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_polygon_gouraud(__pyx_v_self, __pyx_t_30, __pyx_t_31, __pyx_t_32, __pyx_t_34, __pyx_t_36, __pyx_t_38);
 
-        /* "cg/cython/renderer.pyx":658
+        /* "cg/cython/renderer.pyx":671
  *                     polygon = polygons[i]
  *                     index = indexes[i]
  *                     self._draw_polygon_gouraud(polygon[0],             # <<<<<<<<<<<<<<
@@ -9710,16 +9924,16 @@ __pyx_t_38.strides[0] = __pyx_v_vertex_normals.strides[1];
       goto __pyx_L8;
     }
 
-    /* "cg/cython/renderer.pyx":664
+    /* "cg/cython/renderer.pyx":677
  *                                                vertex_normals[index[1]],
  *                                                vertex_normals[index[2]])
  *             elif self.shading_mode is ShadingMode.phong:             # <<<<<<<<<<<<<<
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 664; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 677; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_phong); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 664; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_phong); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 677; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_21 = (__pyx_v_self->shading_mode == __pyx_t_3);
@@ -9727,7 +9941,7 @@ __pyx_t_38.strides[0] = __pyx_v_vertex_normals.strides[1];
     __pyx_t_22 = (__pyx_t_21 != 0);
     if (__pyx_t_22) {
 
-      /* "cg/cython/renderer.pyx":665
+      /* "cg/cython/renderer.pyx":678
  *                                                vertex_normals[index[2]])
  *             elif self.shading_mode is ShadingMode.phong:
  *                 for i in range(polygons.shape[0]):             # <<<<<<<<<<<<<<
@@ -9738,7 +9952,7 @@ __pyx_t_38.strides[0] = __pyx_v_vertex_normals.strides[1];
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
         __pyx_v_i = __pyx_t_7;
 
-        /* "cg/cython/renderer.pyx":666
+        /* "cg/cython/renderer.pyx":679
  *             elif self.shading_mode is ShadingMode.phong:
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]             # <<<<<<<<<<<<<<
@@ -9757,7 +9971,7 @@ __pyx_t_38.strides[0] = __pyx_v_vertex_normals.strides[1];
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 666; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 679; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_39.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9775,7 +9989,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_t_39.memview = NULL;
         __pyx_t_39.data = NULL;
 
-        /* "cg/cython/renderer.pyx":667
+        /* "cg/cython/renderer.pyx":680
  *                 for i in range(polygons.shape[0]):
  *                     polygon = polygons[i]
  *                     index = indexes[i]             # <<<<<<<<<<<<<<
@@ -9794,7 +10008,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_polygon, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 667; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 680; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_40.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9808,7 +10022,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
         __pyx_t_40.memview = NULL;
         __pyx_t_40.data = NULL;
 
-        /* "cg/cython/renderer.pyx":668
+        /* "cg/cython/renderer.pyx":681
  *                     polygon = polygons[i]
  *                     index = indexes[i]
  *                     self._draw_polygon_phong(polygon[0],             # <<<<<<<<<<<<<<
@@ -9827,7 +10041,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_index, 1);
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 668; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 681; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_41.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9838,7 +10052,7 @@ __pyx_t_41.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_9 = -1;
 
-        /* "cg/cython/renderer.pyx":669
+        /* "cg/cython/renderer.pyx":682
  *                     index = indexes[i]
  *                     self._draw_polygon_phong(polygon[0],
  *                                              polygon[1],             # <<<<<<<<<<<<<<
@@ -9856,7 +10070,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 669; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 682; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_42.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9867,7 +10081,7 @@ __pyx_t_42.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_9 = -1;
 
-        /* "cg/cython/renderer.pyx":670
+        /* "cg/cython/renderer.pyx":683
  *                     self._draw_polygon_phong(polygon[0],
  *                                              polygon[1],
  *                                              polygon[2],             # <<<<<<<<<<<<<<
@@ -9885,7 +10099,7 @@ __pyx_t_9 = -1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 670; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 683; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_43.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9896,7 +10110,7 @@ __pyx_t_43.strides[0] = __pyx_v_polygon.strides[1];
 
 __pyx_t_44 = 0;
 
-        /* "cg/cython/renderer.pyx":671
+        /* "cg/cython/renderer.pyx":684
  *                                              polygon[1],
  *                                              polygon[2],
  *                                              vertex_normals[index[0]],             # <<<<<<<<<<<<<<
@@ -9916,7 +10130,7 @@ __pyx_t_44 = 0;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 671; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 684; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_45.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9927,7 +10141,7 @@ __pyx_t_45.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 __pyx_t_46 = 1;
 
-        /* "cg/cython/renderer.pyx":672
+        /* "cg/cython/renderer.pyx":685
  *                                              polygon[2],
  *                                              vertex_normals[index[0]],
  *                                              vertex_normals[index[1]],             # <<<<<<<<<<<<<<
@@ -9947,7 +10161,7 @@ __pyx_t_46 = 1;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 672; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 685; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_47.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9958,7 +10172,7 @@ __pyx_t_47.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 __pyx_t_48 = 2;
 
-        /* "cg/cython/renderer.pyx":673
+        /* "cg/cython/renderer.pyx":686
  *                                              vertex_normals[index[0]],
  *                                              vertex_normals[index[1]],
  *                                              vertex_normals[index[2]])             # <<<<<<<<<<<<<<
@@ -9978,7 +10192,7 @@ __pyx_t_48 = 2;
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 673; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 686; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
         __pyx_t_49.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -9989,7 +10203,7 @@ __pyx_t_49.strides[0] = __pyx_v_vertex_normals.strides[1];
 
 ((struct __pyx_vtabstruct_2cg_6cython_8renderer_Renderer *)__pyx_v_self->__pyx_vtab)->_draw_polygon_phong(__pyx_v_self, __pyx_t_41, __pyx_t_42, __pyx_t_43, __pyx_t_45, __pyx_t_47, __pyx_t_49);
 
-        /* "cg/cython/renderer.pyx":668
+        /* "cg/cython/renderer.pyx":681
  *                     polygon = polygons[i]
  *                     index = indexes[i]
  *                     self._draw_polygon_phong(polygon[0],             # <<<<<<<<<<<<<<
@@ -10009,7 +10223,7 @@ __pyx_t_49.strides[0] = __pyx_v_vertex_normals.strides[1];
   }
   __pyx_L5:;
 
-  /* "cg/cython/renderer.pyx":624
+  /* "cg/cython/renderer.pyx":637
  *                     self._draw_pixel(x, y, z, color)
  * 
  *     def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):             # <<<<<<<<<<<<<<
@@ -10071,7 +10285,7 @@ __pyx_t_49.strides[0] = __pyx_v_vertex_normals.strides[1];
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":675
+/* "cg/cython/renderer.pyx":688
  *                                              vertex_normals[index[2]])
  * 
  *     def draw_polygons(self, np.ndarray points, np.ndarray indexes):             # <<<<<<<<<<<<<<
@@ -10109,11 +10323,11 @@ static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_5draw_polygons(PyObjec
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_indexes)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("draw_polygons", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("draw_polygons", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 688; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "draw_polygons") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "draw_polygons") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 688; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -10126,14 +10340,14 @@ static PyObject *__pyx_pw_2cg_6cython_8renderer_8Renderer_5draw_polygons(PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("draw_polygons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("draw_polygons", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 688; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cg.cython.renderer.Renderer.draw_polygons", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_points), __pyx_ptype_5numpy_ndarray, 1, "points", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_indexes), __pyx_ptype_5numpy_ndarray, 1, "indexes", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_points), __pyx_ptype_5numpy_ndarray, 1, "points", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 688; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_indexes), __pyx_ptype_5numpy_ndarray, 1, "indexes", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 688; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(((struct __pyx_obj_2cg_6cython_8renderer_Renderer *)__pyx_v_self), __pyx_v_points, __pyx_v_indexes);
 
   /* function exit code */
@@ -10158,12 +10372,12 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("draw_polygons", 0);
 
-  /* "cg/cython/renderer.pyx":676
+  /* "cg/cython/renderer.pyx":689
  * 
  *     def draw_polygons(self, np.ndarray points, np.ndarray indexes):
  *         self._draw_polygons(points, indexes)             # <<<<<<<<<<<<<<
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_draw_polygons); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 676; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_draw_polygons); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 689; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -10177,7 +10391,7 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(struct 
       __pyx_t_4 = 1;
     }
   }
-  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 676; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 689; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   if (__pyx_t_3) {
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __Pyx_GIVEREF(__pyx_t_3); __pyx_t_3 = NULL;
@@ -10188,13 +10402,13 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(struct 
   __Pyx_INCREF(((PyObject *)__pyx_v_indexes));
   PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, ((PyObject *)__pyx_v_indexes));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_indexes));
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 676; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 689; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cg/cython/renderer.pyx":675
+  /* "cg/cython/renderer.pyx":688
  *                                              vertex_normals[index[2]])
  * 
  *     def draw_polygons(self, np.ndarray points, np.ndarray indexes):             # <<<<<<<<<<<<<<
@@ -10217,11 +10431,11 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4draw_polygons(struct 
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":149
+/* "cg/cython/renderer.pyx":155
  * 
  * cdef class Renderer:
  *     cdef public object shading_mode             # <<<<<<<<<<<<<<
- *     cdef object camera, shaders,
+ *     cdef object camera, shaders
  *     cdef int depth, width, height, half_width, half_height, z_buffering
  */
 
@@ -10312,7 +10526,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer_12shading_mode_4__del__(stru
   return __pyx_r;
 }
 
-/* "cg/cython/renderer.pyx":153
+/* "cg/cython/renderer.pyx":159
  *     cdef int depth, width, height, half_width, half_height, z_buffering
  *     cdef int _depth
  *     cdef readonly np.ndarray data             # <<<<<<<<<<<<<<
@@ -23410,6 +23624,20 @@ static int __pyx_setprop_2cg_6cython_8renderer_8Renderer_shaders(PyObject *o, Py
   }
 }
 
+static PyObject *__pyx_getprop_2cg_6cython_8renderer_8Renderer_camera(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_1__get__(o);
+}
+
+static int __pyx_setprop_2cg_6cython_8renderer_8Renderer_camera(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  if (v) {
+    return __pyx_pw_2cg_6cython_8renderer_8Renderer_6camera_3__set__(o, v);
+  }
+  else {
+    PyErr_SetString(PyExc_NotImplementedError, "__del__");
+    return -1;
+  }
+}
+
 static PyObject *__pyx_getprop_2cg_6cython_8renderer_8Renderer_shading_mode(PyObject *o, CYTHON_UNUSED void *x) {
   return __pyx_pw_2cg_6cython_8renderer_8Renderer_12shading_mode_1__get__(o);
 }
@@ -23435,6 +23663,7 @@ static PyMethodDef __pyx_methods_2cg_6cython_8renderer_Renderer[] = {
 
 static struct PyGetSetDef __pyx_getsets_2cg_6cython_8renderer_Renderer[] = {
   {(char *)"shaders", __pyx_getprop_2cg_6cython_8renderer_8Renderer_shaders, __pyx_setprop_2cg_6cython_8renderer_8Renderer_shaders, 0, 0},
+  {(char *)"camera", __pyx_getprop_2cg_6cython_8renderer_8Renderer_camera, __pyx_setprop_2cg_6cython_8renderer_8Renderer_camera, 0, 0},
   {(char *)"shading_mode", __pyx_getprop_2cg_6cython_8renderer_8Renderer_shading_mode, __pyx_setprop_2cg_6cython_8renderer_8Renderer_shading_mode, 0, 0},
   {(char *)"data", __pyx_getprop_2cg_6cython_8renderer_8Renderer_data, 0, 0, 0},
   {0, 0, 0, 0, 0}
@@ -24214,7 +24443,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_base, __pyx_k_base, sizeof(__pyx_k_base), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
   {&__pyx_n_u_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 1, 0, 1},
-  {&__pyx_n_s_camera, __pyx_k_camera, sizeof(__pyx_k_camera), 0, 0, 1, 1},
   {&__pyx_n_s_cg_shader, __pyx_k_cg_shader, sizeof(__pyx_k_cg_shader), 0, 0, 1, 1},
   {&__pyx_n_s_class, __pyx_k_class, sizeof(__pyx_k_class), 0, 0, 1, 1},
   {&__pyx_kp_s_contiguous_and_direct, __pyx_k_contiguous_and_direct, sizeof(__pyx_k_contiguous_and_direct), 0, 0, 1, 0},
@@ -24292,7 +24520,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 799; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 142; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -24671,11 +24899,11 @@ PyMODINIT_FUNC PyInit_renderer(void)
   __pyx_vtable_2cg_6cython_8renderer_Renderer._draw_polygon_flat = (void (*)(struct __pyx_obj_2cg_6cython_8renderer_Renderer *, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice))__pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_flat;
   __pyx_vtable_2cg_6cython_8renderer_Renderer._draw_polygon_gouraud = (void (*)(struct __pyx_obj_2cg_6cython_8renderer_Renderer *, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice))__pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_gouraud;
   __pyx_vtable_2cg_6cython_8renderer_Renderer._draw_polygon_phong = (void (*)(struct __pyx_obj_2cg_6cython_8renderer_Renderer *, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice))__pyx_f_2cg_6cython_8renderer_8Renderer__draw_polygon_phong;
-  if (PyType_Ready(&__pyx_type_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_2cg_6cython_8renderer_Renderer.tp_print = 0;
   #if CYTHON_COMPILING_IN_CPYTHON
   {
-    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_2cg_6cython_8renderer_Renderer, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_2cg_6cython_8renderer_Renderer, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
       __pyx_wrapperbase_2cg_6cython_8renderer_8Renderer___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
       __pyx_wrapperbase_2cg_6cython_8renderer_8Renderer___init__.doc = __pyx_doc_2cg_6cython_8renderer_8Renderer___init__;
@@ -24683,8 +24911,8 @@ PyMODINIT_FUNC PyInit_renderer(void)
     }
   }
   #endif
-  if (__Pyx_SetVtable(__pyx_type_2cg_6cython_8renderer_Renderer.tp_dict, __pyx_vtabptr_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "Renderer", (PyObject *)&__pyx_type_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_2cg_6cython_8renderer_Renderer.tp_dict, __pyx_vtabptr_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Renderer", (PyObject *)&__pyx_type_2cg_6cython_8renderer_Renderer) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_2cg_6cython_8renderer_Renderer = &__pyx_type_2cg_6cython_8renderer_Renderer;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
@@ -24857,16 +25085,16 @@ PyMODINIT_FUNC PyInit_renderer(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_UINT64, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cg/cython/renderer.pyx":174
+  /* "cg/cython/renderer.pyx":180
  * 
- *     def __init__(self, camera, int width, int height, z_buffering=True,
+ *     def __init__(self, int width, int height, z_buffering=True,
  *                  int depth=8, shading_mode=ShadingMode.flat):             # <<<<<<<<<<<<<<
  *         """
- *         :param cg.camera.Camera camera:
+ *         :param bool z_buffering: Z
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ShadingMode); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_flat); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_flat); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_k_ = __pyx_t_1;

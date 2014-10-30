@@ -18,10 +18,14 @@ ctypedef np.float64_t DOUBLE_t
 ctypedef np.uint8_t UINT8_t
 ctypedef np.uint64_t UINT64_t
 
-cdef inline int int_max(int a, int b):
+
+cdef inline int int_max(int a, int b) nogil:
     return a if a >= b else b
 
-cdef inline int int_min(int a, int b): return a if a <= b else b
+
+cdef inline int int_min(int a, int b) nogil:
+    return a if a <= b else b
+
 
 cdef inline void _unit_vector(DOUBLE_t[:] v) nogil:
     """単位ベクトルに変換する処理"""
@@ -83,7 +87,7 @@ cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,
 
 cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
                               DOUBLE_t[:,:] polygon_normals,
-                              DOUBLE_t[:,:] vertex_normals):
+                              DOUBLE_t[:,:] vertex_normals) nogil:
     """各頂点の法線ベクトルを計算する処理
 
     各頂点の法線ベクトルは, その頂点を含む全ての面の法線ベクトルの平均である
@@ -99,8 +103,10 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
     cdef int i, j, l
 
     l = vertex_normals.shape[0]
-    vertexes = np.zeros((l, 3), dtype=DOUBLE)
-    vertexes_n = np.zeros(l, dtype=UINT64)
+
+    with gil:
+        vertexes = np.zeros((l, 3), dtype=DOUBLE)
+        vertexes_n = np.zeros(l, dtype=UINT64)
 
     # 各頂点を含む面の法線ベクトルの和を求める
     l = indexes.shape[0]
@@ -147,7 +153,7 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
 
 cdef class Renderer:
     cdef public object shading_mode
-    cdef object camera, shaders,
+    cdef object camera, shaders
     cdef int depth, width, height, half_width, half_height, z_buffering
     cdef int _depth
     cdef readonly np.ndarray data
@@ -170,13 +176,11 @@ cdef class Renderer:
     cdef DOUBLE_t _specular_shininess
     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
 
-    def __init__(self, camera, int width, int height, z_buffering=True,
+    def __init__(self, int width, int height, z_buffering=True,
                  int depth=8, shading_mode=ShadingMode.flat):
         """
-        :param cg.camera.Camera camera: カメラ
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
-        self.camera = camera
         self.depth = depth
         self.width = width
         self.height = height
@@ -190,13 +194,12 @@ cdef class Renderer:
         self._z_buffer = self.z_buffer
         self.half_width = self.width // 2
         self.half_height = self.height // 2
-        self.focus = self.camera.focus
-        self.camera_position = self.camera.position
         self._depth = 2 ** depth - 1
 
     property shaders:
         def __get__(self):
             return self.shaders
+
         def __set__(self, value):
             self.shaders = value
 
@@ -226,6 +229,16 @@ cdef class Renderer:
                     self._specular_pre_shade[0] = shader.pre_shade[0]
                     self._specular_pre_shade[1] = shader.pre_shade[1]
                     self._specular_pre_shade[2] = shader.pre_shade[2]
+
+    property camera:
+        def __get__(self):
+            return self.camera
+
+        def __set__(self, value):
+            self.camera = value
+
+            self.focus = self.camera.focus
+            self.camera_position = self.camera.position
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
