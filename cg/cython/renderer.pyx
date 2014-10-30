@@ -35,7 +35,8 @@ cdef inline double _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2, int l):
     return dot
 
 cdef class Renderer:
-    cdef object camera, shading_mode
+    cdef public object shading_mode
+    cdef object camera, shaders,
     cdef int depth, width, height, half_width, half_height, z_buffering
     cdef int _depth
     cdef readonly np.ndarray data
@@ -58,7 +59,7 @@ cdef class Renderer:
     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
 
     def __init__(self, camera, int width, int height, z_buffering=True,
-                 int depth=8, shaders=tuple(), shading_mode=ShadingMode.flat):
+                 int depth=8, shading_mode=ShadingMode.flat):
         """
         :param cg.camera.Camera camera: カメラ
         :param bool z_buffering: Z バッファを有効にするかどうか
@@ -80,32 +81,38 @@ cdef class Renderer:
         self.camera_position = self.camera.position
         self._depth = 2 ** depth - 1
 
-        # Shading
-        for shader in shaders:
-            if isinstance(shader, AmbientShader):
-                self._is_ambient_shader_enabled = 1
-                self._ambient_shade[0] = shader.shade[0]
-                self._ambient_shade[1] = shader.shade[1]
-                self._ambient_shade[2] = shader.shade[2]
-            elif isinstance(shader, DiffuseShader):
-                self._is_diffuse_shader_enabled = 1
-                self._diffuse_direction[0] = shader.direction[0]
-                self._diffuse_direction[1] = shader.direction[1]
-                self._diffuse_direction[2] = shader.direction[2]
-                self._diffuse_pre_shade[0] = shader._pre_shade[0]
-                self._diffuse_pre_shade[1] = shader._pre_shade[1]
-                self._diffuse_pre_shade[2] = shader._pre_shade[2]
-            elif isinstance(shader, RandomColorShader):
-                self._is_random_shader_enabled = 1
-            elif isinstance(shader, SpecularShader):
-                self._is_specular_shader_enabled = 1
-                self._specular_direction[0] = shader.direction[0]
-                self._specular_direction[1] = shader.direction[1]
-                self._specular_direction[2] = shader.direction[2]
-                self._specular_shininess = shader.shininess
-                self._specular_pre_shade[0] = shader._pre_shade[0]
-                self._specular_pre_shade[1] = shader._pre_shade[1]
-                self._specular_pre_shade[2] = shader._pre_shade[2]
+    property shaders:
+        def __get__(self):
+            return self.shaders
+        def __set__(self, value):
+            self.shaders = value
+
+            # Python で書かれたシェーダーから必要な値を取り出す
+            for shader in self.shaders:
+                if isinstance(shader, AmbientShader):
+                    self._is_ambient_shader_enabled = 1
+                    self._ambient_shade[0] = shader.shade[0]
+                    self._ambient_shade[1] = shader.shade[1]
+                    self._ambient_shade[2] = shader.shade[2]
+                elif isinstance(shader, DiffuseShader):
+                    self._is_diffuse_shader_enabled = 1
+                    self._diffuse_direction[0] = shader.direction[0]
+                    self._diffuse_direction[1] = shader.direction[1]
+                    self._diffuse_direction[2] = shader.direction[2]
+                    self._diffuse_pre_shade[0] = shader._pre_shade[0]
+                    self._diffuse_pre_shade[1] = shader._pre_shade[1]
+                    self._diffuse_pre_shade[2] = shader._pre_shade[2]
+                elif isinstance(shader, RandomColorShader):
+                    self._is_random_shader_enabled = 1
+                elif isinstance(shader, SpecularShader):
+                    self._is_specular_shader_enabled = 1
+                    self._specular_direction[0] = shader.direction[0]
+                    self._specular_direction[1] = shader.direction[1]
+                    self._specular_direction[2] = shader.direction[2]
+                    self._specular_shininess = shader.shininess
+                    self._specular_pre_shade[0] = shader._pre_shade[0]
+                    self._specular_pre_shade[1] = shader._pre_shade[1]
+                    self._specular_pre_shade[2] = shader._pre_shade[2]
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -124,8 +131,9 @@ cdef class Renderer:
 
     cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl):
         cdef DOUBLE_t cos
+
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
-        # TODO: 現状では実行されないのでなくてもよい
+        # TODO: 現状では実行されない
         # if n[0] == 0.0 and n[1] == 0.0 and n[2] == 0.0:
         #     return
 
@@ -146,21 +154,20 @@ cdef class Renderer:
         cl[1] += random()
         cl[2] += random()
 
-    cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
-               DOUBLE_t[:] n, DOUBLE_t[:] cl):
+    cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
+                            DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] cl):
         cdef DOUBLE_t e[3]
         cdef DOUBLE_t s[3]
         cdef DOUBLE_t sn
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
-        # TODO: 現状では実行されないのでなくてもよい
+        # TODO: 現状では実行されない
         # if n[0] == 0.0 and n[1] == 0.0 and n[2] == 0.0:
-        #     cl[0] = 0.0
-        #     cl[1] = 0.0
-        #     cl[2] = 0.0
         #     return
+
         # ポリゴンの重心
         # g = (polygon[0] + polygon[1] + polygon[2]) / 3
+
         # ポリゴンから視点への単位方向ベクトル
         e[0] = self.camera_position[0] - a[0]
         e[1] = self.camera_position[1] - a[1]
@@ -180,8 +187,7 @@ cdef class Renderer:
         cl[2] += sn * self._specular_pre_shade[2]
 
     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                            DOUBLE_t[:] c, DOUBLE_t[:] n,
-                            DOUBLE_t[:] color):
+                            DOUBLE_t[:] c, DOUBLE_t[:] n, DOUBLE_t[:] color):
         """シェーディング処理"""
         cdef int i
 
@@ -189,14 +195,14 @@ cdef class Renderer:
         color[1] = 0.0
         color[2] = 0.0
 
-        if self._is_random_shader_enabled == 1:
-            self._shade_random(color)
+        if self._is_ambient_shader_enabled == 1:
+            self._shade_ambient(color)
 
         if self._is_diffuse_shader_enabled == 1:
             self._shade_diffuse(n, color)
 
-        if self._is_ambient_shader_enabled == 1:
-            self._shade_ambient(color)
+        if self._is_random_shader_enabled == 1:
+            self._shade_random(color)
 
         if self._is_specular_shader_enabled == 1:
             self._shade_specular(a, b, c, n, color)
