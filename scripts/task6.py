@@ -3,9 +3,8 @@ import sys
 import numpy as np
 from PyQt4 import QtCore, QtGui
 
-from cg import shader as py_shader
+from cg import shader
 from cg.camera import Camera
-from cg.cython import shader as cy_shader
 from cg.cython.renderer import Renderer as CyRenderer
 from cg.renderer import Renderer as PyRenderer
 from cg.shader import ShadingMode
@@ -42,10 +41,8 @@ def main():
 
         if backend_cython.isChecked():
             Renderer = CyRenderer
-            shader = cy_shader
         else:
             Renderer = PyRenderer
-            shader = py_shader
 
         shaders = []
         if (diffuse_checkbox.checkState() == 2 and
@@ -94,9 +91,10 @@ def main():
         elif shading_mode_phong.isChecked():
             mode = ShadingMode.phong
 
-        renderer = Renderer(camera=camera, shaders=shaders,
-                            width=width, height=height,
+        renderer = Renderer(width=width, height=height,
                             shading_mode=mode)
+        renderer.camera = camera
+        renderer.shaders = shaders
         renderer.draw_polygons(vrml.points, vrml.indexes)
         image_label.set_image(renderer.data.data)
 
