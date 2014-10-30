@@ -32,14 +32,6 @@ ext_modules = [
     Extension('cg.cython.renderer',
               sources=['cg/cython/renderer' + ext],
               include_dirs=[np.get_include()],
-              extra_compile_args=['-march=native']),
-    Extension('cg.cython.shader',
-              sources=['cg/cython/shader' + ext],
-              include_dirs=[np.get_include()],
-              extra_compile_args=['-march=native']),
-    Extension('cg.cython.utils',
-              sources=['cg/cython/utils' + ext],
-              include_dirs=[np.get_include()],
               extra_compile_args=['-march=native'])
 ]
 

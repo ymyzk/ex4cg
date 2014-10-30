@@ -1,11 +1,14 @@
 #cython: language_level=3, boundscheck=False, cdivision=True
 # -*- coding: utf-8 -*-
 
+from random import random
+
 from libc.math cimport ceil, floor, sqrt
 import numpy as np
 cimport numpy as np
 
-from cg.shader import ShadingMode
+from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
+                       ShadingMode, SpecularShader)
 
 
 DOUBLE = np.float64
@@ -16,14 +19,43 @@ ctypedef np.uint8_t UINT_t
 cdef inline int int_max(int a, int b): return a if a >= b else b
 cdef inline int int_min(int a, int b): return a if a <= b else b
 
+cdef inline void _unit_vector(DOUBLE_t[:] v):
+    """単位ベクトルに変換する処理"""
+    cdef DOUBLE_t norm
+    norm = sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2)
+    v[0] /= norm
+    v[1] /= norm
+    v[2] /= norm
+
+cdef inline double _dot_vectors(DOUBLE_t[:] v1, DOUBLE_t[:] v2, int l):
+    cdef int i
+    cdef double dot = 0.0
+    for i in range(l):
+        dot += v1[i] * v2[i]
+    return dot
+
 cdef class Renderer:
-    cdef object camera, shaders, shading_mode
+    cdef object camera, shading_mode
     cdef int depth, width, height, half_width, half_height, z_buffering
     cdef int _depth
     cdef readonly np.ndarray data
     cdef np.ndarray z_buffer
     cdef DOUBLE_t[:,:] _z_buffer
+    cdef DOUBLE_t[:] camera_position
     cdef DOUBLE_t focus
+
+    # Shading - Ambient
+    cdef int _is_ambient_shader_enabled
+    cdef DOUBLE_t[3] _ambient_shade
+    # Shading - Diffuse
+    cdef int _is_diffuse_shader_enabled
+    cdef DOUBLE_t[3] _diffuse_direction, _diffuse_pre_shade
+    # Shading - Random
+    cdef int _is_random_shader_enabled
+    # Shading - Specular
+    cdef int _is_specular_shader_enabled
+    cdef DOUBLE_t _specular_shininess
+    cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
 
     def __init__(self, camera, int width, int height, z_buffering=True,
                  int depth=8, shaders=tuple(), shading_mode=ShadingMode.flat):
@@ -32,7 +64,6 @@ cdef class Renderer:
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
         self.camera = camera
-        self.shaders = shaders
         self.depth = depth
         self.width = width
         self.height = height
@@ -46,7 +77,35 @@ cdef class Renderer:
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self.focus = self.camera.focus
+        self.camera_position = self.camera.position
         self._depth = 2 ** depth - 1
+
+        # Shading
+        for shader in shaders:
+            if isinstance(shader, AmbientShader):
+                self._is_ambient_shader_enabled = 1
+                self._ambient_shade[0] = shader.shade[0]
+                self._ambient_shade[1] = shader.shade[1]
+                self._ambient_shade[2] = shader.shade[2]
+            elif isinstance(shader, DiffuseShader):
+                self._is_diffuse_shader_enabled = 1
+                self._diffuse_direction[0] = shader.direction[0]
+                self._diffuse_direction[1] = shader.direction[1]
+                self._diffuse_direction[2] = shader.direction[2]
+                self._diffuse_pre_shade[0] = shader._pre_shade[0]
+                self._diffuse_pre_shade[1] = shader._pre_shade[1]
+                self._diffuse_pre_shade[2] = shader._pre_shade[2]
+            elif isinstance(shader, RandomColorShader):
+                self._is_random_shader_enabled = 1
+            elif isinstance(shader, SpecularShader):
+                self._is_specular_shader_enabled = 1
+                self._specular_direction[0] = shader.direction[0]
+                self._specular_direction[1] = shader.direction[1]
+                self._specular_direction[2] = shader.direction[2]
+                self._specular_shininess = shader.shininess
+                self._specular_pre_shade[0] = shader._pre_shade[0]
+                self._specular_pre_shade[1] = shader._pre_shade[1]
+                self._specular_pre_shade[2] = shader._pre_shade[2]
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -58,24 +117,89 @@ cdef class Renderer:
         point[0] = z_ip * point[0]
         point[1] = z_ip * point[1]
 
+    cdef void _shade_ambient(self, DOUBLE_t[:] cl):
+        cl[0] += self._ambient_shade[0]
+        cl[1] += self._ambient_shade[1]
+        cl[2] += self._ambient_shade[2]
+
+    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl):
+        cdef DOUBLE_t cos
+        # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        # TODO: 現状では実行されないのでなくてもよい
+        # if n[0] == 0.0 and n[1] == 0.0 and n[2] == 0.0:
+        #     return
+
+        # 反射光を計算
+        cos = _dot_vectors(self._diffuse_direction, n, 3)
+
+        # ポリゴンが裏を向いているときは, 反射光なし
+        if 0.0 < cos:
+            return
+
+        cl[0] += -cos * self._diffuse_pre_shade[0]
+        cl[1] += -cos * self._diffuse_pre_shade[1]
+        cl[2] += -cos * self._diffuse_pre_shade[2]
+
+    cdef void _shade_random(self, DOUBLE_t[:] cl):
+        """ランダムな色をつけるシェーダ"""
+        cl[0] += random()
+        cl[1] += random()
+        cl[2] += random()
+
+    cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b, DOUBLE_t[:] c,
+               DOUBLE_t[:] n, DOUBLE_t[:] cl):
+        cdef DOUBLE_t e[3]
+        cdef DOUBLE_t s[3]
+        cdef DOUBLE_t sn
+
+        # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
+        # TODO: 現状では実行されないのでなくてもよい
+        # if n[0] == 0.0 and n[1] == 0.0 and n[2] == 0.0:
+        #     cl[0] = 0.0
+        #     cl[1] = 0.0
+        #     cl[2] = 0.0
+        #     return
+        # ポリゴンの重心
+        # g = (polygon[0] + polygon[1] + polygon[2]) / 3
+        # ポリゴンから視点への単位方向ベクトル
+        e[0] = self.camera_position[0] - a[0]
+        e[1] = self.camera_position[1] - a[1]
+        e[2] = self.camera_position[2] - a[2]
+        _unit_vector(e)
+        s[0] = e[0] - self._specular_direction[0]
+        s[1] = e[1] - self._specular_direction[1]
+        s[2] = e[2] - self._specular_direction[2]
+        _unit_vector(s)
+        sn = _dot_vectors(s, n, 3)
+        # ポリゴンが裏を向いているときは, 反射光なし
+        if sn < 0.0:
+            return
+        sn **= self._specular_shininess
+        cl[0] += sn * self._specular_pre_shade[0]
+        cl[1] += sn * self._specular_pre_shade[1]
+        cl[2] += sn * self._specular_pre_shade[2]
+
     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                             DOUBLE_t[:] c, DOUBLE_t[:] n,
                             DOUBLE_t[:] color):
         """シェーディング処理"""
         cdef int i
-        cdef DOUBLE_t _cl[3]
-        cdef DOUBLE_t[:] cl = _cl
 
         color[0] = 0.0
         color[1] = 0.0
         color[2] = 0.0
 
-        # シェーディング
-        for i in range(len(self.shaders)):
-            self.shaders[i].calc(a, b, c, n, cl)
-            color[0] += cl[0]
-            color[1] += cl[1]
-            color[2] += cl[2]
+        if self._is_random_shader_enabled == 1:
+            self._shade_random(color)
+
+        if self._is_diffuse_shader_enabled == 1:
+            self._shade_diffuse(n, color)
+
+        if self._is_ambient_shader_enabled == 1:
+            self._shade_ambient(color)
+
+        if self._is_specular_shader_enabled == 1:
+            self._shade_specular(a, b, c, n, color)
 
     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t[:] cl):
         """画素を描画する処理"""
