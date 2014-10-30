@@ -112,6 +112,7 @@ class Renderer(object):
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
+        d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
 
         # ポリゴン全体を1色でシェーディング
         color = self._shade_vertex(polygon, normal)
@@ -125,8 +126,8 @@ class Renderer(object):
                 s = (y - a[1]) / (b[1] - a[1])
                 px = ((1 - s) * a[0] + s * b[0])
                 qx = ((1 - s) * a[0] + s * d[0])
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # bd -> c
                 if b[1] == c[1]:
@@ -134,8 +135,8 @@ class Renderer(object):
                 s = (y - c[1]) / (b[1] - c[1])
                 px = ((1 - s) * c[0] + s * b[0])
                 qx = ((1 - s) * c[0] + s * d[0])
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -146,7 +147,7 @@ class Renderer(object):
                 px, qx = qx, px
             for x in self.make_range_x(px, qx):
                 r = (x - px) / (qx - px)
-                self.draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
+                self.draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)
 
     def _draw_polygon_gouraud(self, polygon, normals):
         """ポリゴンを描画する処理
@@ -184,6 +185,7 @@ class Renderer(object):
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
+        d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
         dn = (1 - r) * an + r * cn
 
         # 頂点をそれぞれの法線ベクトルでシェーディング
@@ -202,8 +204,8 @@ class Renderer(object):
                 qx = ((1 - s) * a[0] + s * d[0])
                 pc = ((1 - s) * ac + s * bc)
                 qc = ((1 - s) * ac + s * dc)
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # 下 bd -> c
                 if b[1] == c[1]:
@@ -213,8 +215,8 @@ class Renderer(object):
                 qx = ((1 - s) * c[0] + s * d[0])
                 pc = ((1 - s) * cc + s * bc)
                 qc = ((1 - s) * cc + s * dc)
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -227,7 +229,7 @@ class Renderer(object):
             for x in self.make_range_x(px, qx):
                 r = (x - px) / (qx - px)
                 rc = ((1 - r) * pc + r * qc)
-                self.draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
+                self.draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
 
     def _draw_polygon_phong(self, polygon, normals):
         """ポリゴンを描画する処理
@@ -265,6 +267,7 @@ class Renderer(object):
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
         d = (1 - r) * a + r * c
+        d[2] = a[2] * c[2] / (r * a[2] + (1 - r) * c[2])
         dn = (1 - r) * an + r * cn
 
         for y in self.make_range_y(a[1], c[1]):
@@ -278,8 +281,8 @@ class Renderer(object):
                 qx = ((1 - s) * a[0] + s * d[0])
                 pn = ((1 - s) * an + s * bn)
                 qn = ((1 - s) * an + s * dn)
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # 下 bd -> c
                 if b[1] == c[1]:
@@ -289,8 +292,8 @@ class Renderer(object):
                 qx = ((1 - s) * c[0] + s * d[0])
                 pn = ((1 - s) * cn + s * bn)
                 qn = ((1 - s) * cn + s * dn)
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -304,7 +307,7 @@ class Renderer(object):
             for x in self.make_range_x(px, qx):
                 r = (x - px) / (qx - px)
                 rn = ((1 - r) * pn + r * qn)
-                z = 1 / (r / pz + (1 - r) / qz)
+                z = pz * qz / (r * qz + (1 - r) * pz)
                 self.draw_pixel(x, y, z, self._shade_vertex(polygon, rn))
 
     def draw_polygons(self, points, indexes):

@@ -148,8 +148,8 @@ cdef class Renderer:
                 s = (y - a[1]) / (b[1] - a[1])
                 px = ((1 - s) * a[0] + s * b[0])
                 qx = ((1 - s) * a[0] + s * d[0])
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # bd -> c
                 if b[1] == c[1]:
@@ -157,8 +157,8 @@ cdef class Renderer:
                 s = (y - c[1]) / (b[1] - c[1])
                 px = ((1 - s) * c[0] + s * b[0])
                 qx = ((1 - s) * c[0] + s * d[0])
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -170,7 +170,7 @@ cdef class Renderer:
             for x in range(int_max(<int>ceil(px), 1 - self.half_width),
                            int_min(<int>floor(qx), self.half_width) + 1):
                 r = (x - px) / (qx - px)
-                self._draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), color)
+                self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), color)
 
     cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                     DOUBLE_t[:] c, DOUBLE_t[:] an,
@@ -237,8 +237,8 @@ cdef class Renderer:
                 qc[0] = ((1 - s) * ac[0] + s * dc[0])
                 qc[1] = ((1 - s) * ac[1] + s * dc[1])
                 qc[2] = ((1 - s) * ac[2] + s * dc[2])
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # bd -> c
                 if b[1] == c[1]:
@@ -252,8 +252,8 @@ cdef class Renderer:
                 qc[0] = ((1 - s) * cc[0] + s * dc[0])
                 qc[1] = ((1 - s) * cc[1] + s * dc[1])
                 qc[2] = ((1 - s) * cc[2] + s * dc[2])
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -266,7 +266,7 @@ cdef class Renderer:
                     rc[0] = ((1 - r) * pc[0] + r * qc[0])
                     rc[1] = ((1 - r) * pc[1] + r * qc[1])
                     rc[2] = ((1 - r) * pc[2] + r * qc[2])
-                    self._draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
+                    self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
             else:
                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
                                int_min(<int>floor(px), self.half_width) + 1):
@@ -274,7 +274,7 @@ cdef class Renderer:
                     rc[0] = ((1 - r) * qc[0] + r * pc[0])
                     rc[1] = ((1 - r) * qc[1] + r * pc[1])
                     rc[2] = ((1 - r) * qc[2] + r * pc[2])
-                    self._draw_pixel(x, y, 1 / (r / pz + (1 - r) / qz), rc)
+                    self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
 
     cdef void _draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                   DOUBLE_t[:] c, DOUBLE_t[:] an,
@@ -335,8 +335,8 @@ cdef class Renderer:
                 qn[0] = ((1 - s) * an[0] + s * dn[0])
                 qn[1] = ((1 - s) * an[1] + s * dn[1])
                 qn[2] = ((1 - s) * an[2] + s * dn[2])
-                pz = 1 / ((1 - s) / a[2] + s / b[2])
-                qz = 1 / ((1 - s) / a[2] + s / d[2])
+                pz = a[2] * b[2] / (s * a[2] + (1 - s) * b[2])
+                qz = a[2] * d[2] / (s * a[2] + (1 - s) * d[2])
             else:
                 # bd -> c
                 if b[1] == c[1]:
@@ -350,8 +350,8 @@ cdef class Renderer:
                 qn[0] = ((1 - s) * cn[0] + s * dn[0])
                 qn[1] = ((1 - s) * cn[1] + s * dn[1])
                 qn[2] = ((1 - s) * cn[2] + s * dn[2])
-                pz = 1 / ((1 - s) / c[2] + s / b[2])
-                qz = 1 / ((1 - s) / c[2] + s / d[2])
+                pz = c[2] * b[2] / (s * c[2] + (1 - s) * b[2])
+                qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
@@ -365,7 +365,7 @@ cdef class Renderer:
                     rn[0] = ((1 - r) * pn[0] + r * qn[0])
                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
                     rn[2] = ((1 - r) * pn[2] + r * qn[2])
-                    z = 1 / (r / pz + (1 - r) / qz)
+                    z = pz * qz / (r * qz + (1 - r) * pz)
                     self._shade_vertex(a, b, c, rn, color)
                     self._draw_pixel(x, y, z, color)
             else:
@@ -375,7 +375,7 @@ cdef class Renderer:
                     rn[0] = ((1 - r) * qn[0] + r * pn[0])
                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
                     rn[2] = ((1 - r) * qn[2] + r * pn[2])
-                    z = 1 / (r / pz + (1 - r) / qz)
+                    z = pz * qz / (r * qz + (1 - r) * pz)
                     self._shade_vertex(a, b, c, rn, color)
                     self._draw_pixel(x, y, z, color)
 
