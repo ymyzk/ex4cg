@@ -29,6 +29,10 @@ def main():
 
     def open_vrml():
         file_path = QtGui.QFileDialog.getOpenFileName()
+
+        if file_path == '':
+            return
+
         with open(file_path) as f:
             vrml.load(f)
         file_label.setText(file_path)
