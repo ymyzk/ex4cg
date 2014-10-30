@@ -302,7 +302,7 @@ cdef class Renderer:
         sn = s[0] * n[0] + s[1] * n[1] + s[2] * n[2]
 
         # ポリゴンが裏を向いているときは, 反射光なし
-        if sn < 0.0:
+        if sn <= 0.0:
             return
 
         sn **= self._specular_shininess
@@ -364,6 +364,9 @@ cdef class Renderer:
         cdef DOUBLE_t px, qx, pz, qz, r, s
         cdef DOUBLE_t[3] d, color
 
+        # ポリゴン全体を1色でシェーディング
+        self._shade_vertex(a, b, c, n, color)
+
         # ポリゴンの3点を座標変換
         self._convert_point(a)
         self._convert_point(b)
@@ -384,9 +387,6 @@ cdef class Renderer:
         # 3点の y 座標が同じであれば処理終了
         if a[1] == c[1]:
             return
-
-        # ポリゴン全体を1色でシェーディング
-        self._shade_vertex(a, b, c, n, color)
 
         # d の座標を求める
         r = (b[1] - a[1]) / (c[1] - a[1])
@@ -436,7 +436,18 @@ cdef class Renderer:
         cdef int x, y
         cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t [3] ac, bc, cc, dc, pc, qc, rc
+        cdef DOUBLE_t[3] _a, _b, _c, ac, bc, cc, dc, pc, qc, rc
+
+        # 座標変換前の座標を保存
+        _a[0] = a[0]
+        _a[1] = a[1]
+        _a[2] = a[2]
+        _b[0] = b[0]
+        _b[1] = b[1]
+        _b[2] = b[2]
+        _c[0] = c[0]
+        _c[1] = c[1]
+        _c[2] = c[2]
 
         # ポリゴンの3点を座標変換
         self._convert_point(a)
@@ -473,10 +484,10 @@ cdef class Renderer:
         dn[2] = (1 - r) * an[2] + r * cn[2]
 
         # 頂点をそれぞれの法線ベクトルでシェーディング
-        self._shade_vertex(a, b, c, an, ac)
-        self._shade_vertex(a, b, c, bn, bc)
-        self._shade_vertex(a, b, c, cn, cc)
-        self._shade_vertex(a, b, c, dn, dc)
+        self._shade_vertex(_a, _b, _c, an, ac)
+        self._shade_vertex(_a, _b, _c, bn, bc)
+        self._shade_vertex(_a, _b, _c, cn, cc)
+        self._shade_vertex(_a, _b, _c, dn, dc)
 
         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
                        int_min(<int>floor(c[1]), self.half_height) + 1):
@@ -538,9 +549,20 @@ cdef class Renderer:
                                   DOUBLE_t[:] bn, DOUBLE_t[:] cn):
         """ポリゴンを描画する処理 (フォンシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t[3] d, dn, pn, qn, rn
+        cdef DOUBLE_t[3] _a, _b, _c, d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
         cdef DOUBLE_t[3] color
+
+        # 座標変換前の座標を保存
+        _a[0] = a[0]
+        _a[1] = a[1]
+        _a[2] = a[2]
+        _b[0] = b[0]
+        _b[1] = b[1]
+        _b[2] = b[2]
+        _c[0] = c[0]
+        _c[1] = c[1]
+        _c[2] = c[2]
 
         # ポリゴンの3点を座標変換
         self._convert_point(a)
@@ -612,7 +634,7 @@ cdef class Renderer:
             # x についてループ
             if px == qx:
                 # x が同じの時はすぐに終了
-                self._shade_vertex(a, b, c, pn, color)
+                self._shade_vertex(_a, _b, _c, pn, color)
                 self._draw_pixel(<int>px, y, pz, color)
                 continue
             elif px < qx:
@@ -623,7 +645,7 @@ cdef class Renderer:
                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
                     rn[2] = ((1 - r) * pn[2] + r * qn[2])
                     z = pz * qz / (r * qz + (1 - r) * pz)
-                    self._shade_vertex(a, b, c, rn, color)
+                    self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
             else:
                 for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
@@ -633,7 +655,7 @@ cdef class Renderer:
                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
                     rn[2] = ((1 - r) * qn[2] + r * pn[2])
                     z = pz * qz / (r * qz + (1 - r) * pz)
-                    self._shade_vertex(a, b, c, rn, color)
+                    self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
 
     def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
