@@ -5,7 +5,9 @@ from PyQt4 import QtCore, QtGui
 
 from cg import shader as py_shader
 from cg.camera import Camera
-from cg.renderer import Renderer
+from cg.cython import shader as cy_shader
+from cg.cython.renderer import Renderer as CyRenderer
+from cg.renderer import Renderer as PyRenderer
 from cg.shader import ShadingMode
 from cg.vrml import Vrml
 
@@ -38,7 +40,13 @@ def main():
                         angle=np.array((0.0, 0.0, 1.0)),
                         focus=camera_focus.value())
 
-        shader = py_shader
+        if backend_cython.isChecked():
+            Renderer = CyRenderer
+            shader = cy_shader
+        else:
+            Renderer = PyRenderer
+            shader = py_shader
+
         shaders = []
         if (diffuse_checkbox.checkState() == 2 and
                 vrml.diffuse_color is not None):
@@ -85,6 +93,7 @@ def main():
             mode = ShadingMode.gouraud
         elif shading_mode_phong.isChecked():
             mode = ShadingMode.phong
+
         renderer = Renderer(camera=camera, shaders=shaders,
                             width=width, height=height,
                             shading_mode=mode)
@@ -316,9 +325,21 @@ def main():
     shading_mode_phong = QtGui.QRadioButton('Phong')
     shading_mode_layout.addWidget(shading_mode_phong)
 
+    backend = QtGui.QGroupBox()
+    backend_layout = QtGui.QHBoxLayout()
+    backend.setLayout(backend_layout)
+    backend.setTitle('Backend')
+    render_panel_layout.addWidget(backend, 1, 0)
+
+    backend_python = QtGui.QRadioButton('Python')
+    backend_python.setChecked(1)
+    backend_layout.addWidget(backend_python)
+    backend_cython = QtGui.QRadioButton('Python + Cython')
+    backend_layout.addWidget(backend_cython)
+
     render_button = QtGui.QPushButton('Render')
     render_button.clicked.connect(render)
-    render_panel_layout.addWidget(render_button, 1, 0)
+    render_panel_layout.addWidget(render_button, 2, 0)
 
     main_window.setCentralWidget(main_panel)
     main_window.show()
