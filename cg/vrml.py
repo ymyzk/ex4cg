@@ -45,14 +45,12 @@ class Vrml(object):
                 indexes.append((
                     int(items[0]),
                     int(items[1]),
-                    int(items[2])
-                ))
+                    int(items[2])))
             elif status is Status.point and len(items) == 3:
-                points.append(np.array((
+                points.append((
                     float(items[0]),
                     float(items[1]),
-                    float(items[2])
-                ), dtype=DOUBLE))
+                    float(items[2])))
             elif status is Status.material:
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
