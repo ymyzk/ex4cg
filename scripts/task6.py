@@ -6,6 +6,7 @@ from PyQt4 import QtCore, QtGui
 from cg import shader
 from cg.camera import Camera
 from cg.cython.renderer import Renderer as CyRenderer
+from cg.ppm import PpmImage
 from cg.renderer import Renderer as PyRenderer
 from cg.shader import ShadingMode
 from cg.vrml import Vrml
@@ -27,6 +28,8 @@ class ImageWidget(QtGui.QLabel):
 class Application(object):
     def __init__(self):
         self.vrml = Vrml()
+        self.data = None
+        self.width = self.height = 256
 
         # UI
         self.app = QtGui.QApplication(sys.argv)
@@ -71,6 +74,10 @@ class Application(object):
         self.file_label = QtGui.QLabel()
         self.file_label.setText("Please select VRML file")
         file_panel_layout.addWidget(self.file_label, 1, 0)
+
+        save_file_button = QtGui.QPushButton('Save PPM file...')
+        save_file_button.clicked.connect(self.save_ppm)
+        file_panel_layout.addWidget(save_file_button, 2, 0)
 
         # Camera Tab
         camera_panel = QtGui.QWidget()
@@ -275,12 +282,12 @@ class Application(object):
         self.render_size_w = QtGui.QSpinBox()
         self.render_size_w.setMinimum(0)
         self.render_size_w.setMaximum(512)
-        self.render_size_w.setValue(256)
+        self.render_size_w.setValue(self.width)
         render_panel_layout.addWidget(self.render_size_w, 2, 1)
         self.render_size_h = QtGui.QSpinBox()
         self.render_size_h.setMinimum(0)
         self.render_size_h.setMaximum(512)
-        self.render_size_h.setValue(256)
+        self.render_size_h.setValue(self.height)
         render_panel_layout.addWidget(self.render_size_h, 2, 2)
 
         render_button = QtGui.QPushButton('Render')
@@ -303,6 +310,17 @@ class Application(object):
             self.vrml.load(f)
         self.file_label.setText(file_path)
         self.render()
+
+    def save_ppm(self):
+        file_path = QtGui.QFileDialog.getSaveFileName()
+
+        if file_path == '':
+            return
+
+        image = PpmImage(file_path, self.width, self.height, self.data)
+
+        with open(file_path, 'w') as f:
+            image.dump(f)
 
     def render(self):
         self.status_bar.showMessage('Rendering..')
@@ -355,8 +373,8 @@ class Application(object):
         if len(shaders) == 0:
             shaders.append(shader.RandomColorShader())
 
-        width = self.render_size_w.value()
-        height = self.render_size_h.value()
+        self.width = self.render_size_w.value()
+        self.height = self.render_size_h.value()
 
         mode = ShadingMode.flat
         if self.shading_mode_flat.isChecked():
@@ -366,12 +384,14 @@ class Application(object):
         elif self.shading_mode_phong.isChecked():
             mode = ShadingMode.phong
 
-        renderer = Renderer(width=width, height=height,
+        renderer = Renderer(width=self.width, height=self.height,
                             shading_mode=mode)
         renderer.camera = camera
         renderer.shaders = shaders
         renderer.draw_polygons(self.vrml.points, self.vrml.indexes)
-        self.image_label.set_image(renderer.data.data, width, height)
+
+        self.data = renderer.data
+        self.image_label.set_image(self.data, self.width, self.height)
 
         self.status_bar.showMessage('Rendered.')
 
