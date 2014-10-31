@@ -40,6 +40,33 @@ class Application(object):
         main_panel_layout = QtGui.QVBoxLayout()
         main_panel.setLayout(main_panel_layout)
 
+        # Menu Bar
+        menu_bar = self.main_window.menuBar()
+
+        menu_file = menu_bar.addMenu('&File')
+
+        open_action = QtGui.QAction('&Open', self.main_window)
+        open_action.setShortcut('Ctrl+O')
+        open_action.triggered.connect(self.open_vrml)
+        menu_file.addAction(open_action)
+
+        save_action = QtGui.QAction('&Save', self.main_window)
+        save_action.setShortcut('Ctrl+S')
+        save_action.triggered.connect(self.save_ppm)
+        menu_file.addAction(save_action)
+
+        close_action = QtGui.QAction('&Close', self.main_window)
+        close_action.setShortcut('Ctrl+W')
+        close_action.triggered.connect(QtGui.qApp.quit)
+        menu_file.addAction(close_action)
+
+        menu_render = menu_bar.addMenu('&Render')
+
+        render_action = QtGui.QAction('&Render', self.main_window)
+        render_action.setShortcut('Ctrl+R')
+        render_action.triggered.connect(self.render)
+        menu_file.addAction(render_action)
+
         # Status Bar
         self.status_bar = QtGui.QStatusBar()
         self.main_window.setStatusBar(self.status_bar)
