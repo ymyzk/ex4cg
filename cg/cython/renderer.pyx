@@ -661,8 +661,11 @@ cdef class Renderer:
     def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
         cdef DOUBLE_t[:,:,:] polygons
         cdef DOUBLE_t[:,:] polygon, polygon_normals, vertex_normals
+        cdef DOUBLE_t[:] cp, p1, p2, p3, n
         cdef UINT64_t[:] index
         cdef int i
+
+        cp = self.camera_position
 
         # ポリゴンのリストを作成
         polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)
@@ -680,8 +683,26 @@ cdef class Renderer:
         if self.shading_mode is ShadingMode.flat:
             for i in range(polygons.shape[0]):
                 polygon = polygons[i]
-                self._draw_polygon_flat(polygon[0], polygon[1],
-                                        polygon[2], polygon_normals[i])
+                n = polygon_normals[i]
+
+                # ポリゴンがカメラを向いていなければ描画しない
+                p1 = polygon[0]
+                if ((cp[0] - p1[0]) * n[0]
+                    + (cp[1] - p1[1]) * n[1]
+                    + (cp[2] - p1[2]) * n[2]) < 0:
+                    continue
+                p2 = polygon[1]
+                if ((cp[0] - p2[0]) * n[0]
+                    + (cp[1] - p2[1]) * n[1]
+                    + (cp[2] - p2[2]) * n[2]) < 0:
+                    continue
+                p3 = polygon[2]
+                if ((cp[0] - p3[0]) * n[0]
+                    + (cp[1] - p3[1]) * n[1]
+                    + (cp[2] - p3[2]) * n[2]) < 0:
+                    continue
+
+                self._draw_polygon_flat(p1, p2, p3, n)
         else:
             # 各頂点の法線ベクトルを計算
             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
@@ -692,9 +713,26 @@ cdef class Renderer:
                 for i in range(polygons.shape[0]):
                     polygon = polygons[i]
                     index = indexes[i]
-                    self._draw_polygon_gouraud(polygon[0],
-                                               polygon[1],
-                                               polygon[2],
+                    n = polygon_normals[i]
+
+                    # ポリゴンがカメラを向いていなければ描画しない
+                    p1 = polygon[0]
+                    if ((cp[0] - p1[0]) * n[0]
+                        + (cp[1] - p1[1]) * n[1]
+                        + (cp[2] - p1[2]) * n[2]) < 0:
+                        continue
+                    p2 = polygon[1]
+                    if ((cp[0] - p2[0]) * n[0]
+                        + (cp[1] - p2[1]) * n[1]
+                        + (cp[2] - p2[2]) * n[2]) < 0:
+                        continue
+                    p3 = polygon[2]
+                    if ((cp[0] - p3[0]) * n[0]
+                        + (cp[1] - p3[1]) * n[1]
+                        + (cp[2] - p3[2]) * n[2]) < 0:
+                        continue
+
+                    self._draw_polygon_gouraud(p1, p2, p3,
                                                vertex_normals[index[0]],
                                                vertex_normals[index[1]],
                                                vertex_normals[index[2]])
@@ -702,9 +740,26 @@ cdef class Renderer:
                 for i in range(polygons.shape[0]):
                     polygon = polygons[i]
                     index = indexes[i]
-                    self._draw_polygon_phong(polygon[0],
-                                             polygon[1],
-                                             polygon[2],
+                    n = polygon_normals[i]
+
+                    # ポリゴンがカメラを向いていなければ描画しない
+                    p1 = polygon[0]
+                    if ((cp[0] - p1[0]) * n[0]
+                        + (cp[1] - p1[1]) * n[1]
+                        + (cp[2] - p1[2]) * n[2]) < 0:
+                        continue
+                    p2 = polygon[1]
+                    if ((cp[0] - p2[0]) * n[0]
+                        + (cp[1] - p2[1]) * n[1]
+                        + (cp[2] - p2[2]) * n[2]) < 0:
+                        continue
+                    p3 = polygon[2]
+                    if ((cp[0] - p3[0]) * n[0]
+                        + (cp[1] - p3[1]) * n[1]
+                        + (cp[2] - p3[2]) * n[2]) < 0:
+                        continue
+
+                    self._draw_polygon_phong(p1, p2, p3,
                                              vertex_normals[index[0]],
                                              vertex_normals[index[1]],
                                              vertex_normals[index[2]])
