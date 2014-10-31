@@ -4,6 +4,7 @@
 from random import random
 
 from libc.math cimport ceil, floor, sqrt
+from libc.stdlib cimport free, malloc
 import numpy as np
 cimport numpy as np
 
@@ -82,17 +83,17 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
     :param polygon_normals: ポリゴンの面の法線ベクトルの配列 (n x 3)
     :param vertex_normals: 頂点の法線ベクトルの配列 (m x 3)
     """
-    cdef DOUBLE_t[:,:] vertexes
     cdef DOUBLE_t[:] normal, vertex, vertex_normal
-    cdef UINT64_t[:] vertexes_n, index
+    cdef DOUBLE_t *vertexes
+    cdef UINT64_t[:] index
+    cdef UINT64_t *vertexes_n
     cdef UINT64_t vertex_n
     cdef int i, j, l
 
     l = vertex_normals.shape[0]
 
-    with gil:
-        vertexes = np.zeros((l, 3), dtype=DOUBLE)
-        vertexes_n = np.zeros(l, dtype=UINT64)
+    vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * l * 3)
+    vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * l)
 
     # 各頂点を含む面の法線ベクトルの和を求める
     l = indexes.shape[0]
@@ -100,41 +101,41 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
         index = indexes[i]
         normal = polygon_normals[i]
 
-        j = index[0]
-        vertex = vertexes[j]
-        vertex[0] += normal[0]
-        vertex[1] += normal[1]
-        vertex[2] += normal[2]
-        vertexes_n[j] += 1
+        j = 3 * index[0]
+        vertexes[j+0] += normal[0]
+        vertexes[j+1] += normal[1]
+        vertexes[j+2] += normal[2]
+        vertexes_n[index[0]] += 1
 
-        j = index[1]
-        vertex = vertexes[j]
-        vertex[0] += normal[0]
-        vertex[1] += normal[1]
-        vertex[2] += normal[2]
-        vertexes_n[j] += 1
+        j = 3 * index[1]
+        vertexes[j+0] += normal[0]
+        vertexes[j+1] += normal[1]
+        vertexes[j+2] += normal[2]
+        vertexes_n[index[1]] += 1
 
-        j = index[2]
-        vertex = vertexes[j]
-        vertex[0] += normal[0]
-        vertex[1] += normal[1]
-        vertex[2] += normal[2]
-        vertexes_n[j] += 1
+        j = 3 * index[2]
+        vertexes[j+0] += normal[0]
+        vertexes[j+1] += normal[1]
+        vertexes[j+2] += normal[2]
+        vertexes_n[index[2]] += 1
 
     # 各頂点の法線ベクトルの平均値を求める
-    l = vertexes.shape[0]
+    l = vertex_normals.shape[0]
     for i in range(l):
-        vertex = vertexes[i]
+        j = 3 * i
         vertex_n = vertexes_n[i]
         vertex_normal = vertex_normals[i]
         if 0 < vertex_n:
-            vertex_normal[0] = vertex[0] / vertex_n
-            vertex_normal[1] = vertex[1] / vertex_n
-            vertex_normal[2] = vertex[2] / vertex_n
+            vertex_normal[0] = vertexes[j+0] / vertex_n
+            vertex_normal[1] = vertexes[j+1] / vertex_n
+            vertex_normal[2] = vertexes[j+2] / vertex_n
         else:
             vertex_normal[0] = 0.0
             vertex_normal[1] = 0.0
             vertex_normal[2] = 0.0
+
+    free(vertexes)
+    free(vertexes_n)
 
 
 cdef class Renderer:
@@ -146,7 +147,7 @@ cdef class Renderer:
     cdef UINT8_t[:,:] _data
     cdef np.ndarray z_buffer
     cdef DOUBLE_t[:,:] _z_buffer, camera_array
-    cdef DOUBLE_t[:] camera_position
+    cdef DOUBLE_t[3] camera_position
     cdef DOUBLE_t focus
 
     # Shading - Ambient
@@ -230,7 +231,9 @@ cdef class Renderer:
 
             self.focus = self.camera.focus
             self.camera_array = self.camera.array
-            self.camera_position = self.camera.position
+            self.camera_position[0] = self.camera.position[0]
+            self.camera_position[1] = self.camera.position[1]
+            self.camera_position[2] = self.camera.position[2]
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
