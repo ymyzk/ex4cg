@@ -112,36 +112,48 @@ class Application(object):
         camera_panel.setLayout(camera_panel_layout)
         control_tab.addTab(camera_panel, 'Camera')
 
-        # camera_panel_layout.addWidget(
-        #     QtGui.QLabel('Position (x, y, z): '), 0, 0)
-        # camera_position_x = QtGui.QDoubleSpinBox()
-        # camera_position_x.setValue(0.0)
-        # camera_panel_layout.addWidget(camera_position_x, 0, 1)
-        # camera_position_y = QtGui.QDoubleSpinBox()
-        # camera_position_y.setValue(0.0)
-        # camera_panel_layout.addWidget(camera_position_y, 0, 2)
-        # camera_position_z = QtGui.QDoubleSpinBox()
-        # camera_position_z.setValue(0.0)
-        # camera_panel_layout.addWidget(camera_position_z, 0, 3)
-
-        # camera_panel_layout.addWidget(
-        #     QtGui.QLabel('Angle (x, y, z): '), 1, 0)
-        # camera_angle_x = QtGui.QDoubleSpinBox()
-        # camera_angle_x.setValue(0.0)
-        # camera_panel_layout.addWidget(camera_angle_x, 1, 1)
-        # camera_angle_y = QtGui.QDoubleSpinBox()
-        # camera_angle_y.setValue(0.0)
-        # camera_panel_layout.addWidget(camera_angle_y, 1, 2)
-        # camera_angle_z = QtGui.QDoubleSpinBox()
-        # camera_angle_z.setValue(1.0)
-        # camera_panel_layout.addWidget(camera_angle_z, 1, 3)
+        camera_panel_layout.addWidget(
+            QtGui.QLabel('Position (x, y, z): '), 0, 0)
+        self.camera_position_x = QtGui.QDoubleSpinBox()
+        self.camera_position_x.setMinimum(-128.0)
+        self.camera_position_x.setMaximum(127.0)
+        self.camera_position_x.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_position_x, 0, 1)
+        self.camera_position_y = QtGui.QDoubleSpinBox()
+        self.camera_position_y.setMinimum(-128.0)
+        self.camera_position_y.setMaximum(127.0)
+        self.camera_position_y.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_position_y, 0, 2)
+        self.camera_position_z = QtGui.QDoubleSpinBox()
+        self.camera_position_z.setMinimum(-128.0)
+        self.camera_position_z.setMaximum(127.0)
+        self.camera_position_z.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_position_z, 0, 3)
 
         camera_panel_layout.addWidget(
-            QtGui.QLabel('Focus (f): '), 0, 0)
+            QtGui.QLabel('Angle (x, y, z): '), 1, 0)
+        self.camera_angle_x = QtGui.QDoubleSpinBox()
+        self.camera_angle_x.setMinimum(-360.0)
+        self.camera_angle_x.setMaximum(360.0)
+        self.camera_angle_x.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_angle_x, 1, 1)
+        self.camera_angle_y = QtGui.QDoubleSpinBox()
+        self.camera_angle_y.setMinimum(-360.0)
+        self.camera_angle_y.setMaximum(360.0)
+        self.camera_angle_y.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_angle_y, 1, 2)
+        self.camera_angle_z = QtGui.QDoubleSpinBox()
+        self.camera_angle_z.setMinimum(-360.0)
+        self.camera_angle_z.setMaximum(360.0)
+        self.camera_angle_z.setValue(0.0)
+        camera_panel_layout.addWidget(self.camera_angle_z, 1, 3)
+
+        camera_panel_layout.addWidget(
+            QtGui.QLabel('Focus (f): '), 2, 0)
         self.camera_focus = QtGui.QDoubleSpinBox()
         self.camera_focus.setMaximum(1024.0)
         self.camera_focus.setValue(256.0)
-        camera_panel_layout.addWidget(self.camera_focus, 0, 1)
+        camera_panel_layout.addWidget(self.camera_focus, 2, 1)
 
         # Diffuse Tab
         diffuse_panel = QtGui.QWidget()
@@ -352,9 +364,16 @@ class Application(object):
     def render(self):
         self.status_bar.showMessage('Rendering..')
 
-        camera = Camera(position=np.array((0.0, 0.0, 0.0)),
-                        angle=np.array((0.0, 0.0, 1.0)),
-                        focus=self.camera_focus.value())
+        camera = Camera(
+            position=np.array((
+                self.camera_position_x.value(),
+                self.camera_position_y.value(),
+                self.camera_position_z.value())),
+            angle=np.array((
+                self.camera_angle_x.value(),
+                self.camera_angle_y.value(),
+                self.camera_angle_z.value())),
+            focus=self.camera_focus.value())
 
         if self.backend_cython.isChecked():
             Renderer = CyRenderer
