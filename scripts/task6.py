@@ -11,7 +11,6 @@ from cg.shader import ShadingMode
 from cg.vrml import Vrml
 
 
-width = height = 256
 depth = 8
 
 
@@ -19,7 +18,8 @@ class ImageWidget(QtGui.QLabel):
     def __init__(self):
         super().__init__()
 
-    def set_image(self, image):
+    def set_image(self, image, width, height):
+        self.setFixedSize(width, height)
         self.setPixmap(QtGui.QPixmap(
             QtGui.QImage(image, width, height, QtGui.QImage.Format_RGB888)))
 
@@ -49,7 +49,6 @@ class Application(object):
         main_panel_layout.addWidget(image_panel)
 
         self.image_label = ImageWidget()
-        self.image_label.setFixedSize(width, height)
         image_panel_layout.addStretch()
         image_panel_layout.addWidget(self.image_label)
         image_panel_layout.addStretch()
@@ -249,7 +248,7 @@ class Application(object):
         shading_mode_layout = QtGui.QHBoxLayout()
         shading_mode.setLayout(shading_mode_layout)
         shading_mode.setTitle('Shading Mode')
-        render_panel_layout.addWidget(shading_mode, 0, 0)
+        render_panel_layout.addWidget(shading_mode, 0, 0, 1, 3)
 
         self.shading_mode_flat = QtGui.QRadioButton('Flat (Constant)')
         self.shading_mode_flat.setChecked(1)
@@ -263,7 +262,7 @@ class Application(object):
         backend_layout = QtGui.QHBoxLayout()
         backend.setLayout(backend_layout)
         backend.setTitle('Backend')
-        render_panel_layout.addWidget(backend, 1, 0)
+        render_panel_layout.addWidget(backend, 1, 0, 1, 3)
 
         self.backend_python = QtGui.QRadioButton('Python')
         self.backend_python.setChecked(1)
@@ -271,9 +270,22 @@ class Application(object):
         self.backend_cython = QtGui.QRadioButton('Python + Cython')
         backend_layout.addWidget(self.backend_cython)
 
+        render_panel_layout.addWidget(
+            QtGui.QLabel('Size (w, h): '), 2, 0)
+        self.render_size_w = QtGui.QSpinBox()
+        self.render_size_w.setMinimum(0)
+        self.render_size_w.setMaximum(512)
+        self.render_size_w.setValue(256)
+        render_panel_layout.addWidget(self.render_size_w, 2, 1)
+        self.render_size_h = QtGui.QSpinBox()
+        self.render_size_h.setMinimum(0)
+        self.render_size_h.setMaximum(512)
+        self.render_size_h.setValue(256)
+        render_panel_layout.addWidget(self.render_size_h, 2, 2)
+
         render_button = QtGui.QPushButton('Render')
         render_button.clicked.connect(self.render)
-        render_panel_layout.addWidget(render_button, 2, 0)
+        render_panel_layout.addWidget(render_button, 3, 0, 1, 3)
 
         self.main_window.setCentralWidget(main_panel)
 
@@ -343,6 +355,9 @@ class Application(object):
         if len(shaders) == 0:
             shaders.append(shader.RandomColorShader())
 
+        width = self.render_size_w.value()
+        height = self.render_size_h.value()
+
         mode = ShadingMode.flat
         if self.shading_mode_flat.isChecked():
             mode = ShadingMode.flat
@@ -356,7 +371,7 @@ class Application(object):
         renderer.camera = camera
         renderer.shaders = shaders
         renderer.draw_polygons(self.vrml.points, self.vrml.indexes)
-        self.image_label.set_image(renderer.data.data)
+        self.image_label.set_image(renderer.data.data, width, height)
 
         self.status_bar.showMessage('Rendered.')
 
