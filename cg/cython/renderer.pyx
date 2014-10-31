@@ -146,8 +146,9 @@ cdef class Renderer:
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
     cdef np.ndarray z_buffer
-    cdef DOUBLE_t[:,:] _z_buffer, camera_array
-    cdef DOUBLE_t[3] camera_position
+    cdef DOUBLE_t[:,:] _z_buffer
+    cdef DOUBLE_t camera_array[3][3]
+    cdef DOUBLE_t camera_position[3]
     cdef DOUBLE_t focus
 
     # Shading - Ambient
@@ -230,7 +231,16 @@ cdef class Renderer:
             self.camera = value
 
             self.focus = self.camera.focus
-            self.camera_array = self.camera.array
+            cdef DOUBLE_t [:,:] array = self.camera.array
+            self.camera_array[0][0] = array[0][0]
+            self.camera_array[0][1] = array[0][1]
+            self.camera_array[0][2] = array[0][2]
+            self.camera_array[1][0] = array[1][0]
+            self.camera_array[1][1] = array[1][1]
+            self.camera_array[1][2] = array[1][2]
+            self.camera_array[2][0] = array[2][0]
+            self.camera_array[2][1] = array[2][1]
+            self.camera_array[2][2] = array[2][2]
             self.camera_position[0] = self.camera.position[0]
             self.camera_position[1] = self.camera.position[1]
             self.camera_position[2] = self.camera.position[2]
@@ -240,17 +250,15 @@ cdef class Renderer:
 
         画像平面の x, y, z
         """
-        cdef DOUBLE_t[:] row
         cdef DOUBLE_t[3] p
         cdef DOUBLE_t k
         cdef int i
 
         for i in range(3):
-            row = self.camera_array[i]
-            p[i] = (row[0] * point[0]
-                    + row[1] * point[1]
-                    + row[2] * point[2]
-                    + row[3])
+            p[i] = (self.camera_array[i][0] * point[0]
+                    + self.camera_array[i][1] * point[1]
+                    + self.camera_array[i][2] * point[2]
+                    + self.camera_array[i][3])
         k = self.focus / p[2]
         point[0] = k * p[0]
         point[1] = k * p[1]
