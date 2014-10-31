@@ -337,7 +337,19 @@ class Renderer(object):
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(len(polygons)):
-                self._draw_polygon_flat(polygons[i], polygon_normals[i])
+                p = polygons[i]
+                pn = polygon_normals[i]
+
+                # ポリゴンがこちらを向いていなければ描画しない
+                if np.dot(self.camera.position - p[0], pn) < 0:
+                    continue
+                elif np.dot(self.camera.position - p[1], pn) < 0:
+                    continue
+                elif np.dot(self.camera.position - p[2], pn) < 0:
+                    continue
+
+                self._draw_polygon_flat(p, pn)
+
         else:
             # 各頂点の法線ベクトルのリストを作成
             vertexes = [[] for _ in range(len(points))]
@@ -362,9 +374,29 @@ class Renderer(object):
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
                 for i in range(len(polygons)):
-                    self._draw_polygon_gouraud(polygons[i],
-                                               polygon_vertex_normals[i])
+                    p = polygons[i]
+                    pn = polygon_normals[i]
+
+                    # ポリゴンがこちらを向いていなければ描画しない
+                    if np.dot(self.camera.position - p[0], pn) < 0:
+                        continue
+                    elif np.dot(self.camera.position - p[1], pn) < 0:
+                        continue
+                    elif np.dot(self.camera.position - p[2], pn) < 0:
+                        continue
+
+                    self._draw_polygon_gouraud(p, polygon_vertex_normals[i])
             elif self.shading_mode is ShadingMode.phong:
                 for i in range(len(polygons)):
-                    self._draw_polygon_phong(polygons[i],
-                                             polygon_vertex_normals[i])
+                    p = polygons[i]
+                    pn = polygon_normals[i]
+
+                    # ポリゴンがこちらを向いていなければ描画しない
+                    if np.dot(self.camera.position - p[0], pn) < 0:
+                        continue
+                    elif np.dot(self.camera.position - p[1], pn) < 0:
+                        continue
+                    elif np.dot(self.camera.position - p[2], pn) < 0:
+                        continue
+
+                    self._draw_polygon_phong(p, polygon_vertex_normals[i])

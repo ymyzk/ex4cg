@@ -59,8 +59,8 @@ class DiffuseShader(object):
         """
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         # TODO: 現状では実行されないのでなくてもよい
-        if np.count_nonzero(normal) == 0:
-            return _zeros
+        # if np.count_nonzero(normal) == 0:
+        #     return _zeros
         # 反射光を計算
         cos = -np.dot(self.direction, normal)
         # ポリゴンが裏を向いているときは, 反射光なし
@@ -95,8 +95,8 @@ class SpecularShader(object):
     def calc(self, polygon, normal):
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
         # TODO: 現状では実行されないのでなくてもよい
-        if np.count_nonzero(normal) == 0:
-            return _zeros
+        # if np.count_nonzero(normal) == 0:
+        #     return _zeros
         # ポリゴンの重心
         # g = (polygon[0] + polygon[1] + polygon[2]) / 3
         # ポリゴンから視点への単位方向ベクトル
