@@ -33,6 +33,13 @@ class Renderer(object):
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
 
+        # ポリゴンのキャッシュ用
+        self._points = None
+        self._indexes = None
+        self._polygons = None
+        self._polygon_normals = None
+        self._polygon_vertex_normals = None
+
     def _convert_point(self, point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
@@ -310,7 +317,7 @@ class Renderer(object):
                 z = pz * qz / (r * qz + (1 - r) * pz)
                 self.draw_pixel(x, y, z, self._shade_vertex(polygon, rn))
 
-    def draw_polygons(self, points, indexes):
+    def prepare_polygons(self, points, indexes):
         # ポリゴンのリストを作成
         polygons = np.array([[points[i] for i in j] for j in indexes],
                             dtype=DOUBLE)
@@ -335,22 +342,8 @@ class Renderer(object):
         # すべてのポリゴンの面の法線ベクトルを求める
         polygon_normals = [calc_normal(p) for p in polygons]
 
-        if self.shading_mode is ShadingMode.flat:
-            for i in range(len(polygons)):
-                p = polygons[i]
-                pn = polygon_normals[i]
-
-                # ポリゴンがこちらを向いていなければ描画しない
-                if np.dot(self.camera.position - p[0], pn) < 0:
-                    continue
-                elif np.dot(self.camera.position - p[1], pn) < 0:
-                    continue
-                elif np.dot(self.camera.position - p[2], pn) < 0:
-                    continue
-
-                self._draw_polygon_flat(p, pn)
-
-        else:
+        # フラットシェーディング以外の場合は, 頂点の法線ベクトルを計算
+        if self.shading_mode is not ShadingMode.flat:
             # 各頂点の法線ベクトルのリストを作成
             vertexes = [[] for _ in range(len(points))]
             for i, index in enumerate(indexes):
@@ -370,6 +363,35 @@ class Renderer(object):
             # ポリゴンの各頂点の法線ベクトルのリストを作成
             polygon_vertex_normals = [[vertex_normals[i] for i in j]
                                       for j in indexes]
+            self._polygon_vertex_normals = polygon_vertex_normals
+
+        self._points = points
+        self._indexes = indexes
+        self._polygons = polygons
+        self._polygon_normals = polygon_normals
+
+    def draw_polygons(self):
+        points = self._points
+        indexes = self._indexes
+        polygons = self._polygons
+        polygon_normals = self._polygon_normals
+
+        if self.shading_mode is ShadingMode.flat:
+            for i in range(len(polygons)):
+                p = polygons[i]
+                pn = polygon_normals[i]
+
+                # ポリゴンがこちらを向いていなければ描画しない
+                if np.dot(self.camera.position - p[0], pn) < 0:
+                    continue
+                elif np.dot(self.camera.position - p[1], pn) < 0:
+                    continue
+                elif np.dot(self.camera.position - p[2], pn) < 0:
+                    continue
+
+                self._draw_polygon_flat(p, pn)
+        else:
+            polygon_vertex_normals = self._polygon_vertex_normals
 
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:

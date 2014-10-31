@@ -162,6 +162,11 @@ cdef class Renderer:
     cdef DOUBLE_t _specular_shininess
     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
 
+    # ポリゴンのキャッシュ用
+    cdef DOUBLE_t[:,:,:] _polygons
+    cdef DOUBLE_t[:,:] _points, _polygon_normals, _vertex_normals
+    cdef UINT64_t[:,:] _indexes
+
     def __init__(self, int width, int height, z_buffering=True,
                  int depth=8, shading_mode=ShadingMode.flat):
         """
@@ -677,10 +682,9 @@ cdef class Renderer:
                     self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
 
-    def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
+    def _prepare_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
         cdef DOUBLE_t[:,:,:] polygons
         cdef DOUBLE_t[:,:] polygon, polygon_normals, vertex_normals
-        cdef DOUBLE_t[:] cp, p1, p2, p3, n
         cdef UINT64_t[:] index
         cdef int i
 
@@ -698,6 +702,34 @@ cdef class Renderer:
         # すべてのポリゴンの面の法線ベクトルを求める
         polygon_normals = np.empty((indexes.shape[0], 3), dtype=DOUBLE)
         calc_polygon_normals(polygons, polygon_normals)
+
+        if self.shading_mode is not ShadingMode.flat:
+            # 各頂点の法線ベクトルを計算
+            vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
+            calc_vertex_normals(indexes, polygon_normals, vertex_normals)
+
+        self._points = points
+        self._indexes = indexes
+        self._polygons = polygons
+        self._polygon_normals = polygon_normals
+        self._vertex_normals = vertex_normals
+
+    def prepare_polygons(self, np.ndarray points, np.ndarray indexes):
+        self._prepare_polygons(points, indexes)
+
+    def _draw_polygons(self):
+        cdef DOUBLE_t[:,:,:] polygons
+        cdef DOUBLE_t[:,:] points, polygon, polygon_normals, vertex_normals
+        cdef DOUBLE_t[:] cp, p1, p2, p3, n
+        cdef UINT64_t[:,:] indexes
+        cdef UINT64_t[:] index
+        cdef int i
+
+        points = self._points
+        indexes = self._indexes
+        polygons = self._polygons
+        polygon_normals = self._polygon_normals
+        cp = self.camera_position
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(polygons.shape[0]):
@@ -723,9 +755,7 @@ cdef class Renderer:
 
                 self._draw_polygon_flat(p1, p2, p3, n)
         else:
-            # 各頂点の法線ベクトルを計算
-            vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
-            calc_vertex_normals(indexes, polygon_normals, vertex_normals)
+            vertex_normals = self._vertex_normals
 
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
@@ -783,5 +813,5 @@ cdef class Renderer:
                                              vertex_normals[index[1]],
                                              vertex_normals[index[2]])
 
-    def draw_polygons(self, np.ndarray points, np.ndarray indexes):
-        self._draw_polygons(points, indexes)
+    def draw_polygons(self):
+        self._draw_polygons()

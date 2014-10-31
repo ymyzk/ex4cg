@@ -434,7 +434,8 @@ class Application(object):
                             shading_mode=mode)
         renderer.camera = camera
         renderer.shaders = shaders
-        renderer.draw_polygons(self.vrml.points, self.vrml.indexes)
+        renderer.prepare_polygons(self.vrml.points, self.vrml.indexes)
+        renderer.draw_polygons()
 
         self.data = renderer.data
         self.image_label.set_image(self.data, self.width, self.height)
