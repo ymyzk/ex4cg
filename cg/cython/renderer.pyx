@@ -145,7 +145,7 @@ cdef class Renderer:
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
     cdef np.ndarray z_buffer
-    cdef DOUBLE_t[:,:] _z_buffer
+    cdef DOUBLE_t[:,:] _z_buffer, camera_array
     cdef DOUBLE_t[:] camera_position
     cdef DOUBLE_t focus
 
@@ -224,17 +224,29 @@ cdef class Renderer:
             self.camera = value
 
             self.focus = self.camera.focus
+            self.camera_array = self.camera.array
             self.camera_position = self.camera.position
 
-    cdef void _convert_point(self, DOUBLE_t[:] point) nogil:
+    cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
-        画像平面の x, y, z + 元の座標の z
+        画像平面の x, y, z
         """
-        cdef DOUBLE_t z_ip
-        z_ip = self.focus / point[2]
-        point[0] = z_ip * point[0]
-        point[1] = z_ip * point[1]
+        cdef DOUBLE_t[:] row
+        cdef DOUBLE_t[3] p
+        cdef DOUBLE_t k
+        cdef int i
+
+        for i in range(3):
+            row = self.camera_array[i]
+            p[i] = (row[0] * point[0]
+                    + row[1] * point[1]
+                    + row[2] * point[2]
+                    + row[3])
+        k = self.focus / p[2]
+        point[0] = k * p[0]
+        point[1] = k * p[1]
+        point[2] = p[2]
 
     cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:
         cl[0] += self._ambient_shade[0]

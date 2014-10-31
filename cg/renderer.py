@@ -36,11 +36,11 @@ class Renderer(object):
     def _convert_point(self, point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
-        画像平面の x, y, z + 元の座標の z
+        画像平面の x, y, 元の座標の z
         """
-        p = np.dot(self.camera.array, point)
-        converted = (self.camera.focus / point[2]) * p
-        converted[2] = point[2]
+        p = np.dot(self.camera.array, np.append(point, 1))
+        k = self.camera.focus / p[2]
+        converted = np.array((k * p[0], k * p[1], p[2]), dtype=DOUBLE)
         return converted
 
     def _shade_vertex(self, polygon, normal):
