@@ -1181,8 +1181,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
 #define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
 #endif
 
-static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
-
 static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, int none_allowed,
     const char *name, int exact);
 
@@ -1277,6 +1275,8 @@ static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
 #else
 #define __Pyx_PyList_Append(L,x) PyList_Append(L,x)
 #endif
+
+static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
 
 static PyObject *__pyx_memoryviewslice__get__base(PyObject *__pyx_v_self); /*proto*/
 #if PY_MAJOR_VERSION < 3
@@ -9755,7 +9755,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
  *             #
  *             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)             # <<<<<<<<<<<<<<
  *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)
- * 
+ *             self._vertex_normals = vertex_normals
  */
     __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 708; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
@@ -9799,16 +9799,27 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
  *             #
  *             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
  *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)             # <<<<<<<<<<<<<<
+ *             self._vertex_normals = vertex_normals
+ * 
+ */
+    __pyx_f_2cg_6cython_8renderer_calc_vertex_normals(__pyx_v_indexes, __pyx_v_polygon_normals, __pyx_v_vertex_normals);
+
+    /* "cg/cython/renderer.pyx":710
+ *             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
+ *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)
+ *             self._vertex_normals = vertex_normals             # <<<<<<<<<<<<<<
  * 
  *         self._points = points
  */
-    __pyx_f_2cg_6cython_8renderer_calc_vertex_normals(__pyx_v_indexes, __pyx_v_polygon_normals, __pyx_v_vertex_normals);
+    __PYX_XDEC_MEMVIEW(&__pyx_v_self->_vertex_normals, 0);
+    __PYX_INC_MEMVIEW(&__pyx_v_vertex_normals, 0);
+    __pyx_v_self->_vertex_normals = __pyx_v_vertex_normals;
     goto __pyx_L5;
   }
   __pyx_L5:;
 
-  /* "cg/cython/renderer.pyx":711
- *             calc_vertex_normals(indexes, polygon_normals, vertex_normals)
+  /* "cg/cython/renderer.pyx":712
+ *             self._vertex_normals = vertex_normals
  * 
  *         self._points = points             # <<<<<<<<<<<<<<
  *         self._indexes = indexes
@@ -9818,7 +9829,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
   __PYX_INC_MEMVIEW(&__pyx_v_points, 0);
   __pyx_v_self->_points = __pyx_v_points;
 
-  /* "cg/cython/renderer.pyx":712
+  /* "cg/cython/renderer.pyx":713
  * 
  *         self._points = points
  *         self._indexes = indexes             # <<<<<<<<<<<<<<
@@ -9829,39 +9840,27 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
   __PYX_INC_MEMVIEW(&__pyx_v_indexes, 0);
   __pyx_v_self->_indexes = __pyx_v_indexes;
 
-  /* "cg/cython/renderer.pyx":713
+  /* "cg/cython/renderer.pyx":714
  *         self._points = points
  *         self._indexes = indexes
  *         self._polygons = polygons             # <<<<<<<<<<<<<<
  *         self._polygon_normals = polygon_normals
- *         self._vertex_normals = vertex_normals
+ * 
  */
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->_polygons, 0);
   __PYX_INC_MEMVIEW(&__pyx_v_polygons, 0);
   __pyx_v_self->_polygons = __pyx_v_polygons;
 
-  /* "cg/cython/renderer.pyx":714
+  /* "cg/cython/renderer.pyx":715
  *         self._indexes = indexes
  *         self._polygons = polygons
  *         self._polygon_normals = polygon_normals             # <<<<<<<<<<<<<<
- *         self._vertex_normals = vertex_normals
  * 
+ *     def prepare_polygons(self, np.ndarray points, np.ndarray indexes):
  */
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->_polygon_normals, 0);
   __PYX_INC_MEMVIEW(&__pyx_v_polygon_normals, 0);
   __pyx_v_self->_polygon_normals = __pyx_v_polygon_normals;
-
-  /* "cg/cython/renderer.pyx":715
- *         self._polygons = polygons
- *         self._polygon_normals = polygon_normals
- *         self._vertex_normals = vertex_normals             # <<<<<<<<<<<<<<
- * 
- *     def prepare_polygons(self, np.ndarray points, np.ndarray indexes):
- */
-  if (unlikely(!__pyx_v_vertex_normals.memview)) { __Pyx_RaiseUnboundLocalError("vertex_normals"); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 715; __pyx_clineno = __LINE__; goto __pyx_L1_error;} }
-  __PYX_XDEC_MEMVIEW(&__pyx_v_self->_vertex_normals, 0);
-  __PYX_INC_MEMVIEW(&__pyx_v_vertex_normals, 0);
-  __pyx_v_self->_vertex_normals = __pyx_v_vertex_normals;
 
   /* "cg/cython/renderer.pyx":685
  *                     self._draw_pixel(x, y, z, color)
@@ -9906,7 +9905,7 @@ if (unlikely(__pyx_memoryview_copy_contents(__pyx_t_18, __pyx_t_19, 1, 1, 0) < 0
 }
 
 /* "cg/cython/renderer.pyx":717
- *         self._vertex_normals = vertex_normals
+ *         self._polygon_normals = polygon_normals
  * 
  *     def prepare_polygons(self, np.ndarray points, np.ndarray indexes):             # <<<<<<<<<<<<<<
  *         self._prepare_polygons(points, indexes)
@@ -10032,7 +10031,7 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_4prepare_polygons(stru
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cg/cython/renderer.pyx":717
- *         self._vertex_normals = vertex_normals
+ *         self._polygon_normals = polygon_normals
  * 
  *     def prepare_polygons(self, np.ndarray points, np.ndarray indexes):             # <<<<<<<<<<<<<<
  *         self._prepare_polygons(points, indexes)
@@ -11746,7 +11745,6 @@ __pyx_t_121.strides[0] = __pyx_v_vertex_normals.strides[1];
  * 
  *     def draw_polygons(self):             # <<<<<<<<<<<<<<
  *         self._draw_polygons()
- * 
  */
 
 /* Python wrapper */
@@ -11777,8 +11775,6 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_8draw_polygons(struct 
  * 
  *     def draw_polygons(self):
  *         self._draw_polygons()             # <<<<<<<<<<<<<<
- * 
- *     # def _draw_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
  */
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_draw_polygons); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 817; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
@@ -11807,7 +11803,6 @@ static PyObject *__pyx_pf_2cg_6cython_8renderer_8Renderer_8draw_polygons(struct 
  * 
  *     def draw_polygons(self):             # <<<<<<<<<<<<<<
  *         self._draw_polygons()
- * 
  */
 
   /* function exit code */
@@ -27807,10 +27802,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 }
 #endif
 
-static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
-    PyErr_Format(PyExc_UnboundLocalError, "local variable '%s' referenced before assignment", varname);
-}
-
 static void __Pyx_RaiseArgumentTypeInvalid(const char* name, PyObject *obj, PyTypeObject *type) {
     PyErr_Format(PyExc_TypeError,
         "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
@@ -28272,6 +28263,10 @@ static CYTHON_INLINE void __Pyx_ExceptionSwap(PyObject **type, PyObject **value,
     *type = tmp_type;
     *value = tmp_value;
     *tb = tmp_tb;
+}
+
+static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
+    PyErr_Format(PyExc_UnboundLocalError, "local variable '%s' referenced before assignment", varname);
 }
 
 #if !CYTHON_COMPILING_IN_CPYTHON

@@ -707,12 +707,12 @@ cdef class Renderer:
             # 各頂点の法線ベクトルを計算
             vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
             calc_vertex_normals(indexes, polygon_normals, vertex_normals)
+            self._vertex_normals = vertex_normals
 
         self._points = points
         self._indexes = indexes
         self._polygons = polygons
         self._polygon_normals = polygon_normals
-        self._vertex_normals = vertex_normals
 
     def prepare_polygons(self, np.ndarray points, np.ndarray indexes):
         self._prepare_polygons(points, indexes)
