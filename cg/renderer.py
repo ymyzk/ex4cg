@@ -34,8 +34,6 @@ class Renderer(object):
         self._depth = 2 ** depth - 1
 
         # ポリゴンのキャッシュ用
-        self._points = None
-        self._indexes = None
         self._polygons = None
         self._polygon_normals = None
         self._polygon_vertex_normals = None
@@ -365,14 +363,10 @@ class Renderer(object):
                                       for j in indexes]
             self._polygon_vertex_normals = polygon_vertex_normals
 
-        self._points = points
-        self._indexes = indexes
         self._polygons = polygons
         self._polygon_normals = polygon_normals
 
     def draw_polygons(self):
-        points = self._points
-        indexes = self._indexes
         polygons = self._polygons
         polygon_normals = self._polygon_normals
 
