@@ -248,12 +248,12 @@ cdef class Renderer:
         point[1] = k * p[1]
         point[2] = p[2]
 
-    cdef void _shade_ambient(self, DOUBLE_t[:] cl) nogil:
+    cdef void _shade_ambient(self, DOUBLE_t *cl) nogil:
         cl[0] += self._ambient_shade[0]
         cl[1] += self._ambient_shade[1]
         cl[2] += self._ambient_shade[2]
 
-    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t[:] cl) nogil:
+    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t *cl) nogil:
         cdef DOUBLE_t cos
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -274,7 +274,7 @@ cdef class Renderer:
         cl[1] += -cos * self._diffuse_pre_shade[1]
         cl[2] += -cos * self._diffuse_pre_shade[2]
 
-    cdef void _shade_random(self, DOUBLE_t[:] cl):
+    cdef void _shade_random(self, DOUBLE_t *cl):
         """ランダムな色をつけるシェーダ"""
         cl[0] += random()
         cl[1] += random()
@@ -282,7 +282,7 @@ cdef class Renderer:
 
     cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                               DOUBLE_t[:] c, DOUBLE_t[:] n,
-                              DOUBLE_t[:] cl) nogil:
+                              DOUBLE_t *cl) nogil:
         cdef DOUBLE_t[3] e, s
         cdef DOUBLE_t sn, norm
 
@@ -324,7 +324,7 @@ cdef class Renderer:
 
     cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                             DOUBLE_t[:] c, DOUBLE_t[:] n,
-                            DOUBLE_t[:] color) nogil:
+                            DOUBLE_t *color) nogil:
         """シェーディング処理"""
         color[0] = 0.0
         color[1] = 0.0
@@ -343,8 +343,7 @@ cdef class Renderer:
         if self._is_specular_shader_enabled == 1:
             self._shade_specular(a, b, c, n, color)
 
-    cdef void _draw_pixel(self, int x, int y, DOUBLE_t z,
-                          DOUBLE_t[:] cl) nogil:
+    cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t *cl) nogil:
         """画素を描画する処理"""
         cdef int data_x, data_y
 
@@ -374,7 +373,8 @@ cdef class Renderer:
         """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] d, color
+        cdef DOUBLE_t[3] d
+        cdef DOUBLE_t color[3]
 
         # ポリゴン全体を1色でシェーディング
         self._shade_vertex(a, b, c, n, color)
@@ -448,7 +448,14 @@ cdef class Renderer:
         cdef int x, y
         cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] _a, _b, _c, ac, bc, cc, dc, pc, qc, rc
+        cdef DOUBLE_t[3] _a, _b, _c
+        cdef DOUBLE_t ac[3]
+        cdef DOUBLE_t bc[3]
+        cdef DOUBLE_t cc[3]
+        cdef DOUBLE_t dc[3]
+        cdef DOUBLE_t pc[3]
+        cdef DOUBLE_t qc[3]
+        cdef DOUBLE_t rc[3]
 
         # 座標変換前の座標を保存
         _a[0] = a[0]
@@ -563,7 +570,7 @@ cdef class Renderer:
         cdef int x, y
         cdef DOUBLE_t[3] _a, _b, _c, d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
-        cdef DOUBLE_t[3] color
+        cdef DOUBLE_t color[3]
 
         # 座標変換前の座標を保存
         _a[0] = a[0]
