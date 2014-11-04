@@ -1,27 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from random import randint
+from random import randint, random
 
 import numpy as np
 
 
-def random_color(depth):
+def random_color():
     """ランダムな色を生成する処理
 
     :rtype: numpy.ndarray
     """
-    color = 2 ** depth - 1
-    return np.array([randint(0, color) for _ in range(3)], dtype=np.float64)
+    return np.array([random() for _ in range(3)], dtype=np.float64)
 
 
 def random_point():
     """ランダムな座標を生成する処理
 
-    :rtype: numpy.ndarray
+    :rtype: tuple
     """
-    return np.array((randint(-20, 20), randint(-20, 20), randint(15, 50)),
-                    dtype=np.float64)
+    return randint(-20, 20), randint(-20, 20), randint(15, 50)
 
 
 def random_points(n):
@@ -37,6 +35,7 @@ def random_polygons(n):
 
     :rtype: tuple
     """
-    points = random_points(3 * n)
-    indexes = [tuple(range(3 * i, 3 * i + 3)) for i in range(n)]
+    points = np.array(random_points(3 * n), dtype=np.float64)
+    indexes = np.array([tuple(range(3 * i, 3 * i + 3)) for i in range(n)],
+                       dtype=np.uint64)
     return points, indexes

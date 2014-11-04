@@ -10,7 +10,7 @@ import numpy as np
 from cg.camera import Camera
 from cg.ppm import PpmImage
 from cg.renderer import Renderer
-from cg.shader import DiffuseShader, RandomColorShader
+from cg.shader import DiffuseShader, RandomColorShader, ShadingMode
 from cg.vrml import Vrml
 
 
@@ -23,8 +23,8 @@ def main(args):
         args.input.close()
 
     width = height = 256
-    camera = Camera(position=(0.0, 0.0, 0.0),
-                    angle=(0.0, 0.0, 1.0),
+    camera = Camera(position=np.array((0.0, 0.0, 0.0)),
+                    angle=np.array((0.0, 0.0, 1.0)),
                     focus=256.0)
     if vrml.diffuse_color is None:
         shader = RandomColorShader()
@@ -33,10 +33,13 @@ def main(args):
                                luminance=np.array((1.0, 1.0, 1.0)),
                                color=vrml.diffuse_color)
 
-    renderer = Renderer(camera=camera, shaders=[shader],
-                        width=width, height=height)
+    renderer = Renderer(width=width, height=height,
+                        shading_mode=ShadingMode.flat)
+    renderer.camera = camera
+    renderer.shaders = [shader]
 
-    renderer.draw_polygons(vrml.points, vrml.indexes)
+    renderer.prepare_polygons(vrml.points, vrml.indexes)
+    renderer.draw_polygons()
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
     image = PpmImage(name, width, height, renderer.data)

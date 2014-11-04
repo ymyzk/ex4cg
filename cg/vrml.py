@@ -8,6 +8,7 @@ import numpy as np
 
 
 DOUBLE = np.float64
+UINT64 = np.uint64
 
 
 class Status(Enum):
@@ -22,14 +23,14 @@ class Vrml(object):
         self.specular_color = None
         self.ambient_intensity = None
         self.shininess = None
-        self.points = []
-        self.indexes = []
+        self.points = np.zeros((0, 3), dtype=DOUBLE)
+        self.indexes = np.zeros((0, 3), dtype=UINT64)
 
     def load(self, fp):
         """VRML ファイルを読み込む処理"""
         status = Status.material
-        self.points = []
-        self.indexes = []
+        points = []
+        indexes = []
         for l in fp:
             # コメント行の読み飛ばし
             l = l.strip()
@@ -41,17 +42,15 @@ class Vrml(object):
                 continue
 
             if status is Status.index and len(items) == 4:
-                self.indexes.append((
+                indexes.append((
                     int(items[0]),
                     int(items[1]),
-                    int(items[2])
-                ))
+                    int(items[2])))
             elif status is Status.point and len(items) == 3:
-                self.points.append(np.array((
+                points.append((
                     float(items[0]),
                     float(items[1]),
-                    float(items[2])
-                ), dtype=DOUBLE))
+                    float(items[2])))
             elif status is Status.material:
                 if items[0] == 'diffuseColor':
                     self.diffuse_color = np.array(
@@ -67,3 +66,5 @@ class Vrml(object):
                 status = Status.point
             if items[0] == 'coordIndex':
                 status = Status.index
+        self.points = np.array(points, dtype=DOUBLE)
+        self.indexes = np.array(indexes, dtype=UINT64)
