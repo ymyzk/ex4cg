@@ -17,10 +17,9 @@ def random_color():
 def random_point():
     """ランダムな座標を生成する処理
 
-    :rtype: numpy.ndarray
+    :rtype: tuple
     """
-    return np.array((randint(-20, 20), randint(-20, 20), randint(15, 50)),
-                    dtype=np.float64)
+    return randint(-20, 20), randint(-20, 20), randint(15, 50)
 
 
 def random_points(n):
@@ -36,6 +35,7 @@ def random_polygons(n):
 
     :rtype: tuple
     """
-    points = random_points(3 * n)
-    indexes = [tuple(range(3 * i, 3 * i + 3)) for i in range(n)]
+    points = np.array(random_points(3 * n), dtype=np.float64)
+    indexes = np.array([tuple(range(3 * i, 3 * i + 3)) for i in range(n)],
+                       dtype=np.uint64)
     return points, indexes
