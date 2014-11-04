@@ -10,7 +10,9 @@ class Camera(object):
     def __init__(self, position, angle, focus):
         """
         :param numpy.ndarray position: カメラの位置 (x, y, z)
-        :param numpy.ndarray angle: カメラの角度 (x, y, z)
+        :param numpy.ndarray angle: カメラの角度 (x, y, z) [rad]
+        x, y, z 軸の回転量
+        (0, 0, 0) から (0, 0, 1) を見る向きを (0, 0, 0) とする
         :param float focus: カメラの焦点距離
         """
         self.position = position
