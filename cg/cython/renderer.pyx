@@ -145,7 +145,6 @@ cdef class Renderer:
     cdef int _depth
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
-    cdef np.ndarray z_buffer
     cdef DOUBLE_t[:,:] _z_buffer
     cdef DOUBLE_t camera_array[3][3]
     cdef DOUBLE_t camera_position[3]
@@ -174,6 +173,8 @@ cdef class Renderer:
         """
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
+        cdef np.ndarray z_buffer
+
         self.depth = depth
         self.width = width
         self.height = height
@@ -182,9 +183,9 @@ cdef class Renderer:
 
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
         self._data = self.data
-        self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
-        self.z_buffer.fill(float('inf'))
-        self._z_buffer = self.z_buffer
+        z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
+        z_buffer.fill(float('inf'))
+        self._z_buffer = z_buffer
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
