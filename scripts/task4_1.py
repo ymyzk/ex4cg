@@ -31,7 +31,7 @@ def main(args):
         vrml.load(args.input)
     finally:
         args.input.close()
-    performance['vrml'] = time.clock() * 1000 - performance['start']
+    performance['vrml'] = time.clock() * 1000
 
     # シェーディング方式
     shading_mode = ShadingMode.flat
@@ -71,10 +71,10 @@ def main(args):
     renderer.shaders = shaders
 
     renderer.prepare_polygons(vrml.points, vrml.indexes)
-    performance['prepare'] = time.clock() * 1000 - performance['vrml']
+    performance['prepare'] = time.clock() * 1000
 
     renderer.draw_polygons()
-    performance['draw'] = time.clock() * 1000 - performance['prepare']
+    performance['draw'] = time.clock() * 1000
 
     image = PpmImage(width, height, renderer.data)
 
@@ -87,9 +87,14 @@ def main(args):
     else:
         with open(os.path.splitext(args.input.name)[0] + '.ppm', 'w') as f:
             image.dump(f)
-    performance['ppm'] = time.clock() * 1000 - performance['draw']
+    performance['ppm'] = time.clock() * 1000
 
     # パフォーマンスの記録を JSON ファイルに保存
+    performance['total'] = performance['ppm'] - performance['start']
+    performance['ppm'] -= performance['draw']
+    performance['draw'] -= performance['prepare']
+    performance['prepare'] -= performance['vrml']
+    performance['vrml'] -= performance['start']
     del performance['start']
     if args.p is not None:
         try:
