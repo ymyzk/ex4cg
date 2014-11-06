@@ -29,7 +29,7 @@ def main(args):
 
     width = height = 256
     camera = Camera(position=np.array((0.0, 0.0, 0.0), dtype=np.float64),
-                    angle=np.array((0.0, 0.0, 5.0), dtype=np.float64),
+                    angle=np.array((0.0, 0.0, 0.0), dtype=np.float64),
                     focus=256.0)
     shaders = []
     if vrml.diffuse_color is not None:
@@ -68,12 +68,17 @@ def main(args):
     # s = pstats.Stats("Profile.prof")
     # s.strip_dirs().sort_stats("time").print_stats()
 
-    name = os.path.splitext(args.input.name)[0] + '.ppm'
-    image = PpmImage(name, width, height, renderer.data)
+    image = PpmImage(width, height, renderer.data)
 
     # ファイルに保存
-    with open(name, 'w') as f:
-        image.dump(f)
+    if args.o is not None:
+        try:
+            image.dump(args.o)
+        finally:
+            args.o.close()
+    else:
+        with open(os.path.splitext(args.input.name)[0] + '.ppm', 'w') as f:
+            image.dump(f)
 
 
 if __name__ == '__main__':
