@@ -18,7 +18,7 @@ from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
 
 
 # For line profiler
-#@profile
+# @profile
 def main(args):
     # VRML ファイルの読み込み
     vrml = Vrml()
@@ -26,6 +26,13 @@ def main(args):
         vrml.load(args.input)
     finally:
         args.input.close()
+
+    # シェーディング方式
+    shading_mode = ShadingMode.flat
+    if args.s == 'gouraud':
+        shading_mode = ShadingMode.gouraud
+    elif args.s == 'phong':
+        shading_mode = ShadingMode.phong
 
     width = height = 256
     camera = Camera(position=np.array((0.0, 0.0, 0.0), dtype=np.float64),
@@ -53,8 +60,7 @@ def main(args):
     if len(shaders) == 0:
         shaders.append(RandomColorShader())
 
-    renderer = Renderer(width=width, height=height,
-                        shading_mode=ShadingMode.phong)
+    renderer = Renderer(width=width, height=height, shading_mode=shading_mode)
     renderer.camera = camera
     renderer.shaders = shaders
 
@@ -78,6 +84,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Task 4 (Python)')
     parser.add_argument('-o', type=argparse.FileType('w'), metavar='file',
                         default=None, help='Write ppm image to <file>')
+    parser.add_argument('-s', choices=['flat', 'gouraud', 'phong'], type=str,
+                        default='flat', help='Shading mode')
     parser.add_argument('input', type=argparse.FileType('r'),
                         default=sys.stdin,
                         help='VRML file')
