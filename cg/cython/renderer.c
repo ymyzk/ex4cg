@@ -2875,7 +2875,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  * 
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)             # <<<<<<<<<<<<<<
  *         self._data = self.data
- *         self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *
+ *         self._z_buffer = <DOUBLE_t *>malloc(
  */
   __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
@@ -2921,8 +2921,8 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
  * 
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
  *         self._data = self.data             # <<<<<<<<<<<<<<
- *         self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *
- *                                             self.height * self.width)
+ *         self._z_buffer = <DOUBLE_t *>malloc(
+ *             sizeof(DOUBLE_t) * self.height * self.width)
  */
   __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_2cg_6cython_8renderer_UINT8_t(((PyObject *)__pyx_v_self->data));
   if (unlikely(!__pyx_t_6.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -2934,15 +2934,15 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
   /* "cg/cython/renderer.pyx":194
  *         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
  *         self._data = self.data
- *         self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *             # <<<<<<<<<<<<<<
- *                                             self.height * self.width)
+ *         self._z_buffer = <DOUBLE_t *>malloc(             # <<<<<<<<<<<<<<
+ *             sizeof(DOUBLE_t) * self.height * self.width)
  *         for i in range(self.height * self.width):
  */
   __pyx_v_self->_z_buffer = ((__pyx_t_2cg_6cython_8renderer_DOUBLE_t *)malloc((((sizeof(__pyx_t_2cg_6cython_8renderer_DOUBLE_t)) * __pyx_v_self->height) * __pyx_v_self->width)));
 
   /* "cg/cython/renderer.pyx":196
- *         self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *
- *                                             self.height * self.width)
+ *         self._z_buffer = <DOUBLE_t *>malloc(
+ *             sizeof(DOUBLE_t) * self.height * self.width)
  *         for i in range(self.height * self.width):             # <<<<<<<<<<<<<<
  *             self._z_buffer[i] = INFINITY
  *         self.half_width = self.width // 2
@@ -2952,7 +2952,7 @@ static int __pyx_pf_2cg_6cython_8renderer_8Renderer___init__(struct __pyx_obj_2c
     __pyx_v_i = __pyx_t_7;
 
     /* "cg/cython/renderer.pyx":197
- *                                             self.height * self.width)
+ *             sizeof(DOUBLE_t) * self.height * self.width)
  *         for i in range(self.height * self.width):
  *             self._z_buffer[i] = INFINITY             # <<<<<<<<<<<<<<
  *         self.half_width = self.width // 2

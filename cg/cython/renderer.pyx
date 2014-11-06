@@ -191,8 +191,8 @@ cdef class Renderer:
 
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
         self._data = self.data
-        self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *
-                                            self.height * self.width)
+        self._z_buffer = <DOUBLE_t *>malloc(
+            sizeof(DOUBLE_t) * self.height * self.width)
         for i in range(self.height * self.width):
             self._z_buffer[i] = INFINITY
         self.half_width = self.width // 2
