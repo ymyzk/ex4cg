@@ -74,15 +74,15 @@ def main(args):
     renderer.prepare_polygons(vrml.points, vrml.indexes)
     performance['prepare'] = time.clock() * 1000 - performance['vrml']
 
-    renderer.draw_polygons()
-    performance['draw'] = time.clock() * 1000 - performance['prepare']
-
     # C Profiling
     # import cProfile
     # import pstats
-    # cProfile.runctx("renderer.draw_polygons(vrml.points, vrml.indexes)", globals(), locals(), "Profile.prof")
+    # cProfile.runctx("renderer.draw_polygons()", globals(), locals(), "Profile.prof")
     # s = pstats.Stats("Profile.prof")
     # s.strip_dirs().sort_stats("time").print_stats()
+
+    renderer.draw_polygons()
+    performance['draw'] = time.clock() * 1000 - performance['prepare']
 
     image = PpmImage(width, height, renderer.data)
 
