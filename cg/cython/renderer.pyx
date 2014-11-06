@@ -182,8 +182,6 @@ cdef class Renderer:
         """
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
-        cdef np.ndarray z_buffer
-
         self.depth = depth
         self.width = width
         self.height = height
@@ -299,8 +297,8 @@ cdef class Renderer:
         cl[1] += random()
         cl[2] += random()
 
-    cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                              DOUBLE_t[:] c, DOUBLE_t *n, DOUBLE_t *cl) nogil:
+    cdef void _shade_specular(self, DOUBLE_t *a, DOUBLE_t *b,
+                              DOUBLE_t *c, DOUBLE_t *n, DOUBLE_t *cl) nogil:
         cdef DOUBLE_t[3] e, s
         cdef DOUBLE_t sn, norm
 
@@ -340,8 +338,8 @@ cdef class Renderer:
         cl[1] += sn * self._specular_pre_shade[1]
         cl[2] += sn * self._specular_pre_shade[2]
 
-    cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                            DOUBLE_t[:] c, DOUBLE_t *n, DOUBLE_t *color) nogil:
+    cdef void _shade_vertex(self, DOUBLE_t *a, DOUBLE_t *b,
+                            DOUBLE_t *c, DOUBLE_t *n, DOUBLE_t *color) nogil:
         """シェーディング処理"""
         color[0] = 0.0
         color[1] = 0.0
@@ -392,11 +390,25 @@ cdef class Renderer:
         """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] d
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
+        cdef DOUBLE_t d[3]
         cdef DOUBLE_t color[3]
 
+        # 座標変換前の座標を保存
+        _a[0] = a[0]
+        _a[1] = a[1]
+        _a[2] = a[2]
+        _b[0] = b[0]
+        _b[1] = b[1]
+        _b[2] = b[2]
+        _c[0] = c[0]
+        _c[1] = c[1]
+        _c[2] = c[2]
+
         # ポリゴン全体を1色でシェーディング
-        self._shade_vertex(a, b, c, n, color)
+        self._shade_vertex(_a, _b, _c, n, color)
 
         # ポリゴンの3点を座標変換
         self._convert_point(a)
@@ -467,9 +479,12 @@ cdef class Renderer:
                                     DOUBLE_t *cn):
         """ポリゴンを描画する処理 (グーローシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] _a, _b, _c
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
+        cdef DOUBLE_t d[3]
+        cdef DOUBLE_t dn[3]
         cdef DOUBLE_t ac[3]
         cdef DOUBLE_t bc[3]
         cdef DOUBLE_t cc[3]
@@ -591,8 +606,15 @@ cdef class Renderer:
                                   DOUBLE_t *an, DOUBLE_t *bn, DOUBLE_t *cn):
         """ポリゴンを描画する処理 (フォンシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t[3] _a, _b, _c, d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
+        cdef DOUBLE_t d[3]
+        cdef DOUBLE_t dn[3]
+        cdef DOUBLE_t pn[3]
+        cdef DOUBLE_t qn[3]
+        cdef DOUBLE_t rn[3]
         cdef DOUBLE_t color[3]
 
         # 座標変換前の座標を保存
