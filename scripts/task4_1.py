@@ -29,7 +29,7 @@ def main(args):
 
     width = height = 256
     camera = Camera(position=np.array((0.0, 0.0, 0.0), dtype=np.float64),
-                    angle=np.array((0.0, 0.0, 0.0), dtype=np.float64),
+                    angle=np.array((0.0, 0.0, 5.0), dtype=np.float64),
                     focus=256.0)
     shaders = []
     if vrml.diffuse_color is not None:
@@ -54,11 +54,12 @@ def main(args):
         shaders.append(RandomColorShader())
 
     renderer = Renderer(width=width, height=height,
-                        shading_mode=ShadingMode.gouraud)
+                        shading_mode=ShadingMode.phong)
     renderer.camera = camera
     renderer.shaders = shaders
 
-    renderer.draw_polygons(vrml.points, vrml.indexes)
+    renderer.prepare_polygons(vrml.points, vrml.indexes)
+    renderer.draw_polygons()
 
     name = os.path.splitext(args.input.name)[0] + '.ppm'
     image = PpmImage(name, width, height, renderer.data)
