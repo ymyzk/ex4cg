@@ -153,7 +153,7 @@ cdef class Renderer:
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
     cdef DOUBLE_t *_z_buffer
-    cdef DOUBLE_t camera_array[3][3]
+    cdef DOUBLE_t camera_array[3][4]
     cdef DOUBLE_t camera_position[3]
     cdef DOUBLE_t focus
 
@@ -251,12 +251,15 @@ cdef class Renderer:
             self.camera_array[0][0] = array[0][0]
             self.camera_array[0][1] = array[0][1]
             self.camera_array[0][2] = array[0][2]
+            self.camera_array[0][3] = array[0][3]
             self.camera_array[1][0] = array[1][0]
             self.camera_array[1][1] = array[1][1]
             self.camera_array[1][2] = array[1][2]
+            self.camera_array[1][3] = array[1][3]
             self.camera_array[2][0] = array[2][0]
             self.camera_array[2][1] = array[2][1]
             self.camera_array[2][2] = array[2][2]
+            self.camera_array[2][3] = array[2][3]
             self.camera_position[0] = self.camera.position[0]
             self.camera_position[1] = self.camera.position[1]
             self.camera_position[2] = self.camera.position[2]
