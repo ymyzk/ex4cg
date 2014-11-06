@@ -92,8 +92,13 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
 
     l = vertex_normals.shape[0]
 
+    # メモリ確保
     vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * l * 3)
     vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * l)
+    for i in range(l * 3):
+        vertexes[i] = 0.0
+    for i in range(l):
+        vertexes_n[i] = 0
 
     # 各頂点を含む面の法線ベクトルの和を求める
     l = indexes.shape[0]
