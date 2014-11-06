@@ -210,59 +210,43 @@ cdef class Renderer:
             return self.shaders
 
         def __set__(self, value):
+            cdef int i
+
             self.shaders = value
 
             # Python で書かれたシェーダーから必要な値を取り出す
             for shader in self.shaders:
                 if isinstance(shader, AmbientShader):
                     self._is_ambient_shader_enabled = 1
-                    self._ambient_shade[0] = shader.shade[0]
-                    self._ambient_shade[1] = shader.shade[1]
-                    self._ambient_shade[2] = shader.shade[2]
+                    for i in range(3):
+                        self._ambient_shade[i] = shader.shade[i]
                 elif isinstance(shader, DiffuseShader):
                     self._is_diffuse_shader_enabled = 1
-                    self._diffuse_direction[0] = shader.direction[0]
-                    self._diffuse_direction[1] = shader.direction[1]
-                    self._diffuse_direction[2] = shader.direction[2]
-                    self._diffuse_pre_shade[0] = shader.pre_shade[0]
-                    self._diffuse_pre_shade[1] = shader.pre_shade[1]
-                    self._diffuse_pre_shade[2] = shader.pre_shade[2]
+                    for i in range(3):
+                        self._diffuse_direction[i] = shader.direction[i]
+                        self._diffuse_pre_shade[i] = shader.pre_shade[i]
                 elif isinstance(shader, RandomColorShader):
                     self._is_random_shader_enabled = 1
                 elif isinstance(shader, SpecularShader):
                     self._is_specular_shader_enabled = 1
-                    self._specular_direction[0] = shader.direction[0]
-                    self._specular_direction[1] = shader.direction[1]
-                    self._specular_direction[2] = shader.direction[2]
                     self._specular_shininess = shader.shininess
-                    self._specular_pre_shade[0] = shader.pre_shade[0]
-                    self._specular_pre_shade[1] = shader.pre_shade[1]
-                    self._specular_pre_shade[2] = shader.pre_shade[2]
+                    for i in range(3):
+                        self._specular_direction[i] = shader.direction[i]
+                        self._specular_pre_shade[i] = shader.pre_shade[i]
 
     property camera:
         def __get__(self):
             return self.camera
 
         def __set__(self, value):
-            self.camera = value
+            cdef int i, j
 
+            self.camera = value
             self.focus = self.camera.focus
-            cdef DOUBLE_t [:,:] array = self.camera.array
-            self.camera_array[0][0] = array[0][0]
-            self.camera_array[0][1] = array[0][1]
-            self.camera_array[0][2] = array[0][2]
-            self.camera_array[0][3] = array[0][3]
-            self.camera_array[1][0] = array[1][0]
-            self.camera_array[1][1] = array[1][1]
-            self.camera_array[1][2] = array[1][2]
-            self.camera_array[1][3] = array[1][3]
-            self.camera_array[2][0] = array[2][0]
-            self.camera_array[2][1] = array[2][1]
-            self.camera_array[2][2] = array[2][2]
-            self.camera_array[2][3] = array[2][3]
-            self.camera_position[0] = self.camera.position[0]
-            self.camera_position[1] = self.camera.position[1]
-            self.camera_position[2] = self.camera.position[2]
+            for i in range(3):
+                for j in range(4):
+                    self.camera_array[i][j] = self.camera.array[i][j]
+                self.camera_position[i] = self.camera.position[i]
 
     cdef void _convert_point(self, DOUBLE_t[:] point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
