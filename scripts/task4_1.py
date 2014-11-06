@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import os
 import sys
+import time
 
 import numpy as np
 
@@ -20,12 +22,16 @@ from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
 # For line profiler
 # @profile
 def main(args):
+    # プロファイリング
+    performance = {'start': time.clock() * 1000}
+
     # VRML ファイルの読み込み
     vrml = Vrml()
     try:
         vrml.load(args.input)
     finally:
         args.input.close()
+    performance['vrml'] = time.clock() * 1000 - performance['start']
 
     # シェーディング方式
     shading_mode = ShadingMode.flat
@@ -65,7 +71,10 @@ def main(args):
     renderer.shaders = shaders
 
     renderer.prepare_polygons(vrml.points, vrml.indexes)
+    performance['prepare'] = time.clock() * 1000 - performance['vrml']
+
     renderer.draw_polygons()
+    performance['draw'] = time.clock() * 1000 - performance['prepare']
 
     image = PpmImage(width, height, renderer.data)
 
@@ -78,12 +87,24 @@ def main(args):
     else:
         with open(os.path.splitext(args.input.name)[0] + '.ppm', 'w') as f:
             image.dump(f)
+    performance['ppm'] = time.clock() * 1000 - performance['draw']
+
+    # パフォーマンスの記録を JSON ファイルに保存
+    del performance['start']
+    if args.p is not None:
+        try:
+            json.dump(performance, args.p)
+        finally:
+            args.p.close()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Task 4 (Python)')
     parser.add_argument('-o', type=argparse.FileType('w'), metavar='file',
                         default=None, help='Write ppm image to <file>')
+    parser.add_argument('-p', type=argparse.FileType('w'), metavar='file',
+                        default=None,
+                        help='Write performance profile to JSON <file>')
     parser.add_argument('-s', choices=['flat', 'gouraud', 'phong'], type=str,
                         default='flat', help='Shading mode')
     parser.add_argument('input', type=argparse.FileType('r'),
