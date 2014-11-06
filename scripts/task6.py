@@ -65,7 +65,7 @@ class Application(object):
         render_action = QtGui.QAction('&Render', self.main_window)
         render_action.setShortcut('Ctrl+R')
         render_action.triggered.connect(self.render)
-        menu_file.addAction(render_action)
+        menu_render.addAction(render_action)
 
         # Status Bar
         self.status_bar = QtGui.QStatusBar()
