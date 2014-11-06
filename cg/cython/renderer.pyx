@@ -4,6 +4,7 @@
 from random import random
 
 from libc.math cimport ceil, floor, sqrt
+from libc.math cimport INFINITY
 from libc.stdlib cimport free, malloc
 import numpy as np
 cimport numpy as np
@@ -150,7 +151,7 @@ cdef class Renderer:
     cdef int _depth
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
-    cdef DOUBLE_t[:,:] _z_buffer
+    cdef DOUBLE_t *_z_buffer
     cdef DOUBLE_t camera_array[3][3]
     cdef DOUBLE_t camera_position[3]
     cdef DOUBLE_t focus
@@ -188,12 +189,16 @@ cdef class Renderer:
 
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
         self._data = self.data
-        z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
-        z_buffer.fill(float('inf'))
-        self._z_buffer = z_buffer
+        self._z_buffer = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) *
+                                            self.height * self.width)
+        for i in range(self.height * self.width):
+            self._z_buffer[i] = INFINITY
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
+
+    def __del__(self):
+        free(self._z_buffer)
 
     property shaders:
         def __get__(self):
@@ -367,10 +372,18 @@ cdef class Renderer:
 
     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t *cl) nogil:
         """画素を描画する処理"""
-        cdef int data_x, data_y
+        cdef int xy
+
+        # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
+        # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
+        # NOTE: サンプル画像がおかしいので X を反転して表示している
+        # data_x = self.half_width + x # 反転させないコード
+        x = self.half_width - x - 1
+        y = self.half_height - y
+        xy = y * self.width + x
 
         # Z バッファでテスト
-        if not self.z_buffering or z <= self._z_buffer[y][x]:
+        if not self.z_buffering or z <= self._z_buffer[xy]:
             # 飽和
             if 1.0 < cl[0]:
                 cl[0] = 1.0
@@ -379,16 +392,10 @@ cdef class Renderer:
             if 1.0 < cl[2]:
                 cl[2] = 1.0
 
-            # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-            # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-            # NOTE: サンプル画像がおかしいので X を反転して表示している
-            # data_x = 3 * (self.half_width + x) # 反転させないコード
-            data_x = 3 * (self.half_width - x - 1)
-            data_y = self.half_height - y
-            self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
-            self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
-            self._data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)
-            self._z_buffer[y][x] = z
+            self._data[y][3 * x + 0] = <UINT8_t>(cl[0] * self._depth)
+            self._data[y][3 * x + 1] = <UINT8_t>(cl[1] * self._depth)
+            self._data[y][3 * x + 2] = <UINT8_t>(cl[2] * self._depth)
+            self._z_buffer[xy] = z
 
     cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
                                  DOUBLE_t[:] c, DOUBLE_t[:] n):
