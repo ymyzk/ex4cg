@@ -119,4 +119,31 @@ seconds=`expr $end_time - $start_time`
 echo "Finished $seconds [sec]"
 echo
 
+echo 'Analyzing performance profiles...'
+echo
+
+echo '===== task4_1.py (Flat) ====='
+python profile.py ../samples/*4_1_f.json
+echo
+
+echo '===== task4_1.py (Gouraud) ====='
+python profile.py ../samples/*4_1_g.json
+echo
+
+echo '===== task4_1.py (Phong) ====='
+python profile.py ../samples/*4_1_p.json
+echo
+
+echo '===== task4_2.py (Flat) ====='
+python profile.py ../samples/*4_2_f.json
+echo
+
+echo '===== task4_2.py (Gouraud) ====='
+python profile.py ../samples/*4_2_g.json
+echo
+
+echo '===== task4_2.py (Phong) ====='
+python profile.py ../samples/*4_2_p.json
+echo
+
 exit 0
