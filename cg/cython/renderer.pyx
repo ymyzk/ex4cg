@@ -86,26 +86,22 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
     :param vertex_normals: 頂点の法線ベクトルの配列 (m x 3)
     :param num: vertex_normals の数
     """
-    cdef DOUBLE_t[:] vertex
-    cdef DOUBLE_t *vertexes
     cdef UINT64_t[:] index
+    cdef DOUBLE_t *vertexes
     cdef UINT64_t *vertexes_n
     cdef UINT64_t vertex_n
-    cdef int i, j, k, l
-
-    l = num
+    cdef int i, j, k
 
     # メモリ確保
-    vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * l * 3)
-    vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * l)
-    for i in range(l * 3):
+    vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * num * 3)
+    vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * num)
+    for i in range(num * 3):
         vertexes[i] = 0.0
-    for i in range(l):
+    for i in range(num):
         vertexes_n[i] = 0
 
     # 各頂点を含む面の法線ベクトルの和を求める
-    l = indexes.shape[0]
-    for i in range(l):
+    for i in range(indexes.shape[0]):
         index = indexes[i]
         k = 3 * i
 
@@ -128,8 +124,7 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
         vertexes_n[index[2]] += 1
 
     # 各頂点の法線ベクトルの平均値を求める
-    l = num
-    for i in range(l):
+    for i in range(num):
         j = 3 * i
         vertex_n = vertexes_n[i]
         if 0 < vertex_n:
