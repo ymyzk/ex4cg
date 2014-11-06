@@ -464,14 +464,16 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._draw_pixel(<int>px, y, pz, color)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._draw_pixel(x, y, pz, color)
                 continue
             elif px > qx:
                 # x についてソート
                 px, qx = qx, px
-            for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                           int_min(<int>floor(qx), self.half_width) + 1):
+            for x in range(int_max(<int>ceil(px), -self.half_width),
+                           int_min(<int>floor(qx) + 1, self.half_width)):
                 r = (x - px) / (qx - px)
                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz),
                                  color)
@@ -544,7 +546,7 @@ cdef class Renderer:
         self._shade_vertex(_a, _b, _c, dn, dc)
 
         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
-                       int_min(<int>floor(c[1]), self.half_height) + 1):
+                       int_min(<int>floor(c[1]) + 1, self.half_height)):
             # x の左右を探す:
             if y <= b[1]:
                 # a -> bd
@@ -578,20 +580,22 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._draw_pixel(<int>px, y, pz, pc)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._draw_pixel(x, y, pz, pc)
                 continue
             elif px < qx:
-                for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                               int_min(<int>floor(qx), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(px), -self.half_width),
+                               int_min(<int>floor(qx) + 1, self.half_width)):
                     r = (x - px) / (qx - px)
                     rc[0] = ((1 - r) * pc[0] + r * qc[0])
                     rc[1] = ((1 - r) * pc[1] + r * qc[1])
                     rc[2] = ((1 - r) * pc[2] + r * qc[2])
                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
             else:
-                for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
-                               int_min(<int>floor(px), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(qx), -self.half_width),
+                               int_min(<int>floor(px) + 1, self.half_width)):
                     r = (x - qx) / (px - qx)
                     rc[0] = ((1 - r) * qc[0] + r * pc[0])
                     rc[1] = ((1 - r) * qc[1] + r * pc[1])
@@ -687,13 +691,15 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._shade_vertex(_a, _b, _c, pn, color)
-                self._draw_pixel(<int>px, y, pz, color)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._shade_vertex(_a, _b, _c, pn, color)
+                    self._draw_pixel(x, y, pz, color)
                 continue
             elif px < qx:
-                for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                               int_min(<int>floor(qx), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(px), -self.half_width),
+                               int_min(<int>floor(qx) + 1, self.half_width)):
                     r = (x - px) / (qx - px)
                     rn[0] = ((1 - r) * pn[0] + r * qn[0])
                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
@@ -702,8 +708,8 @@ cdef class Renderer:
                     self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
             else:
-                for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
-                               int_min(<int>floor(px), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(qx), -self.half_width),
+                               int_min(<int>floor(px) + 1, self.half_width)):
                     r = (x - qx) / (px - qx)
                     rn[0] = ((1 - r) * qn[0] + r * pn[0])
                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
