@@ -714,7 +714,7 @@ cdef class Renderer:
 
     def _prepare_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
         cdef DOUBLE_t[:,:,:] polygons
-        cdef DOUBLE_t[:,:] polygon, vertex_normals
+        cdef DOUBLE_t[:,:] polygon
         cdef DOUBLE_t *polygon_normals
         cdef UINT64_t[:] index
         cdef int i
@@ -753,7 +753,6 @@ cdef class Renderer:
     def _draw_polygons(self):
         cdef DOUBLE_t[:,:,:] polygons
         cdef DOUBLE_t[:,:] points, polygon
-        cdef DOUBLE_t *polygon_normals
         cdef DOUBLE_t[:] cp, p1, p2, p3
         cdef DOUBLE_t *n
         cdef UINT64_t[:,:] indexes
@@ -763,13 +762,12 @@ cdef class Renderer:
         points = self._points
         indexes = self._indexes
         polygons = self._polygons
-        polygon_normals = self._polygon_normals
         cp = self.camera_position
 
         if self.shading_mode is ShadingMode.flat:
             for i in range(polygons.shape[0]):
                 polygon = polygons[i]
-                n = polygon_normals + 3 * i
+                n = self._polygon_normals + 3 * i
 
                 # ポリゴンがカメラを向いていなければ描画しない
                 p1 = polygon[0]
@@ -795,7 +793,7 @@ cdef class Renderer:
                 for i in range(polygons.shape[0]):
                     polygon = polygons[i]
                     index = indexes[i]
-                    n = polygon_normals + 3 * i
+                    n = self._polygon_normals + 3 * i
 
                     # ポリゴンがカメラを向いていなければ描画しない
                     p1 = polygon[0]
@@ -823,7 +821,7 @@ cdef class Renderer:
                 for i in range(polygons.shape[0]):
                     polygon = polygons[i]
                     index = indexes[i]
-                    n = polygon_normals + 3 * i
+                    n = self._polygon_normals + 3 * i
 
                     # ポリゴンがカメラを向いていなければ描画しない
                     p1 = polygon[0]
