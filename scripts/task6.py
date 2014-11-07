@@ -68,6 +68,13 @@ class Application(object):
         render_action.triggered.connect(self.render)
         menu_render.addAction(render_action)
 
+        menu_animate = menu_bar.addMenu('&Animate')
+
+        key_frame_action = QtGui.QAction('&Key Frame', self.main_window)
+        key_frame_action.setShortcut('Ctrl+K')
+        key_frame_action.triggered.connect(self.key_frame)
+        menu_animate.addAction(key_frame_action)
+
         # Status Bar
         self.status_bar = QtGui.QStatusBar()
         self.main_window.setStatusBar(self.status_bar)
@@ -352,11 +359,11 @@ class Application(object):
         animate_panel_layout.addWidget(key_frame_button, 0, 2)
 
         animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 1, 0)
-        self.animate_key_frame = QtGui.QSpinBox()
-        self.animate_key_frame.setMinimum(0)
-        self.animate_key_frame.setMaximum(300)
-        self.animate_key_frame.setValue(30)
-        animate_panel_layout.addWidget(self.animate_key_frame, 1, 1, 1, 2)
+        self.animate_fps = QtGui.QSpinBox()
+        self.animate_fps.setMinimum(0)
+        self.animate_fps.setMaximum(300)
+        self.animate_fps.setValue(30)
+        animate_panel_layout.addWidget(self.animate_fps, 1, 1, 1, 2)
 
         animate_button = QtGui.QPushButton('Animate')
         animate_button.clicked.connect(self.animate)
@@ -507,8 +514,31 @@ class Application(object):
 
         self.status_bar.showMessage('Rendered.')
 
+    def _interpolate(self, a, b, r):
+        result = {}
+        for k in a:
+            print(k, type(a[k]), a[k])
+            if isinstance(a[k], (int, float)):
+                result[k] = (1 - r) * a[k] + r * b[k]
+            else:
+                result[k] = a[k]
+        return result
+
     def animate(self):
-        pass
+        keys = sorted(self.key_frames.keys())
+        self.frames = []
+        for i in range(len(keys) - 1):
+            ka = keys[i]
+            kb = keys[i + 1]
+            fa = self.key_frames[ka]
+            fb = self.key_frames[kb]
+            for kc in range(ka, kb):
+                # a -- (r) -- c -- (1-r) -- b
+                r = (kc - ka) / (kb - ka)
+                print(kc, r)
+                self.frames.append(self._interpolate(fa, fb, r))
+        from pprint import pprint
+        pprint(self.frames)
 
 
 def main():
