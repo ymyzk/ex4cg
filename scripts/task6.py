@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import division, print_function, unicode_literals
 import sys
 
 import numpy as np
@@ -28,9 +32,17 @@ class ImageWidget(QtGui.QLabel):
 class Application(object):
     def __init__(self):
         self.vrml = Vrml()
+        self.renderer = None
         self.data = None
         self.width = self.height = 256
+        # キーフレームの辞書
         self.key_frames = {}
+        # アニメーション用のタイマー
+        self.timer = None
+        # アニメーションに用いるフレームの配列
+        self.frames = []
+        # アニメーション中のフレーム番号
+        self.frame_i = 0
 
         # UI
         self.app = QtGui.QApplication(sys.argv)
@@ -424,10 +436,7 @@ class Application(object):
             'ambient': self.ambient_checkbox.checkState() == 2,
             'ambient_luminance_r': self.ambient_luminance_r.value(),
             'ambient_luminance_g': self.ambient_luminance_g.value(),
-            'ambient_luminance_b': self.ambient_luminance_b.value(),
-            'random': (self.diffuse_checkbox.checkState() != 2
-                       and self.specular_checkbox.checkState() == 2
-                       and self.ambient_checkbox.checkState() == 2)
+            'ambient_luminance_b': self.ambient_luminance_b.value()
         }
 
         key_frame = self.animate_key_frame.value()
@@ -515,16 +524,105 @@ class Application(object):
         self.status_bar.showMessage('Rendered.')
 
     def _interpolate(self, a, b, r):
+        """キーフレーム間のフレームを描画するための情報を補完する処理"""
         result = {}
         for k in a:
-            print(k, type(a[k]), a[k])
             if isinstance(a[k], (int, float)):
                 result[k] = (1 - r) * a[k] + r * b[k]
             else:
                 result[k] = a[k]
         return result
 
+    def _animate(self):
+        if len(self.frames) <= self.frame_i:
+            self.timer.stop()
+            self.timer = None
+            return
+
+        if self.backend_cython.isChecked():
+            Renderer = CyRenderer
+        else:
+            Renderer = PyRenderer
+
+        mode = ShadingMode.flat
+        if self.shading_mode_flat.isChecked():
+            mode = ShadingMode.flat
+        elif self.shading_mode_gouraud.isChecked():
+            mode = ShadingMode.gouraud
+        elif self.shading_mode_phong.isChecked():
+            mode = ShadingMode.phong
+
+        self.width = self.render_size_w.value()
+        self.height = self.render_size_h.value()
+
+        self.renderer = Renderer(width=self.width, height=self.height,
+                                 shading_mode=mode)
+        self.renderer.prepare_polygons(self.vrml.points, self.vrml.indexes)
+
+        frame = self.frames[self.frame_i]
+
+        camera = Camera(
+            position=np.array((
+                frame['camera_position_x'],
+                frame['camera_position_y'],
+                frame['camera_position_z'])),
+            angle=np.array((
+                frame['camera_angle_x'],
+                frame['camera_angle_y'],
+                frame['camera_angle_z'])),
+            focus=frame['camera_focus'])
+        self.renderer.camera = camera
+
+        shaders = []
+        if frame['diffuse']:
+            shaders.append(shader.DiffuseShader(
+                direction=np.array((
+                    frame['diffuse_direction_x'],
+                    frame['diffuse_direction_y'],
+                    frame['diffuse_direction_z'])),
+                luminance=np.array((
+                    frame['diffuse_luminance_r'],
+                    frame['diffuse_luminance_g'],
+                    frame['diffuse_luminance_b'])),
+                color=self.vrml.diffuse_color))
+        if (frame['specular'] and
+                self.vrml.specular_color is not None and
+                self.vrml.shininess is not None):
+            shaders.append(shader.SpecularShader(
+                camera_position=camera.position,
+                direction=np.array((
+                    frame['specular_direction_x'],
+                    frame['specular_direction_y'],
+                    frame['specular_direction_z'])),
+                luminance=np.array((
+                    frame['specular_luminance_r'],
+                    frame['specular_luminance_g'],
+                    frame['specular_luminance_b'])),
+                color=self.vrml.specular_color,
+                shininess=self.vrml.shininess))
+        if (frame['ambient'] and
+                self.vrml.ambient_intensity is not None):
+            shaders.append(shader.AmbientShader(
+                luminance=np.array((
+                    frame['ambient_luminance_r'],
+                    frame['ambient_luminance_g'],
+                    frame['ambient_luminance_b'])),
+                intensity=self.vrml.ambient_intensity))
+        if len(shaders) == 0:
+            shaders.append(shader.RandomColorShader())
+        self.renderer.shaders = shaders
+
+        self.renderer.draw_polygons()
+        self.data = self.renderer.data
+        self.image_label.set_image(self.data, self.width, self.height)
+        self.renderer.clear()
+        self.status_bar.showMessage('Rendered {0}'.format(self.frame_i + 1))
+
+        self.frame_i += 1
+
     def animate(self):
+        """アニメーション処理を行う"""
+        # キーフレームをもとに補完する
         keys = sorted(self.key_frames.keys())
         self.frames = []
         for i in range(len(keys) - 1):
@@ -535,10 +633,15 @@ class Application(object):
             for kc in range(ka, kb):
                 # a -- (r) -- c -- (1-r) -- b
                 r = (kc - ka) / (kb - ka)
-                print(kc, r)
                 self.frames.append(self._interpolate(fa, fb, r))
-        from pprint import pprint
-        pprint(self.frames)
+        self.frames.append(self.key_frames[keys[-1]])
+
+        # アニメーションスタート
+        self.frame_i = 0
+        self.timer = QtCore.QTimer()
+        self.main_window.connect(self.timer, QtCore.SIGNAL('timeout()'),
+                                 self._animate)
+        self.timer.start(1000 / self.animate_fps.value())
 
 
 def main():

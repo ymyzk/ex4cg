@@ -184,15 +184,15 @@ cdef class Renderer:
         self.z_buffering = z_buffering
         self.shading_mode = shading_mode
 
-        self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
+        self.data = np.empty((self.height, self.width * 3), dtype=UINT8)
         self._data = self.data
         self._z_buffer = <DOUBLE_t *>malloc(
             sizeof(DOUBLE_t) * self.height * self.width)
-        for i in range(self.height * self.width):
-            self._z_buffer[i] = INFINITY
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
+
+        self.clear()
 
     def __del__(self):
         free(self._z_buffer)
@@ -382,13 +382,27 @@ cdef class Renderer:
             self._data[y][3 * x + 2] = <UINT8_t>(cl[2] * self._depth)
             self._z_buffer[xy] = z
 
-    cdef void _draw_polygon_flat(self, DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
-                                 DOUBLE_t *n):
+    cdef void _draw_polygon_flat(self, DOUBLE_t *a, DOUBLE_t *b,
+                                 DOUBLE_t *c, DOUBLE_t *n):
         """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t px, qx, pz, qz, r, s
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
         cdef DOUBLE_t d[3]
         cdef DOUBLE_t color[3]
+
+        # 座標変換前の座標を保存
+        _a[0] = a[0]
+        _a[1] = a[1]
+        _a[2] = a[2]
+        _b[0] = b[0]
+        _b[1] = b[1]
+        _b[2] = b[2]
+        _c[0] = c[0]
+        _c[1] = c[1]
+        _c[2] = c[2]
 
         # ポリゴン全体を1色でシェーディング
         self._shade_vertex(a, b, c, n, color)
@@ -456,6 +470,17 @@ cdef class Renderer:
                 r = (x - px) / (qx - px)
                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz),
                                  color)
+
+        # 座標を戻す
+        a[0] = _a[0]
+        a[1] = _a[1]
+        a[2] = _a[2]
+        b[0] = _b[0]
+        b[1] = _b[1]
+        b[2] = _b[2]
+        c[0] = _c[0]
+        c[1] = _c[1]
+        c[2] = _c[2]
 
     cdef void _draw_polygon_gouraud(self, DOUBLE_t *a, DOUBLE_t *b,
                                     DOUBLE_t *c, DOUBLE_t *an, DOUBLE_t *bn,
@@ -584,6 +609,17 @@ cdef class Renderer:
                     rc[2] = ((1 - r) * qc[2] + r * pc[2])
                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
 
+        # 座標を戻す
+        a[0] = _a[0]
+        a[1] = _a[1]
+        a[2] = _a[2]
+        b[0] = _b[0]
+        b[1] = _b[1]
+        b[2] = _b[2]
+        c[0] = _c[0]
+        c[1] = _c[1]
+        c[2] = _c[2]
+
     cdef void _draw_polygon_phong(self,
                                   DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
                                   DOUBLE_t *an, DOUBLE_t *bn, DOUBLE_t *cn):
@@ -706,6 +742,17 @@ cdef class Renderer:
                     z = pz * qz / (r * qz + (1 - r) * pz)
                     self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
+
+        # 座標を戻す
+        a[0] = _a[0]
+        a[1] = _a[1]
+        a[2] = _a[2]
+        b[0] = _b[0]
+        b[1] = _b[1]
+        b[2] = _b[2]
+        c[0] = _c[0]
+        c[1] = _c[1]
+        c[2] = _c[2]
 
     def _prepare_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
         cdef DOUBLE_t *polygons
@@ -857,3 +904,13 @@ cdef class Renderer:
 
     def draw_polygons(self):
         self._draw_polygons()
+
+    cdef _clear(self):
+        cdef int i
+        for i in range(self.height * self.width):
+            self._z_buffer[i] = INFINITY
+
+    def clear(self):
+        """描画内容と, Z バッファをクリアする処理"""
+        self.data.fill(0)
+        self._clear()
