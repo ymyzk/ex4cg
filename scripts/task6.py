@@ -30,6 +30,7 @@ class Application(object):
         self.vrml = Vrml()
         self.data = None
         self.width = self.height = 256
+        self.key_frames = {}
 
         # UI
         self.app = QtGui.QApplication(sys.argv)
@@ -185,24 +186,24 @@ class Application(object):
 
         diffuse_panel_layout.addWidget(
             QtGui.QLabel('Luminance (r, g, b): '), 2, 0)
-        self.diffuse_luminance_x = QtGui.QDoubleSpinBox()
-        self.diffuse_luminance_x.setMinimum(0.0)
-        self.diffuse_luminance_x.setMaximum(1.0)
-        self.diffuse_luminance_x.setSingleStep(0.1)
-        self.diffuse_luminance_x.setValue(1.0)
-        diffuse_panel_layout.addWidget(self.diffuse_luminance_x, 2, 1)
-        self.diffuse_luminance_y = QtGui.QDoubleSpinBox()
-        self.diffuse_luminance_y.setMinimum(0.0)
-        self.diffuse_luminance_y.setMaximum(1.0)
-        self.diffuse_luminance_y.setSingleStep(0.1)
-        self.diffuse_luminance_y.setValue(1.0)
-        diffuse_panel_layout.addWidget(self.diffuse_luminance_y, 2, 2)
-        self.diffuse_luminance_z = QtGui.QDoubleSpinBox()
-        self.diffuse_luminance_z.setMinimum(0.0)
-        self.diffuse_luminance_z.setMaximum(1.0)
-        self.diffuse_luminance_z.setSingleStep(0.1)
-        self.diffuse_luminance_z.setValue(1.0)
-        diffuse_panel_layout.addWidget(self.diffuse_luminance_z, 2, 3)
+        self.diffuse_luminance_r = QtGui.QDoubleSpinBox()
+        self.diffuse_luminance_r.setMinimum(0.0)
+        self.diffuse_luminance_r.setMaximum(1.0)
+        self.diffuse_luminance_r.setSingleStep(0.1)
+        self.diffuse_luminance_r.setValue(1.0)
+        diffuse_panel_layout.addWidget(self.diffuse_luminance_r, 2, 1)
+        self.diffuse_luminance_g = QtGui.QDoubleSpinBox()
+        self.diffuse_luminance_g.setMinimum(0.0)
+        self.diffuse_luminance_g.setMaximum(1.0)
+        self.diffuse_luminance_g.setSingleStep(0.1)
+        self.diffuse_luminance_g.setValue(1.0)
+        diffuse_panel_layout.addWidget(self.diffuse_luminance_g, 2, 2)
+        self.diffuse_luminance_b = QtGui.QDoubleSpinBox()
+        self.diffuse_luminance_b.setMinimum(0.0)
+        self.diffuse_luminance_b.setMaximum(1.0)
+        self.diffuse_luminance_b.setSingleStep(0.1)
+        self.diffuse_luminance_b.setValue(1.0)
+        diffuse_panel_layout.addWidget(self.diffuse_luminance_b, 2, 3)
 
         # Specular Tab
         specular_panel = QtGui.QWidget()
@@ -234,24 +235,24 @@ class Application(object):
 
         specular_panel_layout.addWidget(QtGui.QLabel(
             'Luminance (r, g, b): '), 2, 0)
-        self.specular_luminance_x = QtGui.QDoubleSpinBox()
-        self.specular_luminance_x.setMinimum(0.0)
-        self.specular_luminance_x.setMaximum(1.0)
-        self.specular_luminance_x.setSingleStep(0.1)
-        self.specular_luminance_x.setValue(1.0)
-        specular_panel_layout.addWidget(self.specular_luminance_x, 2, 1)
-        self.specular_luminance_y = QtGui.QDoubleSpinBox()
-        self.specular_luminance_y.setMinimum(0.0)
-        self.specular_luminance_y.setMaximum(1.0)
-        self.specular_luminance_y.setSingleStep(0.1)
-        self.specular_luminance_y.setValue(1.0)
-        specular_panel_layout.addWidget(self.specular_luminance_y, 2, 2)
-        self.specular_luminance_z = QtGui.QDoubleSpinBox()
-        self.specular_luminance_z.setMinimum(0.0)
-        self.specular_luminance_z.setMaximum(1.0)
-        self.specular_luminance_z.setSingleStep(0.1)
-        self.specular_luminance_z.setValue(1.0)
-        specular_panel_layout.addWidget(self.specular_luminance_z, 2, 3)
+        self.specular_luminance_r = QtGui.QDoubleSpinBox()
+        self.specular_luminance_r.setMinimum(0.0)
+        self.specular_luminance_r.setMaximum(1.0)
+        self.specular_luminance_r.setSingleStep(0.1)
+        self.specular_luminance_r.setValue(1.0)
+        specular_panel_layout.addWidget(self.specular_luminance_r, 2, 1)
+        self.specular_luminance_g = QtGui.QDoubleSpinBox()
+        self.specular_luminance_g.setMinimum(0.0)
+        self.specular_luminance_g.setMaximum(1.0)
+        self.specular_luminance_g.setSingleStep(0.1)
+        self.specular_luminance_g.setValue(1.0)
+        specular_panel_layout.addWidget(self.specular_luminance_g, 2, 2)
+        self.specular_luminance_b = QtGui.QDoubleSpinBox()
+        self.specular_luminance_b.setMinimum(0.0)
+        self.specular_luminance_b.setMaximum(1.0)
+        self.specular_luminance_b.setSingleStep(0.1)
+        self.specular_luminance_b.setValue(1.0)
+        specular_panel_layout.addWidget(self.specular_luminance_b, 2, 3)
 
         # Ambient Tab
         ambient_panel = QtGui.QWidget()
@@ -265,24 +266,24 @@ class Application(object):
 
         ambient_panel_layout.addWidget(
             QtGui.QLabel('Luminance (r, g, b): '), 1, 0)
-        self.ambient_luminance_x = QtGui.QDoubleSpinBox()
-        self.ambient_luminance_x.setMinimum(0.0)
-        self.ambient_luminance_x.setMaximum(1.0)
-        self.ambient_luminance_x.setSingleStep(0.1)
-        self.ambient_luminance_x.setValue(1.0)
-        ambient_panel_layout.addWidget(self.ambient_luminance_x, 1, 1)
-        self.ambient_luminance_y = QtGui.QDoubleSpinBox()
-        self.ambient_luminance_y.setMinimum(0.0)
-        self.ambient_luminance_y.setMaximum(1.0)
-        self.ambient_luminance_y.setSingleStep(0.1)
-        self.ambient_luminance_y.setValue(1.0)
-        ambient_panel_layout.addWidget(self.ambient_luminance_y, 1, 2)
-        self.ambient_luminance_z = QtGui.QDoubleSpinBox()
-        self.ambient_luminance_z.setMinimum(0.0)
-        self.ambient_luminance_z.setMaximum(1.0)
-        self.ambient_luminance_z.setSingleStep(0.1)
-        self.ambient_luminance_z.setValue(1.0)
-        ambient_panel_layout.addWidget(self.ambient_luminance_z, 1, 3)
+        self.ambient_luminance_r = QtGui.QDoubleSpinBox()
+        self.ambient_luminance_r.setMinimum(0.0)
+        self.ambient_luminance_r.setMaximum(1.0)
+        self.ambient_luminance_r.setSingleStep(0.1)
+        self.ambient_luminance_r.setValue(1.0)
+        ambient_panel_layout.addWidget(self.ambient_luminance_r, 1, 1)
+        self.ambient_luminance_g = QtGui.QDoubleSpinBox()
+        self.ambient_luminance_g.setMinimum(0.0)
+        self.ambient_luminance_g.setMaximum(1.0)
+        self.ambient_luminance_g.setSingleStep(0.1)
+        self.ambient_luminance_g.setValue(1.0)
+        ambient_panel_layout.addWidget(self.ambient_luminance_g, 1, 2)
+        self.ambient_luminance_b = QtGui.QDoubleSpinBox()
+        self.ambient_luminance_b.setMinimum(0.0)
+        self.ambient_luminance_b.setMaximum(1.0)
+        self.ambient_luminance_b.setSingleStep(0.1)
+        self.ambient_luminance_b.setValue(1.0)
+        ambient_panel_layout.addWidget(self.ambient_luminance_b, 1, 3)
 
         # Render Tab
         render_panel = QtGui.QWidget()
@@ -333,6 +334,34 @@ class Application(object):
         render_button.clicked.connect(self.render)
         render_panel_layout.addWidget(render_button, 3, 0, 1, 3)
 
+        # Animate Tab
+        animate_panel = QtGui.QWidget()
+        animate_panel_layout = QtGui.QGridLayout()
+        animate_panel.setLayout(animate_panel_layout)
+        control_tab.addTab(animate_panel, 'Animate')
+
+        animate_panel_layout.addWidget(QtGui.QLabel('# Frame: '), 0, 0)
+        self.animate_key_frame = QtGui.QSpinBox()
+        self.animate_key_frame.setMinimum(0)
+        self.animate_key_frame.setMaximum(1024)
+        self.animate_key_frame.setValue(0)
+        animate_panel_layout.addWidget(self.animate_key_frame, 0, 1)
+
+        key_frame_button = QtGui.QPushButton('Key Frame')
+        key_frame_button.clicked.connect(self.key_frame)
+        animate_panel_layout.addWidget(key_frame_button, 0, 2)
+
+        animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 1, 0)
+        self.animate_key_frame = QtGui.QSpinBox()
+        self.animate_key_frame.setMinimum(0)
+        self.animate_key_frame.setMaximum(300)
+        self.animate_key_frame.setValue(30)
+        animate_panel_layout.addWidget(self.animate_key_frame, 1, 1, 1, 2)
+
+        animate_button = QtGui.QPushButton('Animate')
+        animate_button.clicked.connect(self.animate)
+        animate_panel_layout.addWidget(animate_button, 2, 0, 1, 3)
+
         self.main_window.setCentralWidget(main_panel)
 
     def run(self):
@@ -360,6 +389,42 @@ class Application(object):
 
         with open(file_path, 'w') as f:
             image.dump(f)
+
+    def key_frame(self):
+        """キーフレームとして情報を保存する処理"""
+        info = {
+            'camera_position_x': self.camera_position_x.value(),
+            'camera_position_y': self.camera_position_y.value(),
+            'camera_position_z': self.camera_position_z.value(),
+            'camera_angle_x': self.camera_angle_x.value(),
+            'camera_angle_y': self.camera_angle_y.value(),
+            'camera_angle_z': self.camera_angle_z.value(),
+            'camera_focus': self.camera_focus.value(),
+            'diffuse': self.diffuse_checkbox.checkState() == 2,
+            'diffuse_direction_x': self.diffuse_direction_x.value(),
+            'diffuse_direction_y': self.diffuse_direction_y.value(),
+            'diffuse_direction_z': self.diffuse_direction_z.value(),
+            'diffuse_luminance_r': self.diffuse_luminance_r.value(),
+            'diffuse_luminance_g': self.diffuse_luminance_g.value(),
+            'diffuse_luminance_b': self.diffuse_luminance_b.value(),
+            'specular': self.specular_checkbox.checkState() == 2,
+            'specular_direction_x': self.specular_direction_x.value(),
+            'specular_direction_y': self.specular_direction_y.value(),
+            'specular_direction_z': self.specular_direction_z.value(),
+            'specular_luminance_r': self.specular_luminance_r.value(),
+            'specular_luminance_g': self.specular_luminance_g.value(),
+            'specular_luminance_b': self.specular_luminance_b.value(),
+            'ambient': self.ambient_checkbox.checkState() == 2,
+            'ambient_luminance_r': self.ambient_luminance_r.value(),
+            'ambient_luminance_g': self.ambient_luminance_g.value(),
+            'ambient_luminance_b': self.ambient_luminance_b.value(),
+            'random': (self.diffuse_checkbox.checkState() != 2
+                       and self.specular_checkbox.checkState() == 2
+                       and self.ambient_checkbox.checkState() == 2)
+        }
+
+        key_frame = self.animate_key_frame.value()
+        self.key_frames[key_frame] = info
 
     def render(self):
         self.status_bar.showMessage('Rendering..')
@@ -389,9 +454,9 @@ class Application(object):
                     self.diffuse_direction_y.value(),
                     self.diffuse_direction_z.value())),
                 luminance=np.array((
-                    self.diffuse_luminance_x.value(),
-                    self.diffuse_luminance_y.value(),
-                    self.diffuse_luminance_z.value())),
+                    self.diffuse_luminance_r.value(),
+                    self.diffuse_luminance_g.value(),
+                    self.diffuse_luminance_b.value())),
                 color=self.vrml.diffuse_color))
         if (self.specular_checkbox.checkState() == 2 and
                 self.vrml.specular_color is not None and
@@ -403,18 +468,18 @@ class Application(object):
                     self.specular_direction_y.value(),
                     self.specular_direction_z.value())),
                 luminance=np.array((
-                    self.specular_luminance_x.value(),
-                    self.specular_luminance_y.value(),
-                    self.specular_luminance_z.value())),
+                    self.specular_luminance_r.value(),
+                    self.specular_luminance_g.value(),
+                    self.specular_luminance_b.value())),
                 color=self.vrml.specular_color,
                 shininess=self.vrml.shininess))
         if (self.ambient_checkbox.checkState() == 2 and
                 self.vrml.ambient_intensity is not None):
             shaders.append(shader.AmbientShader(
                 luminance=np.array((
-                    self.ambient_luminance_x.value(),
-                    self.ambient_luminance_y.value(),
-                    self.ambient_luminance_z.value())),
+                    self.ambient_luminance_r.value(),
+                    self.ambient_luminance_g.value(),
+                    self.ambient_luminance_b.value())),
                 intensity=self.vrml.ambient_intensity))
         if len(shaders) == 0:
             shaders.append(shader.RandomColorShader())
@@ -441,6 +506,9 @@ class Application(object):
         self.image_label.set_image(self.data, self.width, self.height)
 
         self.status_bar.showMessage('Rendered.')
+
+    def animate(self):
+        pass
 
 
 def main():
