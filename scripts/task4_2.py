@@ -14,7 +14,7 @@ from cg.ppm import PpmImage
 from cg.shader import ShadingMode
 from cg.vrml import Vrml
 
-from cg.cython.renderer import Renderer
+from cg.cython import Renderer
 from cg.shader import (AmbientShader, DiffuseShader, RandomColorShader,
                        SpecularShader)
 

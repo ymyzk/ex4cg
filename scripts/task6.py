@@ -5,7 +5,7 @@ from PyQt4 import QtCore, QtGui
 
 from cg import shader
 from cg.camera import Camera
-from cg.cython.renderer import Renderer as CyRenderer
+from cg.cython import Renderer as CyRenderer
 from cg.ppm import PpmImage
 from cg.renderer import Renderer as PyRenderer
 from cg.shader import ShadingMode

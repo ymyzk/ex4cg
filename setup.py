@@ -29,8 +29,8 @@ else:
     cmdclass = {}
 
 ext_modules = [
-    Extension('cg.cython.renderer',
-              sources=['cg/cython/renderer' + ext],
+    Extension('cg.cython',
+              sources=['cg/cython' + ext],
               include_dirs=[np.get_include()],
               extra_compile_args=['-march=native'])
 ]
