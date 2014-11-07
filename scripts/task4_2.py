@@ -68,7 +68,6 @@ def main(args):
 
     renderer = Renderer(width=width, height=height, shading_mode=shading_mode)
     renderer.camera = camera
-
     renderer.shaders = shaders
 
     renderer.prepare_polygons(vrml.points, vrml.indexes)
