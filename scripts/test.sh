@@ -37,6 +37,26 @@ seconds=`expr $end_time - $start_time`
 echo "Finished $seconds [sec]"
 echo
 
+echo '===== task3.py ====='
+start_time=`date +%s`
+for vrml in $vrml_files; do
+  echo $vrml
+  ppm=${vrml%.wrl}_3.ppm
+  python task3.py -o $ppm $vrml > task3.py.log 2>&1
+  if [ $? -eq 0 ]; then
+    echo 'Success'
+  else
+    echo 'Error'
+    cat task3.py.log
+    exit 1
+  fi
+done
+echo
+end_time=`date +%s`
+seconds=`expr $end_time - $start_time`
+echo "Finished $seconds [sec]"
+echo
+
 echo '===== task4_1.py ====='
 start_time=`date +%s`
 for vrml in $vrml_files; do
