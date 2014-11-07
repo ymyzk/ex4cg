@@ -12,10 +12,10 @@ except ImportError:
     USE_CYTHON = False
 
 __author__ = 'Yusuke Miyazaki <miyazaki.dev@gmail.com>'
-__version__ = '0.2'
+__version__ = '0.3'
 
 requires = [
-    'numpy>=1.9.0'
+    'numpy>=1.9.1'
 ]
 
 if sys.version_info < (3, 4):
@@ -29,11 +29,10 @@ else:
     cmdclass = {}
 
 ext_modules = [
-    Extension('cg.cython.renderer',
-              sources=['cg/cython/renderer' + ext],
+    Extension('cg.cython',
+              sources=['cg/cython' + ext],
               include_dirs=[np.get_include()],
-              extra_compile_args=['-march=native'])
-]
+              extra_compile_args=['-march=native'])]
 
 setup(
     name='ex4cg',

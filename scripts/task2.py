@@ -41,12 +41,17 @@ def main(args):
     renderer.prepare_polygons(vrml.points, vrml.indexes)
     renderer.draw_polygons()
 
-    name = os.path.splitext(args.input.name)[0] + '.ppm'
-    image = PpmImage(name, width, height, renderer.data)
+    image = PpmImage(width, height, renderer.data)
 
     # ファイルに保存
-    with open(name, 'w') as f:
-        image.dump(f)
+    if args.o is not None:
+        try:
+            image.dump(args.o)
+        finally:
+            args.o.close()
+    else:
+        with open(os.path.splitext(args.input.name)[0] + '.ppm', 'w') as f:
+            image.dump(f)
 
 
 if __name__ == '__main__':

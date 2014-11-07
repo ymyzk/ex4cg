@@ -26,9 +26,8 @@ class Renderer(object):
         self.z_buffering = z_buffering
         self.shading_mode = shading_mode
 
-        self.data = np.zeros((self.height, self.width * 3), dtype=np.uint8)
+        self.data = np.empty((self.height, self.width * 3), dtype=np.uint8)
         self.z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
-        self.z_buffer.fill(float('inf'))
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
@@ -37,6 +36,8 @@ class Renderer(object):
         self._polygons = None
         self._polygon_normals = None
         self._polygon_vertex_normals = None
+
+        self.clear()
 
     def _convert_point(self, point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
@@ -52,11 +53,16 @@ class Renderer(object):
         """シェーディング処理"""
         return sum([s.calc(polygon, normal) for s in self.shaders])
 
+    def clear(self):
+        """描画内容と, Z バッファをクリアする処理"""
+        self.data.fill(0.0)
+        self.z_buffer.fill(float('inf'))
+
     def make_range_x(self, x1, x2):
         x1 = int(math.ceil(x1))
         x2 = int(math.floor(x2))
         return range(max(x1, -self.half_width),
-                     min(x2, self.half_width - 1) + 1)
+                     min(x2 + 1, self.half_width))
 
     def make_range_y(self, y1, y2):
         y1 = int(math.ceil(y1))
@@ -66,6 +72,12 @@ class Renderer(object):
 
     def draw_pixel(self, x, y, z, cl):
         """画素を描画する処理"""
+        # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
+        # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
+        # NOTE: サンプル画像がおかしいので X を反転して表示している
+        # data_x = self.half_width + x # 反転させないコード
+        x = self.half_width - x - 1
+        y = self.half_height - y
         # Z バッファでテスト
         if not self.z_buffering or z <= self.z_buffer[y][x]:
             # 飽和
@@ -76,14 +88,7 @@ class Renderer(object):
             if 1.0 < cl[2]:
                 cl[2] = 1.0
             cl = (cl * self._depth).astype(np.uint8)
-
-            # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-            # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-            # NOTE: サンプル画像がおかしいので X を反転して表示している
-            # data_x = 3 * (self.half_width + x) # 反転させないコード
-            data_x = 3 * (self.half_width - x - 1)
-            data_y = self.half_height - y
-            self.data[data_y][data_x:data_x + 3] = cl
+            self.data[y][3 * x:3 * x + 3] = cl
             self.z_buffer[y][x] = z
 
     def _draw_polygon_flat(self, polygon, normal):
@@ -144,8 +149,10 @@ class Renderer(object):
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self.draw_pixel(int(px), y, pz, color)
+                x = int(px)
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self.draw_pixel(x, y, pz, color)
                 continue
             elif px > qx:
                 # x についてソート
@@ -224,8 +231,10 @@ class Renderer(object):
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self.draw_pixel(int(px), y, pz, pc)
+                x = int(px)
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self.draw_pixel(x, y, pz, pc)
                 continue
             elif px > qx:
                 # x についてソート
@@ -301,9 +310,11 @@ class Renderer(object):
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self.draw_pixel(int(px), y, pz,
-                                self._shade_vertex(polygon, pn))
+                x = int(px)
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self.draw_pixel(x, y, pz,
+                                    self._shade_vertex(polygon, pn))
                 continue
             elif px > qx:
                 # x についてソート

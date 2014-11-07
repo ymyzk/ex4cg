@@ -35,7 +35,7 @@ if __name__ == '__main__':
     renderer.draw_polygons()
 
     name = "task1.ppm"
-    image = PpmImage(name, width, height, renderer.data, depth=depth)
+    image = PpmImage(width, height, renderer.data, depth=depth)
 
     # ファイルに保存
     with open(name, 'w') as f:

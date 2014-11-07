@@ -5,7 +5,7 @@ from PyQt4 import QtCore, QtGui
 
 from cg import shader
 from cg.camera import Camera
-from cg.cython.renderer import Renderer as CyRenderer
+from cg.cython import Renderer as CyRenderer
 from cg.ppm import PpmImage
 from cg.renderer import Renderer as PyRenderer
 from cg.shader import ShadingMode
@@ -65,7 +65,7 @@ class Application(object):
         render_action = QtGui.QAction('&Render', self.main_window)
         render_action.setShortcut('Ctrl+R')
         render_action.triggered.connect(self.render)
-        menu_file.addAction(render_action)
+        menu_render.addAction(render_action)
 
         # Status Bar
         self.status_bar = QtGui.QStatusBar()

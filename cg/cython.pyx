@@ -4,6 +4,7 @@
 from random import random
 
 from libc.math cimport ceil, floor, sqrt
+from libc.math cimport INFINITY
 from libc.stdlib cimport free, malloc
 import numpy as np
 cimport numpy as np
@@ -28,26 +29,27 @@ cdef inline int int_min(int a, int b) nogil:
     return a if a <= b else b
 
 
-cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,
-                               DOUBLE_t[:,:] polygon_normals) nogil:
+cdef void calc_polygon_normals(DOUBLE_t *polygons, DOUBLE_t *polygon_normals,
+                               int num) nogil:
     """ポリゴンの面の法線ベクトルを求める処理
 
     :param polygons: ポリゴンの配列 (n x 3 x 3)
     :param polygon_normals: ポリゴンの面の法線ベクトルを格納する配列 (n x 3)
+    :param num: ポリゴンの数 (n)
     """
-    cdef DOUBLE_t[:,:] polygon
-    cdef DOUBLE_t[:] a, b, c, polygon_normal
+    cdef DOUBLE_t *polygon
+    cdef DOUBLE_t *a
+    cdef DOUBLE_t *b
+    cdef DOUBLE_t *c
     cdef DOUBLE_t[3] ab, bc, cr
     cdef DOUBLE_t norm
-    cdef int i, l
+    cdef int i, j
 
-    l = polygons.shape[0]
-
-    for i in range(l):
-        polygon = polygons[i]
-        a = polygon[0]
-        b = polygon[1]
-        c = polygon[2]
+    for i in range(num):
+        polygon = polygons + i * 3 * 3
+        a = polygon + 3 * 0
+        b = polygon + 3 * 1
+        c = polygon + 3 * 2
         ab[0] = b[0] - a[0]
         ab[1] = b[1] - a[1]
         ab[2] = b[2] - a[2]
@@ -66,15 +68,15 @@ cdef void calc_polygon_normals(DOUBLE_t[:,:,:] polygons,
 
         # 法線ベクトル (単位ベクトル化)
         norm = sqrt(cr[0] ** 2 + cr[1] ** 2 + cr[2] ** 2)
-        polygon_normal = polygon_normals[i]
-        polygon_normal[0] = cr[0] / norm
-        polygon_normal[1] = cr[1] / norm
-        polygon_normal[2] = cr[2] / norm
+        j = 3 * i
+        polygon_normals[j + 0] = cr[0] / norm
+        polygon_normals[j + 1] = cr[1] / norm
+        polygon_normals[j + 2] = cr[2] / norm
 
 
 cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
-                              DOUBLE_t[:,:] polygon_normals,
-                              DOUBLE_t[:,:] vertex_normals) nogil:
+                              DOUBLE_t *polygon_normals,
+                              DOUBLE_t *vertex_normals, int num) nogil:
     """各頂点の法線ベクトルを計算する処理
 
     各頂点の法線ベクトルは, その頂点を含む全ての面の法線ベクトルの平均である
@@ -82,58 +84,59 @@ cdef void calc_vertex_normals(UINT64_t[:,:] indexes,
     :param indexes: ポリゴンのインデックス
     :param polygon_normals: ポリゴンの面の法線ベクトルの配列 (n x 3)
     :param vertex_normals: 頂点の法線ベクトルの配列 (m x 3)
+    :param num: vertex_normals の数
     """
-    cdef DOUBLE_t[:] normal, vertex, vertex_normal
-    cdef DOUBLE_t *vertexes
     cdef UINT64_t[:] index
+    cdef DOUBLE_t *vertexes
     cdef UINT64_t *vertexes_n
     cdef UINT64_t vertex_n
-    cdef int i, j, l
+    cdef int i, j, k
 
-    l = vertex_normals.shape[0]
-
-    vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * l * 3)
-    vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * l)
+    # メモリ確保
+    vertexes = <DOUBLE_t *>malloc(sizeof(DOUBLE_t) * num * 3)
+    vertexes_n = <UINT64_t *>malloc(sizeof(UINT64_t) * num)
+    for i in range(num * 3):
+        vertexes[i] = 0.0
+    for i in range(num):
+        vertexes_n[i] = 0
 
     # 各頂点を含む面の法線ベクトルの和を求める
-    l = indexes.shape[0]
-    for i in range(l):
+    for i in range(indexes.shape[0]):
         index = indexes[i]
-        normal = polygon_normals[i]
+        k = 3 * i
 
         j = 3 * index[0]
-        vertexes[j+0] += normal[0]
-        vertexes[j+1] += normal[1]
-        vertexes[j+2] += normal[2]
+        vertexes[j + 0] += polygon_normals[k + 0]
+        vertexes[j + 1] += polygon_normals[k + 1]
+        vertexes[j + 2] += polygon_normals[k + 2]
         vertexes_n[index[0]] += 1
 
         j = 3 * index[1]
-        vertexes[j+0] += normal[0]
-        vertexes[j+1] += normal[1]
-        vertexes[j+2] += normal[2]
+        vertexes[j + 0] += polygon_normals[k + 0]
+        vertexes[j + 1] += polygon_normals[k + 1]
+        vertexes[j + 2] += polygon_normals[k + 2]
         vertexes_n[index[1]] += 1
 
         j = 3 * index[2]
-        vertexes[j+0] += normal[0]
-        vertexes[j+1] += normal[1]
-        vertexes[j+2] += normal[2]
+        vertexes[j + 0] += polygon_normals[k + 0]
+        vertexes[j + 1] += polygon_normals[k + 1]
+        vertexes[j + 2] += polygon_normals[k + 2]
         vertexes_n[index[2]] += 1
 
     # 各頂点の法線ベクトルの平均値を求める
-    l = vertex_normals.shape[0]
-    for i in range(l):
+    for i in range(num):
         j = 3 * i
         vertex_n = vertexes_n[i]
-        vertex_normal = vertex_normals[i]
         if 0 < vertex_n:
-            vertex_normal[0] = vertexes[j+0] / vertex_n
-            vertex_normal[1] = vertexes[j+1] / vertex_n
-            vertex_normal[2] = vertexes[j+2] / vertex_n
+            vertex_normals[j + 0] = vertexes[j + 0] / vertex_n
+            vertex_normals[j + 1] = vertexes[j + 1] / vertex_n
+            vertex_normals[j + 2] = vertexes[j + 2] / vertex_n
         else:
-            vertex_normal[0] = 0.0
-            vertex_normal[1] = 0.0
-            vertex_normal[2] = 0.0
+            vertex_normals[j + 0] = 0.0
+            vertex_normals[j + 1] = 0.0
+            vertex_normals[j + 2] = 0.0
 
+    # メモリ解放
     free(vertexes)
     free(vertexes_n)
 
@@ -145,8 +148,8 @@ cdef class Renderer:
     cdef int _depth
     cdef readonly np.ndarray data
     cdef UINT8_t[:,:] _data
-    cdef DOUBLE_t[:,:] _z_buffer
-    cdef DOUBLE_t camera_array[3][3]
+    cdef DOUBLE_t *_z_buffer
+    cdef DOUBLE_t camera_array[3][4]
     cdef DOUBLE_t camera_position[3]
     cdef DOUBLE_t focus
 
@@ -164,17 +167,17 @@ cdef class Renderer:
     cdef DOUBLE_t[3] _specular_direction, _specular_pre_shade
 
     # ポリゴンのキャッシュ用
-    cdef DOUBLE_t[:,:,:] _polygons
-    cdef DOUBLE_t[:,:] _points, _polygon_normals, _vertex_normals
+    cdef DOUBLE_t[:,:] _points
     cdef UINT64_t[:,:] _indexes
+    cdef DOUBLE_t *_polygons
+    cdef DOUBLE_t *_polygon_normals
+    cdef DOUBLE_t *_vertex_normals
 
     def __init__(self, int width, int height, z_buffering=True,
                  int depth=8, shading_mode=ShadingMode.flat):
         """
         :param bool z_buffering: Z バッファを有効にするかどうか
         """
-        cdef np.ndarray z_buffer
-
         self.depth = depth
         self.width = width
         self.height = height
@@ -183,75 +186,69 @@ cdef class Renderer:
 
         self.data = np.zeros((self.height, self.width * 3), dtype=UINT8)
         self._data = self.data
-        z_buffer = np.empty((self.height, self.width), dtype=DOUBLE)
-        z_buffer.fill(float('inf'))
-        self._z_buffer = z_buffer
+        self._z_buffer = <DOUBLE_t *>malloc(
+            sizeof(DOUBLE_t) * self.height * self.width)
+        for i in range(self.height * self.width):
+            self._z_buffer[i] = INFINITY
         self.half_width = self.width // 2
         self.half_height = self.height // 2
         self._depth = 2 ** depth - 1
+
+    def __del__(self):
+        free(self._z_buffer)
+        free(self._polygons)
+        free(self._polygon_normals)
+        free(self._vertex_normals)
 
     property shaders:
         def __get__(self):
             return self.shaders
 
         def __set__(self, value):
+            cdef int i
+
             self.shaders = value
 
             # Python で書かれたシェーダーから必要な値を取り出す
             for shader in self.shaders:
                 if isinstance(shader, AmbientShader):
                     self._is_ambient_shader_enabled = 1
-                    self._ambient_shade[0] = shader.shade[0]
-                    self._ambient_shade[1] = shader.shade[1]
-                    self._ambient_shade[2] = shader.shade[2]
+                    for i in range(3):
+                        self._ambient_shade[i] = shader.shade[i]
                 elif isinstance(shader, DiffuseShader):
                     self._is_diffuse_shader_enabled = 1
-                    self._diffuse_direction[0] = shader.direction[0]
-                    self._diffuse_direction[1] = shader.direction[1]
-                    self._diffuse_direction[2] = shader.direction[2]
-                    self._diffuse_pre_shade[0] = shader.pre_shade[0]
-                    self._diffuse_pre_shade[1] = shader.pre_shade[1]
-                    self._diffuse_pre_shade[2] = shader.pre_shade[2]
+                    for i in range(3):
+                        self._diffuse_direction[i] = shader.direction[i]
+                        self._diffuse_pre_shade[i] = shader.pre_shade[i]
                 elif isinstance(shader, RandomColorShader):
                     self._is_random_shader_enabled = 1
                 elif isinstance(shader, SpecularShader):
                     self._is_specular_shader_enabled = 1
-                    self._specular_direction[0] = shader.direction[0]
-                    self._specular_direction[1] = shader.direction[1]
-                    self._specular_direction[2] = shader.direction[2]
                     self._specular_shininess = shader.shininess
-                    self._specular_pre_shade[0] = shader.pre_shade[0]
-                    self._specular_pre_shade[1] = shader.pre_shade[1]
-                    self._specular_pre_shade[2] = shader.pre_shade[2]
+                    for i in range(3):
+                        self._specular_direction[i] = shader.direction[i]
+                        self._specular_pre_shade[i] = shader.pre_shade[i]
 
     property camera:
         def __get__(self):
             return self.camera
 
         def __set__(self, value):
+            cdef int i, j
+
             self.camera = value
-
             self.focus = self.camera.focus
-            cdef DOUBLE_t [:,:] array = self.camera.array
-            self.camera_array[0][0] = array[0][0]
-            self.camera_array[0][1] = array[0][1]
-            self.camera_array[0][2] = array[0][2]
-            self.camera_array[1][0] = array[1][0]
-            self.camera_array[1][1] = array[1][1]
-            self.camera_array[1][2] = array[1][2]
-            self.camera_array[2][0] = array[2][0]
-            self.camera_array[2][1] = array[2][1]
-            self.camera_array[2][2] = array[2][2]
-            self.camera_position[0] = self.camera.position[0]
-            self.camera_position[1] = self.camera.position[1]
-            self.camera_position[2] = self.camera.position[2]
+            for i in range(3):
+                for j in range(4):
+                    self.camera_array[i][j] = self.camera.array[i][j]
+                self.camera_position[i] = self.camera.position[i]
 
-    cdef void _convert_point(self, DOUBLE_t[:] point):
+    cdef void _convert_point(self, DOUBLE_t *point):
         """カメラ座標系の座標を画像平面上の座標に変換する処理
 
         画像平面の x, y, z
         """
-        cdef DOUBLE_t[3] p
+        cdef DOUBLE_t p[3]
         cdef DOUBLE_t k
         cdef int i
 
@@ -270,7 +267,7 @@ cdef class Renderer:
         cl[1] += self._ambient_shade[1]
         cl[2] += self._ambient_shade[2]
 
-    cdef void _shade_diffuse(self, DOUBLE_t[:] n, DOUBLE_t *cl) nogil:
+    cdef void _shade_diffuse(self, DOUBLE_t *n, DOUBLE_t *cl) nogil:
         cdef DOUBLE_t cos
 
         # 法線ベクトルがゼロベクトルであれば, 計算不能 (ex. 面積0のポリゴン)
@@ -297,9 +294,8 @@ cdef class Renderer:
         cl[1] += random()
         cl[2] += random()
 
-    cdef void _shade_specular(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                              DOUBLE_t[:] c, DOUBLE_t[:] n,
-                              DOUBLE_t *cl) nogil:
+    cdef void _shade_specular(self, DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
+                              DOUBLE_t *n, DOUBLE_t *cl) nogil:
         cdef DOUBLE_t[3] e, s
         cdef DOUBLE_t sn, norm
 
@@ -339,9 +335,8 @@ cdef class Renderer:
         cl[1] += sn * self._specular_pre_shade[1]
         cl[2] += sn * self._specular_pre_shade[2]
 
-    cdef void _shade_vertex(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                            DOUBLE_t[:] c, DOUBLE_t[:] n,
-                            DOUBLE_t *color) nogil:
+    cdef void _shade_vertex(self, DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
+                            DOUBLE_t *n, DOUBLE_t *color) nogil:
         """シェーディング処理"""
         color[0] = 0.0
         color[1] = 0.0
@@ -362,10 +357,18 @@ cdef class Renderer:
 
     cdef void _draw_pixel(self, int x, int y, DOUBLE_t z, DOUBLE_t *cl) nogil:
         """画素を描画する処理"""
-        cdef int data_x, data_y
+        cdef int xy
+
+        # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
+        # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
+        # NOTE: サンプル画像がおかしいので X を反転して表示している
+        # data_x = self.half_width + x # 反転させないコード
+        x = self.half_width - x - 1
+        y = self.half_height - y
+        xy = y * self.width + x
 
         # Z バッファでテスト
-        if not self.z_buffering or z <= self._z_buffer[y][x]:
+        if not self.z_buffering or z <= self._z_buffer[xy]:
             # 飽和
             if 1.0 < cl[0]:
                 cl[0] = 1.0
@@ -374,23 +377,17 @@ cdef class Renderer:
             if 1.0 < cl[2]:
                 cl[2] = 1.0
 
-            # X: -128 ~ 127 -> (x + 128) -> 0 ~ 255
-            # Y: -127 ~ 128 -> (128 - y) -> 0 ~ 255
-            # NOTE: サンプル画像がおかしいので X を反転して表示している
-            # data_x = 3 * (self.half_width + x) # 反転させないコード
-            data_x = 3 * (self.half_width - x - 1)
-            data_y = self.half_height - y
-            self._data[data_y][data_x+0] = <UINT8_t>(cl[0] * self._depth)
-            self._data[data_y][data_x+1] = <UINT8_t>(cl[1] * self._depth)
-            self._data[data_y][data_x+2] = <UINT8_t>(cl[2] * self._depth)
-            self._z_buffer[y][x] = z
+            self._data[y][3 * x + 0] = <UINT8_t>(cl[0] * self._depth)
+            self._data[y][3 * x + 1] = <UINT8_t>(cl[1] * self._depth)
+            self._data[y][3 * x + 2] = <UINT8_t>(cl[2] * self._depth)
+            self._z_buffer[xy] = z
 
-    cdef void _draw_polygon_flat(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                 DOUBLE_t[:] c, DOUBLE_t[:] n):
+    cdef void _draw_polygon_flat(self, DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
+                                 DOUBLE_t *n):
         """ポリゴンを描画する処理 (フラットシェーディング)"""
         cdef int x, y
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] d
+        cdef DOUBLE_t d[3]
         cdef DOUBLE_t color[3]
 
         # ポリゴン全体を1色でシェーディング
@@ -446,26 +443,31 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._draw_pixel(<int>px, y, pz, color)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._draw_pixel(x, y, pz, color)
                 continue
             elif px > qx:
                 # x についてソート
                 px, qx = qx, px
-            for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                           int_min(<int>floor(qx), self.half_width) + 1):
+            for x in range(int_max(<int>ceil(px), -self.half_width),
+                           int_min(<int>floor(qx) + 1, self.half_width)):
                 r = (x - px) / (qx - px)
                 self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz),
                                  color)
 
-    cdef void _draw_polygon_gouraud(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                    DOUBLE_t[:] c, DOUBLE_t[:] an,
-                                    DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+    cdef void _draw_polygon_gouraud(self, DOUBLE_t *a, DOUBLE_t *b,
+                                    DOUBLE_t *c, DOUBLE_t *an, DOUBLE_t *bn,
+                                    DOUBLE_t *cn):
         """ポリゴンを描画する処理 (グーローシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t[3] d, dn
         cdef DOUBLE_t px, qx, pz, qz, r, s
-        cdef DOUBLE_t[3] _a, _b, _c
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
+        cdef DOUBLE_t d[3]
+        cdef DOUBLE_t dn[3]
         cdef DOUBLE_t ac[3]
         cdef DOUBLE_t bc[3]
         cdef DOUBLE_t cc[3]
@@ -526,7 +528,7 @@ cdef class Renderer:
         self._shade_vertex(_a, _b, _c, dn, dc)
 
         for y in range(int_max(<int>ceil(a[1]), 1 - self.half_height),
-                       int_min(<int>floor(c[1]), self.half_height) + 1):
+                       int_min(<int>floor(c[1]) + 1, self.half_height)):
             # x の左右を探す:
             if y <= b[1]:
                 # a -> bd
@@ -560,33 +562,42 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._draw_pixel(<int>px, y, pz, pc)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._draw_pixel(x, y, pz, pc)
                 continue
             elif px < qx:
-                for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                               int_min(<int>floor(qx), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(px), -self.half_width),
+                               int_min(<int>floor(qx) + 1, self.half_width)):
                     r = (x - px) / (qx - px)
                     rc[0] = ((1 - r) * pc[0] + r * qc[0])
                     rc[1] = ((1 - r) * pc[1] + r * qc[1])
                     rc[2] = ((1 - r) * pc[2] + r * qc[2])
                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
             else:
-                for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
-                               int_min(<int>floor(px), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(qx), -self.half_width),
+                               int_min(<int>floor(px) + 1, self.half_width)):
                     r = (x - qx) / (px - qx)
                     rc[0] = ((1 - r) * qc[0] + r * pc[0])
                     rc[1] = ((1 - r) * qc[1] + r * pc[1])
                     rc[2] = ((1 - r) * qc[2] + r * pc[2])
                     self._draw_pixel(x, y, pz * qz / (r * qz + (1 - r) * pz), rc)
 
-    cdef void _draw_polygon_phong(self, DOUBLE_t[:] a, DOUBLE_t[:] b,
-                                  DOUBLE_t[:] c, DOUBLE_t[:] an,
-                                  DOUBLE_t[:] bn, DOUBLE_t[:] cn):
+    cdef void _draw_polygon_phong(self,
+                                  DOUBLE_t *a, DOUBLE_t *b, DOUBLE_t *c,
+                                  DOUBLE_t *an, DOUBLE_t *bn, DOUBLE_t *cn):
         """ポリゴンを描画する処理 (フォンシェーディング)"""
         cdef int x, y
-        cdef DOUBLE_t[3] _a, _b, _c, d, dn, pn, qn, rn
         cdef DOUBLE_t px, qx, pz, qz, r, s, z
+        cdef DOUBLE_t _a[3]
+        cdef DOUBLE_t _b[3]
+        cdef DOUBLE_t _c[3]
+        cdef DOUBLE_t d[3]
+        cdef DOUBLE_t dn[3]
+        cdef DOUBLE_t pn[3]
+        cdef DOUBLE_t qn[3]
+        cdef DOUBLE_t rn[3]
         cdef DOUBLE_t color[3]
 
         # 座標変換前の座標を保存
@@ -669,13 +680,15 @@ cdef class Renderer:
                 qz = c[2] * d[2] / (s * c[2] + (1 - s) * d[2])
             # x についてループ
             if px == qx:
-                # x が同じの時はすぐに終了
-                self._shade_vertex(_a, _b, _c, pn, color)
-                self._draw_pixel(<int>px, y, pz, color)
+                x = <int>px
+                if -self.half_width <= x <= self.half_width - 1:
+                    # x が同じの時はすぐに終了
+                    self._shade_vertex(_a, _b, _c, pn, color)
+                    self._draw_pixel(x, y, pz, color)
                 continue
             elif px < qx:
-                for x in range(int_max(<int>ceil(px), 1 - self.half_width),
-                               int_min(<int>floor(qx), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(px), -self.half_width),
+                               int_min(<int>floor(qx) + 1, self.half_width)):
                     r = (x - px) / (qx - px)
                     rn[0] = ((1 - r) * pn[0] + r * qn[0])
                     rn[1] = ((1 - r) * pn[1] + r * qn[1])
@@ -684,8 +697,8 @@ cdef class Renderer:
                     self._shade_vertex(_a, _b, _c, rn, color)
                     self._draw_pixel(x, y, z, color)
             else:
-                for x in range(int_max(<int>ceil(qx), 1 - self.half_width),
-                               int_min(<int>floor(px), self.half_width) + 1):
+                for x in range(int_max(<int>ceil(qx), -self.half_width),
+                               int_min(<int>floor(px) + 1, self.half_width)):
                     r = (x - qx) / (px - qx)
                     rn[0] = ((1 - r) * qn[0] + r * pn[0])
                     rn[1] = ((1 - r) * qn[1] + r * pn[1])
@@ -695,31 +708,42 @@ cdef class Renderer:
                     self._draw_pixel(x, y, z, color)
 
     def _prepare_polygons(self, DOUBLE_t[:,:] points, UINT64_t[:,:] indexes):
-        cdef DOUBLE_t[:,:,:] polygons
-        cdef DOUBLE_t[:,:] polygon, polygon_normals, vertex_normals
+        cdef DOUBLE_t *polygons
+        cdef DOUBLE_t *polygon
+        cdef DOUBLE_t *polygon_normals
         cdef UINT64_t[:] index
         cdef int i
 
         cp = self.camera_position
 
         # ポリゴンのリストを作成
-        polygons = np.empty((indexes.shape[0], 3, 3), dtype=DOUBLE)
+        polygons = <DOUBLE_t *>malloc(
+                sizeof(DOUBLE_t) * indexes.shape[0] * 3 * 3)
+
         for i in range(indexes.shape[0]):
-            polygon = polygons[i]
+            polygon = polygons + i * 3 * 3
             index = indexes[i]
-            polygon[0] = points[index[0]]
-            polygon[1] = points[index[1]]
-            polygon[2] = points[index[2]]
+            polygon[0] = points[index[0]][0]
+            polygon[1] = points[index[0]][1]
+            polygon[2] = points[index[0]][2]
+            polygon[3] = points[index[1]][0]
+            polygon[4] = points[index[1]][1]
+            polygon[5] = points[index[1]][2]
+            polygon[6] = points[index[2]][0]
+            polygon[7] = points[index[2]][1]
+            polygon[8] = points[index[2]][2]
 
         # すべてのポリゴンの面の法線ベクトルを求める
-        polygon_normals = np.empty((indexes.shape[0], 3), dtype=DOUBLE)
-        calc_polygon_normals(polygons, polygon_normals)
+        polygon_normals = <DOUBLE_t *>malloc(
+                sizeof(DOUBLE_t) * indexes.shape[0] * 3)
+        calc_polygon_normals(polygons, polygon_normals, indexes.shape[0])
 
         if self.shading_mode is not ShadingMode.flat:
             # 各頂点の法線ベクトルを計算
-            vertex_normals = np.empty((points.shape[0], 3), dtype=DOUBLE)
-            calc_vertex_normals(indexes, polygon_normals, vertex_normals)
-            self._vertex_normals = vertex_normals
+            self._vertex_normals = <DOUBLE_t *>malloc(
+                sizeof(DOUBLE_t) * points.shape[0] * 3)
+            calc_vertex_normals(indexes, polygon_normals, self._vertex_normals,
+                                points.shape[0])
 
         self._points = points
         self._indexes = indexes
@@ -730,11 +754,17 @@ cdef class Renderer:
         self._prepare_polygons(points, indexes)
 
     def _draw_polygons(self):
-        cdef DOUBLE_t[:,:,:] polygons
-        cdef DOUBLE_t[:,:] points, polygon, polygon_normals, vertex_normals
-        cdef DOUBLE_t[:] cp, p1, p2, p3, n
+        cdef DOUBLE_t[:,:] points
+        cdef DOUBLE_t[:] cp
         cdef UINT64_t[:,:] indexes
         cdef UINT64_t[:] index
+        cdef DOUBLE_t *polygons
+        cdef DOUBLE_t *polygon
+        cdef DOUBLE_t *polygon_normals
+        cdef DOUBLE_t *p1
+        cdef DOUBLE_t *p2
+        cdef DOUBLE_t *p3
+        cdef DOUBLE_t *n
         cdef int i
 
         points = self._points
@@ -744,22 +774,22 @@ cdef class Renderer:
         cp = self.camera_position
 
         if self.shading_mode is ShadingMode.flat:
-            for i in range(polygons.shape[0]):
-                polygon = polygons[i]
-                n = polygon_normals[i]
+            for i in range(indexes.shape[0]):
+                polygon = polygons + i * 3 * 3
+                n = polygon_normals + 3 * i
 
                 # ポリゴンがカメラを向いていなければ描画しない
-                p1 = polygon[0]
+                p1 = polygon + 3 * 0
                 if ((cp[0] - p1[0]) * n[0]
                     + (cp[1] - p1[1]) * n[1]
                     + (cp[2] - p1[2]) * n[2]) < 0:
                     continue
-                p2 = polygon[1]
+                p2 = polygon + 3 * 1
                 if ((cp[0] - p2[0]) * n[0]
                     + (cp[1] - p2[1]) * n[1]
                     + (cp[2] - p2[2]) * n[2]) < 0:
                     continue
-                p3 = polygon[2]
+                p3 = polygon + 3 * 2
                 if ((cp[0] - p3[0]) * n[0]
                     + (cp[1] - p3[1]) * n[1]
                     + (cp[2] - p3[2]) * n[2]) < 0:
@@ -767,63 +797,63 @@ cdef class Renderer:
 
                 self._draw_polygon_flat(p1, p2, p3, n)
         else:
-            vertex_normals = self._vertex_normals
-
             # ポリゴンを描画
             if self.shading_mode is ShadingMode.gouraud:
-                for i in range(polygons.shape[0]):
-                    polygon = polygons[i]
+                for i in range(indexes.shape[0]):
+                    polygon = polygons + i * 3 * 3
                     index = indexes[i]
-                    n = polygon_normals[i]
+                    n = polygon_normals + 3 * i
 
                     # ポリゴンがカメラを向いていなければ描画しない
-                    p1 = polygon[0]
+                    p1 = polygon + 3 * 0
                     if ((cp[0] - p1[0]) * n[0]
                         + (cp[1] - p1[1]) * n[1]
                         + (cp[2] - p1[2]) * n[2]) < 0:
                         continue
-                    p2 = polygon[1]
+                    p2 = polygon + 3 * 1
                     if ((cp[0] - p2[0]) * n[0]
                         + (cp[1] - p2[1]) * n[1]
                         + (cp[2] - p2[2]) * n[2]) < 0:
                         continue
-                    p3 = polygon[2]
+                    p3 = polygon + 3 * 2
                     if ((cp[0] - p3[0]) * n[0]
                         + (cp[1] - p3[1]) * n[1]
                         + (cp[2] - p3[2]) * n[2]) < 0:
                         continue
 
-                    self._draw_polygon_gouraud(p1, p2, p3,
-                                               vertex_normals[index[0]],
-                                               vertex_normals[index[1]],
-                                               vertex_normals[index[2]])
+                    self._draw_polygon_gouraud(
+                        p1, p2, p3,
+                        self._vertex_normals + index[0] * 3,
+                        self._vertex_normals + index[1] * 3,
+                        self._vertex_normals + index[2] * 3)
             elif self.shading_mode is ShadingMode.phong:
-                for i in range(polygons.shape[0]):
-                    polygon = polygons[i]
+                for i in range(indexes.shape[0]):
+                    polygon = polygons + i * 3 * 3
                     index = indexes[i]
-                    n = polygon_normals[i]
+                    n = polygon_normals + 3 * i
 
                     # ポリゴンがカメラを向いていなければ描画しない
-                    p1 = polygon[0]
+                    p1 = polygon + 3 * 0
                     if ((cp[0] - p1[0]) * n[0]
                         + (cp[1] - p1[1]) * n[1]
                         + (cp[2] - p1[2]) * n[2]) < 0:
                         continue
-                    p2 = polygon[1]
+                    p2 = polygon + 3 * 1
                     if ((cp[0] - p2[0]) * n[0]
                         + (cp[1] - p2[1]) * n[1]
                         + (cp[2] - p2[2]) * n[2]) < 0:
                         continue
-                    p3 = polygon[2]
+                    p3 = polygon + 3 * 2
                     if ((cp[0] - p3[0]) * n[0]
                         + (cp[1] - p3[1]) * n[1]
                         + (cp[2] - p3[2]) * n[2]) < 0:
                         continue
 
-                    self._draw_polygon_phong(p1, p2, p3,
-                                             vertex_normals[index[0]],
-                                             vertex_normals[index[1]],
-                                             vertex_normals[index[2]])
+                    self._draw_polygon_phong(
+                        p1, p2, p3,
+                        self._vertex_normals + index[0] * 3,
+                        self._vertex_normals + index[1] * 3,
+                        self._vertex_normals + index[2] * 3)
 
     def draw_polygons(self):
         self._draw_polygons()
