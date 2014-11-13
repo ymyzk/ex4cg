@@ -452,18 +452,16 @@ class Application(object):
         animate_panel.setLayout(animate_panel_layout)
         control_tab.addTab(animate_panel, 'Animate')
 
-        animate_panel_layout.addWidget(QtGui.QLabel('# Frame: '), 0, 0)
-
-        animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 1, 0)
+        animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 0, 0)
         self.animate_fps = QtGui.QSpinBox()
         self.animate_fps.setMinimum(0)
         self.animate_fps.setMaximum(300)
         self.animate_fps.setValue(30)
-        animate_panel_layout.addWidget(self.animate_fps, 1, 1, 1, 2)
+        animate_panel_layout.addWidget(self.animate_fps, 0, 1, 1, 1)
 
         animate_button = QtGui.QPushButton('Animate')
         animate_button.clicked.connect(self.animate)
-        animate_panel_layout.addWidget(animate_button, 2, 0, 1, 3)
+        animate_panel_layout.addWidget(animate_button, 1, 0, 1, 2)
 
         self.main_window.setCentralWidget(main_panel)
 
@@ -493,85 +491,9 @@ class Application(object):
         with open(file_path, 'w') as f:
             image.dump(f)
 
-    def render(self, is_cython=False):
+    def render(self):
         self.status_bar.showMessage('Rendering..')
-
-        camera = Camera(
-            position=np.array((
-                self.camera_position_x.value(),
-                self.camera_position_y.value(),
-                self.camera_position_z.value())),
-            angle=np.array((
-                self.camera_angle_x.value(),
-                self.camera_angle_y.value(),
-                self.camera_angle_z.value())),
-            focus=self.camera_focus.value())
-
-        if is_cython or self.backend_cython.isChecked():
-            Renderer = CyRenderer
-        else:
-            Renderer = PyRenderer
-
-        shaders = []
-        if (self.diffuse_checkbox.checkState() == 2 and
-                self.vrml.diffuse_color is not None):
-            shaders.append(shader.DiffuseShader(
-                direction=np.array((
-                    self.diffuse_direction_x.value(),
-                    self.diffuse_direction_y.value(),
-                    self.diffuse_direction_z.value())),
-                luminance=np.array((
-                    self.diffuse_luminance_r.value(),
-                    self.diffuse_luminance_g.value(),
-                    self.diffuse_luminance_b.value())),
-                color=self.vrml.diffuse_color))
-        if (self.specular_checkbox.checkState() == 2 and
-                self.vrml.specular_color is not None and
-                self.vrml.shininess is not None):
-            shaders.append(shader.SpecularShader(
-                camera_position=camera.position,
-                direction=np.array((
-                    self.specular_direction_x.value(),
-                    self.specular_direction_y.value(),
-                    self.specular_direction_z.value())),
-                luminance=np.array((
-                    self.specular_luminance_r.value(),
-                    self.specular_luminance_g.value(),
-                    self.specular_luminance_b.value())),
-                color=self.vrml.specular_color,
-                shininess=self.vrml.shininess))
-        if (self.ambient_checkbox.checkState() == 2 and
-                self.vrml.ambient_intensity is not None):
-            shaders.append(shader.AmbientShader(
-                luminance=np.array((
-                    self.ambient_luminance_r.value(),
-                    self.ambient_luminance_g.value(),
-                    self.ambient_luminance_b.value())),
-                intensity=self.vrml.ambient_intensity))
-        if len(shaders) == 0:
-            shaders.append(shader.RandomColorShader())
-
-        self.width = self.render_size_w.value()
-        self.height = self.render_size_h.value()
-
-        mode = ShadingMode.flat
-        if self.shading_mode_flat.isChecked():
-            mode = ShadingMode.flat
-        elif self.shading_mode_gouraud.isChecked():
-            mode = ShadingMode.gouraud
-        elif self.shading_mode_phong.isChecked():
-            mode = ShadingMode.phong
-
-        renderer = Renderer(width=self.width, height=self.height,
-                            shading_mode=mode)
-        renderer.camera = camera
-        renderer.shaders = shaders
-        renderer.prepare_polygons(self.vrml.points, self.vrml.indexes)
-        renderer.draw_polygons()
-
-        self.data = renderer.data
-        self.image_label.set_image(self.data, self.width, self.height)
-
+        self._render(self.get_frame())
         self.status_bar.showMessage('Rendered.')
 
     def frame_changed(self, f):
@@ -582,32 +504,8 @@ class Application(object):
             return
 
         frame = self.frames[f]
-        self.camera_position_x.setValue(frame['camera_position_x'])
-        self.camera_position_y.setValue(frame['camera_position_y'])
-        self.camera_position_z.setValue(frame['camera_position_z'])
-        self.camera_angle_x.setValue(frame['camera_angle_x'])
-        self.camera_angle_y.setValue(frame['camera_angle_y'])
-        self.camera_angle_z.setValue(frame['camera_angle_z'])
-        self.camera_focus.setValue(frame['camera_focus'])
-        self.diffuse_checkbox.setCheckState(2 if frame['diffuse'] else 0)
-        self.diffuse_direction_x.setValue(frame['diffuse_direction_x'])
-        self.diffuse_direction_y.setValue(frame['diffuse_direction_y'])
-        self.diffuse_direction_z.setValue(frame['diffuse_direction_z'])
-        self.diffuse_luminance_r.setValue(frame['diffuse_luminance_r'])
-        self.diffuse_luminance_g.setValue(frame['diffuse_luminance_g'])
-        self.diffuse_luminance_b.setValue(frame['diffuse_luminance_b'])
-        self.specular_checkbox.setCheckState(2 if frame['specular'] else 0)
-        self.specular_direction_x.setValue(frame['specular_direction_x'])
-        self.specular_direction_y.setValue(frame['specular_direction_y'])
-        self.specular_direction_z.setValue(frame['specular_direction_z'])
-        self.specular_luminance_r.setValue(frame['specular_luminance_r'])
-        self.specular_luminance_g.setValue(frame['specular_luminance_g'])
-        self.specular_luminance_b.setValue(frame['specular_luminance_b'])
-        self.ambient_checkbox.setCheckState(2 if frame['ambient'] else 0)
-        self.ambient_luminance_r.setValue(frame['ambient_luminance_r'])
-        self.ambient_luminance_g.setValue(frame['ambient_luminance_g'])
-        self.ambient_luminance_b.setValue(frame['ambient_luminance_b'])
-        self.render(is_cython=True)
+        self.restore_frame(frame)
+        self._render(frame, is_cython=True)
 
     def key_frame_changed(self, i, b):
         if b:
@@ -617,90 +515,20 @@ class Application(object):
             self.del_key_frame(i)
             self.interpoate()
 
-    def add_key_frame(self, i):
-        """キーフレームとして情報を保存する処理"""
-        info = {
-            'camera_position_x': self.camera_position_x.value(),
-            'camera_position_y': self.camera_position_y.value(),
-            'camera_position_z': self.camera_position_z.value(),
-            'camera_angle_x': self.camera_angle_x.value(),
-            'camera_angle_y': self.camera_angle_y.value(),
-            'camera_angle_z': self.camera_angle_z.value(),
-            'camera_focus': self.camera_focus.value(),
-            'diffuse': self.diffuse_checkbox.checkState() == 2,
-            'diffuse_direction_x': self.diffuse_direction_x.value(),
-            'diffuse_direction_y': self.diffuse_direction_y.value(),
-            'diffuse_direction_z': self.diffuse_direction_z.value(),
-            'diffuse_luminance_r': self.diffuse_luminance_r.value(),
-            'diffuse_luminance_g': self.diffuse_luminance_g.value(),
-            'diffuse_luminance_b': self.diffuse_luminance_b.value(),
-            'specular': self.specular_checkbox.checkState() == 2,
-            'specular_direction_x': self.specular_direction_x.value(),
-            'specular_direction_y': self.specular_direction_y.value(),
-            'specular_direction_z': self.specular_direction_z.value(),
-            'specular_luminance_r': self.specular_luminance_r.value(),
-            'specular_luminance_g': self.specular_luminance_g.value(),
-            'specular_luminance_b': self.specular_luminance_b.value(),
-            'ambient': self.ambient_checkbox.checkState() == 2,
-            'ambient_luminance_r': self.ambient_luminance_r.value(),
-            'ambient_luminance_g': self.ambient_luminance_g.value(),
-            'ambient_luminance_b': self.ambient_luminance_b.value()
-        }
+    def animate(self):
+        """アニメーション処理を開始する処理"""
+        # アニメーションスタート
+        self.frame_i = 0
+        self.timer = QtCore.QTimer()
+        self.main_window.connect(self.timer, QtCore.SIGNAL('timeout()'),
+                                 self._animate)
+        self.timer.start(1000 / self.animate_fps.value())
 
-        self.key_frames[i] = info
-
-    def del_key_frame(self, i):
-        if i in self.key_frames:
-            del self.key_frames[i]
-
-    def _interpolate(self, a, b, r):
-        """キーフレーム間のフレームを描画するための情報を補完する処理"""
-        result = {}
-        for k in a:
-            if isinstance(a[k], (int, float)):
-                result[k] = (1 - r) * a[k] + r * b[k]
-            else:
-                result[k] = a[k]
-        return result
-
-    def interpoate(self):
-        # キーフレームをもとに補完する
-        keys = sorted(self.key_frames.keys())
-        key_frames = self.key_frames.copy()
-
-        # 先頭フレームがキーフレームでなければ
-        # 先頭フレームのキーフレームを, 最初のキーフレームと同じとして扱う
-        if keys[0] != 0:
-            key_frames[0] = key_frames[keys[0]]
-            keys = [0] + keys
-
-        # 同様に末尾フレームを補完
-        if keys[-1] < self.seek_bar.num_frames - 1:
-            key_frames[self.seek_bar.num_frames - 1] = key_frames[keys[-1]]
-            keys += [self.seek_bar.num_frames - 1]
-        self.frames = []
-        for i in range(len(keys) - 1):
-            ka = keys[i]
-            kb = keys[i + 1]
-            fa = key_frames[ka]
-            fb = key_frames[kb]
-            for kc in range(ka, kb):
-                # a -- (r) -- c -- (1-r) -- b
-                r = (kc - ka) / (kb - ka)
-                self.frames.append(self._interpolate(fa, fb, r))
-        self.frames.append(key_frames[keys[-1]])
-
-    def _animate(self):
-        if len(self.frames) <= self.frame_i:
-            self.timer.stop()
-            self.timer = None
-            return
-
-        Renderer = CyRenderer
-        # if self.backend_cython.isChecked():
-        #     Renderer = CyRenderer
-        # else:
-        #     Renderer = PyRenderer
+    def _render(self, frame, is_cython=False):
+        if is_cython or self.backend_cython.isChecked():
+            Renderer = CyRenderer
+        else:
+            Renderer = PyRenderer
 
         mode = ShadingMode.flat
         if self.shading_mode_flat.isChecked():
@@ -716,8 +544,6 @@ class Application(object):
         self.renderer = Renderer(width=self.width, height=self.height,
                                  shading_mode=mode)
         self.renderer.prepare_polygons(self.vrml.points, self.vrml.indexes)
-
-        frame = self.frames[self.frame_i]
 
         camera = Camera(
             position=np.array((
@@ -774,19 +600,126 @@ class Application(object):
         self.data = self.renderer.data
         self.image_label.set_image(self.data, self.width, self.height)
         self.renderer.clear()
+
+    def get_frame(self):
+        """フレームの情報を UI から取得する処理"""
+        info = {
+            'camera_position_x': self.camera_position_x.value(),
+            'camera_position_y': self.camera_position_y.value(),
+            'camera_position_z': self.camera_position_z.value(),
+            'camera_angle_x': self.camera_angle_x.value(),
+            'camera_angle_y': self.camera_angle_y.value(),
+            'camera_angle_z': self.camera_angle_z.value(),
+            'camera_focus': self.camera_focus.value(),
+            'diffuse': self.diffuse_checkbox.checkState() == 2,
+            'diffuse_direction_x': self.diffuse_direction_x.value(),
+            'diffuse_direction_y': self.diffuse_direction_y.value(),
+            'diffuse_direction_z': self.diffuse_direction_z.value(),
+            'diffuse_luminance_r': self.diffuse_luminance_r.value(),
+            'diffuse_luminance_g': self.diffuse_luminance_g.value(),
+            'diffuse_luminance_b': self.diffuse_luminance_b.value(),
+            'specular': self.specular_checkbox.checkState() == 2,
+            'specular_direction_x': self.specular_direction_x.value(),
+            'specular_direction_y': self.specular_direction_y.value(),
+            'specular_direction_z': self.specular_direction_z.value(),
+            'specular_luminance_r': self.specular_luminance_r.value(),
+            'specular_luminance_g': self.specular_luminance_g.value(),
+            'specular_luminance_b': self.specular_luminance_b.value(),
+            'ambient': self.ambient_checkbox.checkState() == 2,
+            'ambient_luminance_r': self.ambient_luminance_r.value(),
+            'ambient_luminance_g': self.ambient_luminance_g.value(),
+            'ambient_luminance_b': self.ambient_luminance_b.value()
+        }
+        return info
+
+    def restore_frame(self, frame):
+        """フレームの情報を UI に反映させる処理"""
+        self.camera_position_x.setValue(frame['camera_position_x'])
+        self.camera_position_y.setValue(frame['camera_position_y'])
+        self.camera_position_z.setValue(frame['camera_position_z'])
+        self.camera_angle_x.setValue(frame['camera_angle_x'])
+        self.camera_angle_y.setValue(frame['camera_angle_y'])
+        self.camera_angle_z.setValue(frame['camera_angle_z'])
+        self.camera_focus.setValue(frame['camera_focus'])
+        self.diffuse_checkbox.setCheckState(2 if frame['diffuse'] else 0)
+        self.diffuse_direction_x.setValue(frame['diffuse_direction_x'])
+        self.diffuse_direction_y.setValue(frame['diffuse_direction_y'])
+        self.diffuse_direction_z.setValue(frame['diffuse_direction_z'])
+        self.diffuse_luminance_r.setValue(frame['diffuse_luminance_r'])
+        self.diffuse_luminance_g.setValue(frame['diffuse_luminance_g'])
+        self.diffuse_luminance_b.setValue(frame['diffuse_luminance_b'])
+        self.specular_checkbox.setCheckState(2 if frame['specular'] else 0)
+        self.specular_direction_x.setValue(frame['specular_direction_x'])
+        self.specular_direction_y.setValue(frame['specular_direction_y'])
+        self.specular_direction_z.setValue(frame['specular_direction_z'])
+        self.specular_luminance_r.setValue(frame['specular_luminance_r'])
+        self.specular_luminance_g.setValue(frame['specular_luminance_g'])
+        self.specular_luminance_b.setValue(frame['specular_luminance_b'])
+        self.ambient_checkbox.setCheckState(2 if frame['ambient'] else 0)
+        self.ambient_luminance_r.setValue(frame['ambient_luminance_r'])
+        self.ambient_luminance_g.setValue(frame['ambient_luminance_g'])
+        self.ambient_luminance_b.setValue(frame['ambient_luminance_b'])
+
+    def add_key_frame(self, i):
+        """キーフレームを追加する処理"""
+        self.key_frames[i] = self.get_frame()
+
+    def del_key_frame(self, i):
+        """キーフレームを削除する処理"""
+        if i in self.key_frames:
+            del self.key_frames[i]
+
+    def _interpolate(self, a, b, r):
+        """キーフレーム間のフレームを描画するための情報を補完する処理"""
+        result = {}
+        for k in a:
+            if isinstance(a[k], (int, float)):
+                result[k] = (1 - r) * a[k] + r * b[k]
+            else:
+                result[k] = a[k]
+        return result
+
+    def interpoate(self):
+        """キーフレーム間のフレームを保管する処理"""
+        # キーフレームをもとに補完する
+        keys = sorted(self.key_frames.keys())
+        key_frames = self.key_frames.copy()
+
+        # 先頭フレームがキーフレームでなければ
+        # 先頭フレームのキーフレームを, 最初のキーフレームと同じとして扱う
+        if keys[0] != 0:
+            key_frames[0] = key_frames[keys[0]]
+            keys = [0] + keys
+
+        # 同様に末尾フレームを補完
+        if keys[-1] < self.seek_bar.num_frames - 1:
+            key_frames[self.seek_bar.num_frames - 1] = key_frames[keys[-1]]
+            keys += [self.seek_bar.num_frames - 1]
+        self.frames = []
+        for i in range(len(keys) - 1):
+            ka = keys[i]
+            kb = keys[i + 1]
+            fa = key_frames[ka]
+            fb = key_frames[kb]
+            for kc in range(ka, kb):
+                # a -- (r) -- c -- (1-r) -- b
+                r = (kc - ka) / (kb - ka)
+                self.frames.append(self._interpolate(fa, fb, r))
+        self.frames.append(key_frames[keys[-1]])
+
+    def _animate(self):
+        """アニメーションの1フレームを描画する処理"""
+        if len(self.frames) <= self.frame_i:
+            self.timer.stop()
+            self.timer = None
+            return
+
+        self._render(self.frames[self.frame_i], is_cython=True)
+
         self.status_bar.showMessage('Rendered {0}'.format(self.frame_i + 1))
 
         self.seek_bar.current_frame = self.frame_i
         self.frame_i += 1
-
-    def animate(self):
-        """アニメーション処理を行う"""
-        # アニメーションスタート
-        self.frame_i = 0
-        self.timer = QtCore.QTimer()
-        self.main_window.connect(self.timer, QtCore.SIGNAL('timeout()'),
-                                 self._animate)
-        self.timer.start(1000 / self.animate_fps.value())
 
 
 def main():
