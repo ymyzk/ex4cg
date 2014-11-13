@@ -29,6 +29,75 @@ class ImageWidget(QtGui.QLabel):
             QtGui.QImage(image, width, height, QtGui.QImage.Format_RGB888)))
 
 
+class SeekBarWidget(QtGui.QWidget):
+    current_frame_changed = QtCore.pyqtSignal(int)
+    key_frame_added = QtCore.pyqtSignal(int)
+
+    def __init__(self):
+        super().__init__()
+
+        layout = QtGui.QHBoxLayout()
+        self.setLayout(layout)
+
+        self._seek_slider = QtGui.QSlider(1, self)
+        self._seek_slider.setMinimum(0)
+        self._seek_slider.setMaximum(30)
+        self._seek_slider.setValue(0)
+        self._seek_slider.valueChanged.connect(self._slider_changed)
+        layout.addWidget(self._seek_slider)
+
+        self._key_frame_button = QtGui.QPushButton('Key Frame')
+        self._key_frame_button.clicked.connect(self._key_frame_added)
+        layout.addWidget(self._key_frame_button)
+
+        self._current_frame = QtGui.QSpinBox()
+        self._current_frame.setMinimum(0)
+        self._current_frame.setMaximum(1000)
+        self._current_frame.setValue(0)
+        self._current_frame.valueChanged.connect(self._current_frame_changed)
+        layout.addWidget(self._current_frame)
+
+        self._num_frames = QtGui.QSpinBox()
+        self._num_frames.setMinimum(0)
+        self._num_frames.setMaximum(1000)
+        self._num_frames.setValue(30)
+        self._num_frames.valueChanged.connect(self._num_frames_changed)
+        layout.addWidget(self._num_frames)
+
+    @property
+    def current_frame(self):
+        return self._current_frame.value()
+
+    @current_frame.setter
+    def current_frame(self, frame):
+        self._current_frame.setValue(frame)
+        self._seek_slider.setValue(frame)
+
+    @property
+    def num_frames(self):
+        return self._num_frames.value()
+
+    @num_frames.setter
+    def num_frames(self, frames):
+        self._seek_slider.setValue(min(self.current_frame, frames - 1))
+        self._seek_slider.setMaximum(frames - 1)
+        self._num_frames.setValue(frames)
+
+    def _key_frame_added(self):
+        self.key_frame_added.emit(self.current_frame)
+
+    def _slider_changed(self, i):
+        self._current_frame.setValue(i)
+        self.current_frame_changed.emit(i)
+
+    def _current_frame_changed(self, i):
+        self._seek_slider.setValue(i)
+        self.current_frame_changed.emit(i)
+
+    def _num_frames_changed(self, i):
+        self.num_frames = i
+
+
 class Application(object):
     def __init__(self):
         self.vrml = Vrml()
@@ -87,6 +156,11 @@ class Application(object):
         key_frame_action.triggered.connect(self.key_frame)
         menu_animate.addAction(key_frame_action)
 
+        animate_action = QtGui.QAction('&Animate', self.main_window)
+        animate_action.setShortcut('Ctrl+A')
+        animate_action.triggered.connect(self.animate)
+        menu_animate.addAction(animate_action)
+
         # Status Bar
         self.status_bar = QtGui.QStatusBar()
         self.main_window.setStatusBar(self.status_bar)
@@ -102,6 +176,12 @@ class Application(object):
         image_panel_layout.addStretch()
         image_panel_layout.addWidget(self.image_label)
         image_panel_layout.addStretch()
+
+        # Seek Bar
+        self.seek_bar = SeekBarWidget()
+        self.seek_bar.key_frame_added.connect(self.key_frame_added)
+        self.seek_bar.current_frame_changed.connect(self.frame_changed)
+        main_panel_layout.addWidget(self.seek_bar)
 
         # Tab
         control_tab = QtGui.QTabWidget()
@@ -360,15 +440,10 @@ class Application(object):
         control_tab.addTab(animate_panel, 'Animate')
 
         animate_panel_layout.addWidget(QtGui.QLabel('# Frame: '), 0, 0)
-        self.animate_key_frame = QtGui.QSpinBox()
-        self.animate_key_frame.setMinimum(0)
-        self.animate_key_frame.setMaximum(1024)
-        self.animate_key_frame.setValue(0)
-        animate_panel_layout.addWidget(self.animate_key_frame, 0, 1)
 
         key_frame_button = QtGui.QPushButton('Key Frame')
         key_frame_button.clicked.connect(self.key_frame)
-        animate_panel_layout.addWidget(key_frame_button, 0, 2)
+        animate_panel_layout.addWidget(key_frame_button, 0, 1)
 
         animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 1, 0)
         self.animate_fps = QtGui.QSpinBox()
@@ -409,40 +484,7 @@ class Application(object):
         with open(file_path, 'w') as f:
             image.dump(f)
 
-    def key_frame(self):
-        """キーフレームとして情報を保存する処理"""
-        info = {
-            'camera_position_x': self.camera_position_x.value(),
-            'camera_position_y': self.camera_position_y.value(),
-            'camera_position_z': self.camera_position_z.value(),
-            'camera_angle_x': self.camera_angle_x.value(),
-            'camera_angle_y': self.camera_angle_y.value(),
-            'camera_angle_z': self.camera_angle_z.value(),
-            'camera_focus': self.camera_focus.value(),
-            'diffuse': self.diffuse_checkbox.checkState() == 2,
-            'diffuse_direction_x': self.diffuse_direction_x.value(),
-            'diffuse_direction_y': self.diffuse_direction_y.value(),
-            'diffuse_direction_z': self.diffuse_direction_z.value(),
-            'diffuse_luminance_r': self.diffuse_luminance_r.value(),
-            'diffuse_luminance_g': self.diffuse_luminance_g.value(),
-            'diffuse_luminance_b': self.diffuse_luminance_b.value(),
-            'specular': self.specular_checkbox.checkState() == 2,
-            'specular_direction_x': self.specular_direction_x.value(),
-            'specular_direction_y': self.specular_direction_y.value(),
-            'specular_direction_z': self.specular_direction_z.value(),
-            'specular_luminance_r': self.specular_luminance_r.value(),
-            'specular_luminance_g': self.specular_luminance_g.value(),
-            'specular_luminance_b': self.specular_luminance_b.value(),
-            'ambient': self.ambient_checkbox.checkState() == 2,
-            'ambient_luminance_r': self.ambient_luminance_r.value(),
-            'ambient_luminance_g': self.ambient_luminance_g.value(),
-            'ambient_luminance_b': self.ambient_luminance_b.value()
-        }
-
-        key_frame = self.animate_key_frame.value()
-        self.key_frames[key_frame] = info
-
-    def render(self):
+    def render(self, is_cython=False):
         self.status_bar.showMessage('Rendering..')
 
         camera = Camera(
@@ -456,7 +498,7 @@ class Application(object):
                 self.camera_angle_z.value())),
             focus=self.camera_focus.value())
 
-        if self.backend_cython.isChecked():
+        if is_cython or self.backend_cython.isChecked():
             Renderer = CyRenderer
         else:
             Renderer = PyRenderer
@@ -523,6 +565,76 @@ class Application(object):
 
         self.status_bar.showMessage('Rendered.')
 
+    def frame_changed(self, f):
+        # アニメーション中
+        if self.timer is not None:
+            return
+
+        frame = self.frames[f]
+        self.camera_position_x.setValue(frame['camera_position_x'])
+        self.camera_position_y.setValue(frame['camera_position_y'])
+        self.camera_position_z.setValue(frame['camera_position_z'])
+        self.camera_angle_x.setValue(frame['camera_angle_x'])
+        self.camera_angle_y.setValue(frame['camera_angle_y'])
+        self.camera_angle_z.setValue(frame['camera_angle_z'])
+        self.camera_focus.setValue(frame['camera_focus'])
+        self.diffuse_checkbox.setCheckState(2 if frame['diffuse'] else 0)
+        self.diffuse_direction_x.setValue(frame['diffuse_direction_x'])
+        self.diffuse_direction_y.setValue(frame['diffuse_direction_y'])
+        self.diffuse_direction_z.setValue(frame['diffuse_direction_z'])
+        self.diffuse_luminance_r.setValue(frame['diffuse_luminance_r'])
+        self.diffuse_luminance_g.setValue(frame['diffuse_luminance_g'])
+        self.diffuse_luminance_b.setValue(frame['diffuse_luminance_b'])
+        self.specular_checkbox.setCheckState(2 if frame['specular'] else 0)
+        self.specular_direction_x.setValue(frame['specular_direction_x'])
+        self.specular_direction_y.setValue(frame['specular_direction_y'])
+        self.specular_direction_z.setValue(frame['specular_direction_z'])
+        self.specular_luminance_r.setValue(frame['specular_luminance_r'])
+        self.specular_luminance_g.setValue(frame['specular_luminance_g'])
+        self.specular_luminance_b.setValue(frame['specular_luminance_b'])
+        self.ambient_checkbox.setCheckState(2 if frame['ambient'] else 0)
+        self.ambient_luminance_r.setValue(frame['ambient_luminance_r'])
+        self.ambient_luminance_g.setValue(frame['ambient_luminance_g'])
+        self.ambient_luminance_b.setValue(frame['ambient_luminance_b'])
+        self.render(is_cython=True)
+
+    def key_frame_added(self):
+        self.key_frame()
+        self.interpoate()
+
+    def key_frame(self):
+        """キーフレームとして情報を保存する処理"""
+        info = {
+            'camera_position_x': self.camera_position_x.value(),
+            'camera_position_y': self.camera_position_y.value(),
+            'camera_position_z': self.camera_position_z.value(),
+            'camera_angle_x': self.camera_angle_x.value(),
+            'camera_angle_y': self.camera_angle_y.value(),
+            'camera_angle_z': self.camera_angle_z.value(),
+            'camera_focus': self.camera_focus.value(),
+            'diffuse': self.diffuse_checkbox.checkState() == 2,
+            'diffuse_direction_x': self.diffuse_direction_x.value(),
+            'diffuse_direction_y': self.diffuse_direction_y.value(),
+            'diffuse_direction_z': self.diffuse_direction_z.value(),
+            'diffuse_luminance_r': self.diffuse_luminance_r.value(),
+            'diffuse_luminance_g': self.diffuse_luminance_g.value(),
+            'diffuse_luminance_b': self.diffuse_luminance_b.value(),
+            'specular': self.specular_checkbox.checkState() == 2,
+            'specular_direction_x': self.specular_direction_x.value(),
+            'specular_direction_y': self.specular_direction_y.value(),
+            'specular_direction_z': self.specular_direction_z.value(),
+            'specular_luminance_r': self.specular_luminance_r.value(),
+            'specular_luminance_g': self.specular_luminance_g.value(),
+            'specular_luminance_b': self.specular_luminance_b.value(),
+            'ambient': self.ambient_checkbox.checkState() == 2,
+            'ambient_luminance_r': self.ambient_luminance_r.value(),
+            'ambient_luminance_g': self.ambient_luminance_g.value(),
+            'ambient_luminance_b': self.ambient_luminance_b.value()
+        }
+
+        key_frame = self.seek_bar.current_frame
+        self.key_frames[key_frame] = info
+
     def _interpolate(self, a, b, r):
         """キーフレーム間のフレームを描画するための情報を補完する処理"""
         result = {}
@@ -533,16 +645,45 @@ class Application(object):
                 result[k] = a[k]
         return result
 
+    def interpoate(self):
+        # キーフレームをもとに補完する
+        keys = sorted(self.key_frames.keys())
+        key_frames = self.key_frames.copy()
+
+        # 先頭フレームがキーフレームでなければ
+        # 先頭フレームのキーフレームを, 最初のキーフレームと同じとして扱う
+        if keys[0] != 0:
+            key_frames[0] = key_frames[keys[0]]
+            keys = [0] + keys
+
+        # 同様に末尾フレームを補完
+        if keys[-1] < self.seek_bar.num_frames - 1:
+            key_frames[self.seek_bar.num_frames - 1] = key_frames[keys[-1]]
+            keys += [self.seek_bar.num_frames - 1]
+
+        self.frames = []
+        for i in range(len(keys) - 1):
+            ka = keys[i]
+            kb = keys[i + 1]
+            fa = key_frames[ka]
+            fb = key_frames[kb]
+            for kc in range(ka, kb):
+                # a -- (r) -- c -- (1-r) -- b
+                r = (kc - ka) / (kb - ka)
+                self.frames.append(self._interpolate(fa, fb, r))
+        self.frames.append(key_frames[keys[-1]])
+
     def _animate(self):
         if len(self.frames) <= self.frame_i:
             self.timer.stop()
             self.timer = None
             return
 
-        if self.backend_cython.isChecked():
-            Renderer = CyRenderer
-        else:
-            Renderer = PyRenderer
+        Renderer = CyRenderer
+        # if self.backend_cython.isChecked():
+        #     Renderer = CyRenderer
+        # else:
+        #     Renderer = PyRenderer
 
         mode = ShadingMode.flat
         if self.shading_mode_flat.isChecked():
@@ -618,24 +759,11 @@ class Application(object):
         self.renderer.clear()
         self.status_bar.showMessage('Rendered {0}'.format(self.frame_i + 1))
 
+        self.seek_bar.current_frame = self.frame_i
         self.frame_i += 1
 
     def animate(self):
         """アニメーション処理を行う"""
-        # キーフレームをもとに補完する
-        keys = sorted(self.key_frames.keys())
-        self.frames = []
-        for i in range(len(keys) - 1):
-            ka = keys[i]
-            kb = keys[i + 1]
-            fa = self.key_frames[ka]
-            fb = self.key_frames[kb]
-            for kc in range(ka, kb):
-                # a -- (r) -- c -- (1-r) -- b
-                r = (kc - ka) / (kb - ka)
-                self.frames.append(self._interpolate(fa, fb, r))
-        self.frames.append(self.key_frames[keys[-1]])
-
         # アニメーションスタート
         self.frame_i = 0
         self.timer = QtCore.QTimer()
