@@ -231,16 +231,19 @@ class Application(object):
         self.camera_position_x.setMinimum(-32768.0)
         self.camera_position_x.setMaximum(32767.0)
         self.camera_position_x.setValue(0.0)
+        self.camera_position_x.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_position_x, 0, 1)
         self.camera_position_y = QtGui.QDoubleSpinBox()
         self.camera_position_y.setMinimum(-32768.0)
         self.camera_position_y.setMaximum(32767.0)
         self.camera_position_y.setValue(0.0)
+        self.camera_position_y.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_position_y, 0, 2)
         self.camera_position_z = QtGui.QDoubleSpinBox()
         self.camera_position_z.setMinimum(-32768.0)
         self.camera_position_z.setMaximum(32767.0)
         self.camera_position_z.setValue(0.0)
+        self.camera_position_z.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_position_z, 0, 3)
 
         camera_panel_layout.addWidget(
@@ -249,16 +252,19 @@ class Application(object):
         self.camera_angle_x.setMinimum(-360.0)
         self.camera_angle_x.setMaximum(360.0)
         self.camera_angle_x.setValue(0.0)
+        self.camera_angle_x.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_angle_x, 1, 1)
         self.camera_angle_y = QtGui.QDoubleSpinBox()
         self.camera_angle_y.setMinimum(-360.0)
         self.camera_angle_y.setMaximum(360.0)
         self.camera_angle_y.setValue(0.0)
+        self.camera_angle_y.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_angle_y, 1, 2)
         self.camera_angle_z = QtGui.QDoubleSpinBox()
         self.camera_angle_z.setMinimum(-360.0)
         self.camera_angle_z.setMaximum(360.0)
         self.camera_angle_z.setValue(0.0)
+        self.camera_angle_z.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_angle_z, 1, 3)
 
         camera_panel_layout.addWidget(
@@ -266,6 +272,7 @@ class Application(object):
         self.camera_focus = QtGui.QDoubleSpinBox()
         self.camera_focus.setMaximum(1024.0)
         self.camera_focus.setValue(256.0)
+        self.camera_focus.valueChanged.connect(self.value_changed)
         camera_panel_layout.addWidget(self.camera_focus, 2, 1)
 
         # Diffuse Tab
@@ -284,16 +291,19 @@ class Application(object):
         self.diffuse_direction_x.setMinimum(-128.0)
         self.diffuse_direction_x.setMaximum(127.0)
         self.diffuse_direction_x.setValue(-1.0)
+        self.diffuse_direction_x.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_direction_x, 1, 1)
         self.diffuse_direction_y = QtGui.QDoubleSpinBox()
         self.diffuse_direction_y.setMinimum(-128.0)
         self.diffuse_direction_y.setMaximum(127.0)
         self.diffuse_direction_y.setValue(-1.0)
+        self.diffuse_direction_y.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_direction_y, 1, 2)
         self.diffuse_direction_z = QtGui.QDoubleSpinBox()
         self.diffuse_direction_z.setMinimum(-128.0)
         self.diffuse_direction_z.setMaximum(127.0)
         self.diffuse_direction_z.setValue(2.0)
+        self.diffuse_direction_z.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_direction_z, 1, 3)
 
         diffuse_panel_layout.addWidget(
@@ -303,18 +313,21 @@ class Application(object):
         self.diffuse_luminance_r.setMaximum(1.0)
         self.diffuse_luminance_r.setSingleStep(0.1)
         self.diffuse_luminance_r.setValue(1.0)
+        self.diffuse_luminance_r.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_luminance_r, 2, 1)
         self.diffuse_luminance_g = QtGui.QDoubleSpinBox()
         self.diffuse_luminance_g.setMinimum(0.0)
         self.diffuse_luminance_g.setMaximum(1.0)
         self.diffuse_luminance_g.setSingleStep(0.1)
         self.diffuse_luminance_g.setValue(1.0)
+        self.diffuse_luminance_g.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_luminance_g, 2, 2)
         self.diffuse_luminance_b = QtGui.QDoubleSpinBox()
         self.diffuse_luminance_b.setMinimum(0.0)
         self.diffuse_luminance_b.setMaximum(1.0)
         self.diffuse_luminance_b.setSingleStep(0.1)
         self.diffuse_luminance_b.setValue(1.0)
+        self.diffuse_luminance_b.valueChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_luminance_b, 2, 3)
 
         # Specular Tab
@@ -333,16 +346,19 @@ class Application(object):
         self.specular_direction_x.setMinimum(-128.0)
         self.specular_direction_x.setMaximum(127.0)
         self.specular_direction_x.setValue(-1.0)
+        self.specular_direction_x.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_direction_x, 1, 1)
         self.specular_direction_y = QtGui.QDoubleSpinBox()
         self.specular_direction_y.setMinimum(-128.0)
         self.specular_direction_y.setMaximum(127.0)
         self.specular_direction_y.setValue(-1.0)
+        self.specular_direction_y.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_direction_y, 1, 2)
         self.specular_direction_z = QtGui.QDoubleSpinBox()
         self.specular_direction_z.setMinimum(-128.0)
         self.specular_direction_z.setMaximum(127.0)
         self.specular_direction_z.setValue(2.0)
+        self.specular_direction_z.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_direction_z, 1, 3)
 
         specular_panel_layout.addWidget(QtGui.QLabel(
@@ -352,18 +368,21 @@ class Application(object):
         self.specular_luminance_r.setMaximum(1.0)
         self.specular_luminance_r.setSingleStep(0.1)
         self.specular_luminance_r.setValue(1.0)
+        self.specular_luminance_r.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_luminance_r, 2, 1)
         self.specular_luminance_g = QtGui.QDoubleSpinBox()
         self.specular_luminance_g.setMinimum(0.0)
         self.specular_luminance_g.setMaximum(1.0)
         self.specular_luminance_g.setSingleStep(0.1)
         self.specular_luminance_g.setValue(1.0)
+        self.specular_luminance_g.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_luminance_g, 2, 2)
         self.specular_luminance_b = QtGui.QDoubleSpinBox()
         self.specular_luminance_b.setMinimum(0.0)
         self.specular_luminance_b.setMaximum(1.0)
         self.specular_luminance_b.setSingleStep(0.1)
         self.specular_luminance_b.setValue(1.0)
+        self.specular_luminance_b.valueChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_luminance_b, 2, 3)
 
         # Ambient Tab
@@ -383,18 +402,21 @@ class Application(object):
         self.ambient_luminance_r.setMaximum(1.0)
         self.ambient_luminance_r.setSingleStep(0.1)
         self.ambient_luminance_r.setValue(1.0)
+        self.ambient_luminance_r.valueChanged.connect(self.value_changed)
         ambient_panel_layout.addWidget(self.ambient_luminance_r, 1, 1)
         self.ambient_luminance_g = QtGui.QDoubleSpinBox()
         self.ambient_luminance_g.setMinimum(0.0)
         self.ambient_luminance_g.setMaximum(1.0)
         self.ambient_luminance_g.setSingleStep(0.1)
         self.ambient_luminance_g.setValue(1.0)
+        self.ambient_luminance_g.valueChanged.connect(self.value_changed)
         ambient_panel_layout.addWidget(self.ambient_luminance_g, 1, 2)
         self.ambient_luminance_b = QtGui.QDoubleSpinBox()
         self.ambient_luminance_b.setMinimum(0.0)
         self.ambient_luminance_b.setMaximum(1.0)
         self.ambient_luminance_b.setSingleStep(0.1)
         self.ambient_luminance_b.setValue(1.0)
+        self.ambient_luminance_b.valueChanged.connect(self.value_changed)
         ambient_panel_layout.addWidget(self.ambient_luminance_b, 1, 3)
 
         # Render Tab
@@ -435,11 +457,13 @@ class Application(object):
         self.render_size_w.setMinimum(0)
         self.render_size_w.setMaximum(512)
         self.render_size_w.setValue(self.width)
+        self.render_size_w.valueChanged.connect(self.value_changed)
         render_panel_layout.addWidget(self.render_size_w, 2, 1)
         self.render_size_h = QtGui.QSpinBox()
         self.render_size_h.setMinimum(0)
         self.render_size_h.setMaximum(512)
         self.render_size_h.setValue(self.height)
+        self.render_size_h.valueChanged.connect(self.value_changed)
         render_panel_layout.addWidget(self.render_size_h, 2, 2)
 
         render_button = QtGui.QPushButton('Render')
@@ -491,10 +515,8 @@ class Application(object):
         with open(file_path, 'w') as f:
             image.dump(f)
 
-    def render(self):
-        self.status_bar.showMessage('Rendering..')
-        self._render(self.get_frame())
-        self.status_bar.showMessage('Rendered.')
+    def value_changed(self):
+        self._render(self.get_frame(), is_cython=True)
 
     def frame_changed(self, f):
         self.seek_bar.is_key_frame = f in self.key_frames
@@ -514,6 +536,11 @@ class Application(object):
         else:
             self.del_key_frame(i)
             self.interpoate()
+
+    def render(self):
+        self.status_bar.showMessage('Rendering..')
+        self._render(self.get_frame())
+        self.status_bar.showMessage('Rendered.')
 
     def animate(self):
         """アニメーション処理を開始する処理"""
