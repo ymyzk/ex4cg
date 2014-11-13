@@ -31,7 +31,7 @@ class ImageWidget(QtGui.QLabel):
 
 class SeekBarWidget(QtGui.QWidget):
     current_frame_changed = QtCore.pyqtSignal(int)
-    key_frame_added = QtCore.pyqtSignal(int)
+    key_frame_changed = QtCore.pyqtSignal(int, bool)
 
     def __init__(self):
         super().__init__()
@@ -41,18 +41,19 @@ class SeekBarWidget(QtGui.QWidget):
 
         self._seek_slider = QtGui.QSlider(1, self)
         self._seek_slider.setMinimum(0)
-        self._seek_slider.setMaximum(30)
+        self._seek_slider.setMaximum(29)
         self._seek_slider.setValue(0)
         self._seek_slider.valueChanged.connect(self._slider_changed)
         layout.addWidget(self._seek_slider)
 
-        self._key_frame_button = QtGui.QPushButton('Key Frame')
-        self._key_frame_button.clicked.connect(self._key_frame_added)
-        layout.addWidget(self._key_frame_button)
+        self._key_frame_checkbox = QtGui.QCheckBox('Key Frame')
+        self._key_frame_checkbox.setCheckState(0)
+        self._key_frame_checkbox.stateChanged.connect(self._key_frame_changed)
+        layout.addWidget(self._key_frame_checkbox)
 
         self._current_frame = QtGui.QSpinBox()
         self._current_frame.setMinimum(0)
-        self._current_frame.setMaximum(1000)
+        self._current_frame.setMaximum(29)
         self._current_frame.setValue(0)
         self._current_frame.valueChanged.connect(self._current_frame_changed)
         layout.addWidget(self._current_frame)
@@ -81,10 +82,22 @@ class SeekBarWidget(QtGui.QWidget):
     def num_frames(self, frames):
         self._seek_slider.setValue(min(self.current_frame, frames - 1))
         self._seek_slider.setMaximum(frames - 1)
+        self._current_frame.setMaximum(frames - 1)
         self._num_frames.setValue(frames)
 
-    def _key_frame_added(self):
-        self.key_frame_added.emit(self.current_frame)
+    @property
+    def is_key_frame(self):
+        return True if self._key_frame_checkbox.checkState() == 2 else False
+
+    @is_key_frame.setter
+    def is_key_frame(self, b):
+        status = self._key_frame_checkbox.blockSignals(True)
+        self._key_frame_checkbox.setCheckState(2 if b else 0)
+        self._key_frame_checkbox.blockSignals(status)
+
+    def _key_frame_changed(self, i):
+        self.key_frame_changed.emit(self.current_frame,
+                                    True if i == 2 else False)
 
     def _slider_changed(self, i):
         self._current_frame.setValue(i)
@@ -153,7 +166,7 @@ class Application(object):
 
         key_frame_action = QtGui.QAction('&Key Frame', self.main_window)
         key_frame_action.setShortcut('Ctrl+K')
-        key_frame_action.triggered.connect(self.key_frame)
+        # key_frame_action.triggered.connect(self.key_frame)
         menu_animate.addAction(key_frame_action)
 
         animate_action = QtGui.QAction('&Animate', self.main_window)
@@ -179,7 +192,7 @@ class Application(object):
 
         # Seek Bar
         self.seek_bar = SeekBarWidget()
-        self.seek_bar.key_frame_added.connect(self.key_frame_added)
+        self.seek_bar.key_frame_changed.connect(self.key_frame_changed)
         self.seek_bar.current_frame_changed.connect(self.frame_changed)
         main_panel_layout.addWidget(self.seek_bar)
 
@@ -441,10 +454,6 @@ class Application(object):
 
         animate_panel_layout.addWidget(QtGui.QLabel('# Frame: '), 0, 0)
 
-        key_frame_button = QtGui.QPushButton('Key Frame')
-        key_frame_button.clicked.connect(self.key_frame)
-        animate_panel_layout.addWidget(key_frame_button, 0, 1)
-
         animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 1, 0)
         self.animate_fps = QtGui.QSpinBox()
         self.animate_fps.setMinimum(0)
@@ -566,8 +575,10 @@ class Application(object):
         self.status_bar.showMessage('Rendered.')
 
     def frame_changed(self, f):
+        self.seek_bar.is_key_frame = f in self.key_frames
+
         # アニメーション中
-        if self.timer is not None:
+        if self.timer is not None or len(self.frames) == 0:
             return
 
         frame = self.frames[f]
@@ -598,11 +609,15 @@ class Application(object):
         self.ambient_luminance_b.setValue(frame['ambient_luminance_b'])
         self.render(is_cython=True)
 
-    def key_frame_added(self):
-        self.key_frame()
-        self.interpoate()
+    def key_frame_changed(self, i, b):
+        if b:
+            self.add_key_frame(i)
+            self.interpoate()
+        else:
+            self.del_key_frame(i)
+            self.interpoate()
 
-    def key_frame(self):
+    def add_key_frame(self, i):
         """キーフレームとして情報を保存する処理"""
         info = {
             'camera_position_x': self.camera_position_x.value(),
@@ -632,8 +647,11 @@ class Application(object):
             'ambient_luminance_b': self.ambient_luminance_b.value()
         }
 
-        key_frame = self.seek_bar.current_frame
-        self.key_frames[key_frame] = info
+        self.key_frames[i] = info
+
+    def del_key_frame(self, i):
+        if i in self.key_frames:
+            del self.key_frames[i]
 
     def _interpolate(self, a, b, r):
         """キーフレーム間のフレームを描画するための情報を補完する処理"""
@@ -660,7 +678,6 @@ class Application(object):
         if keys[-1] < self.seek_bar.num_frames - 1:
             key_frames[self.seek_bar.num_frames - 1] = key_frames[keys[-1]]
             keys += [self.seek_bar.num_frames - 1]
-
         self.frames = []
         for i in range(len(keys) - 1):
             ka = keys[i]
