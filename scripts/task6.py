@@ -477,16 +477,19 @@ class Application(object):
         animate_panel.setLayout(animate_panel_layout)
         control_tab.addTab(animate_panel, 'Animate')
 
-        animate_panel_layout.addWidget(QtGui.QLabel('FPS: '), 0, 0)
+        animate_panel_layout.addWidget(
+            QtGui.QLabel('Animation is executed by Python + Cython.'), 0, 0)
+        animate_panel_layout.addWidget(
+            QtGui.QLabel('Frames per second: '), 1, 0)
         self.animate_fps = QtGui.QSpinBox()
         self.animate_fps.setMinimum(0)
         self.animate_fps.setMaximum(300)
         self.animate_fps.setValue(30)
-        animate_panel_layout.addWidget(self.animate_fps, 0, 1, 1, 1)
+        animate_panel_layout.addWidget(self.animate_fps, 1, 1, 1, 1)
 
         animate_button = QtGui.QPushButton('Animate')
         animate_button.clicked.connect(self.animate)
-        animate_panel_layout.addWidget(animate_button, 1, 0, 1, 2)
+        animate_panel_layout.addWidget(animate_button, 2, 0, 1, 2)
 
         self.main_window.setCentralWidget(main_panel)
 
