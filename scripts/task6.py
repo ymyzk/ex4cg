@@ -278,6 +278,7 @@ class Application(object):
 
         self.diffuse_checkbox = QtGui.QCheckBox('Enable')
         self.diffuse_checkbox.setCheckState(2)
+        self.diffuse_checkbox.stateChanged.connect(self.value_changed)
         diffuse_panel_layout.addWidget(self.diffuse_checkbox, 0, 0)
 
         diffuse_panel_layout.addWidget(
@@ -333,6 +334,7 @@ class Application(object):
 
         self.specular_checkbox = QtGui.QCheckBox('Enable')
         self.specular_checkbox.setCheckState(2)
+        self.specular_checkbox.stateChanged.connect(self.value_changed)
         specular_panel_layout.addWidget(self.specular_checkbox, 0, 0)
 
         specular_panel_layout.addWidget(
@@ -388,6 +390,7 @@ class Application(object):
 
         self.ambient_checkbox = QtGui.QCheckBox('Enable')
         self.ambient_checkbox.setCheckState(2)
+        self.ambient_checkbox.stateChanged.connect(self.value_changed)
         ambient_panel_layout.addWidget(self.ambient_checkbox, 0, 0)
 
         ambient_panel_layout.addWidget(
@@ -428,10 +431,13 @@ class Application(object):
 
         self.shading_mode_flat = QtGui.QRadioButton('Flat (Constant)')
         self.shading_mode_flat.setChecked(1)
+        self.shading_mode_flat.toggled.connect(self.value_changed)
         shading_mode_layout.addWidget(self.shading_mode_flat)
         self.shading_mode_gouraud = QtGui.QRadioButton('Gouraud')
+        self.shading_mode_gouraud.toggled.connect(self.value_changed)
         shading_mode_layout.addWidget(self.shading_mode_gouraud)
         self.shading_mode_phong = QtGui.QRadioButton('Phong')
+        self.shading_mode_phong.toggled.connect(self.value_changed)
         shading_mode_layout.addWidget(self.shading_mode_phong)
 
         backend = QtGui.QGroupBox()
