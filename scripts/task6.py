@@ -164,13 +164,8 @@ class Application(object):
 
         menu_animate = menu_bar.addMenu('&Animate')
 
-        key_frame_action = QtGui.QAction('&Key Frame', self.main_window)
-        key_frame_action.setShortcut('Ctrl+K')
-        # key_frame_action.triggered.connect(self.key_frame)
-        menu_animate.addAction(key_frame_action)
-
         animate_action = QtGui.QAction('&Animate', self.main_window)
-        animate_action.setShortcut('Ctrl+A')
+        animate_action.setShortcut('Ctrl+T')
         animate_action.triggered.connect(self.animate)
         menu_animate.addAction(animate_action)
 
