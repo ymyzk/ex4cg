@@ -9,5 +9,5 @@ install:
     - pip install .
 script:
     - python setup.py test
-    - samples/download.sh
+    - scripts/download.sh
     - scripts/test.sh
